@@ -15,6 +15,8 @@
             <nav class="menu">
                 <ul>
                     <li><a href="<?php echo SITE_URL; ?>index.php?controller=dashboard&action=index">Dashboard</a></li>
+                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=clientes&action=index">Clientes</a></li>
+                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=index">Oportunidades</a></li>
                     <?php if ($_SESSION['usuario']['id_perfil'] == 1) : ?>
                         <li><a href="<?php echo SITE_URL; ?>index.php?controller=usuarios&action=index">Usuarios</a></li>
                         <li><a href="<?php echo SITE_URL; ?>index.php?controller=perfiles&action=index">Perfiles</a></li>
