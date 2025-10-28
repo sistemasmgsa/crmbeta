@@ -52,8 +52,9 @@
                 <div class="kanban-card" draggable="true" id="op-<?php echo $op['id_oportunidad']; ?>" data-id="<?php echo $op['id_oportunidad']; ?>">
                     <h4><?php echo $op['nombre_oportunidad']; ?></h4>
                     <p><?php echo $op['nombre_cliente']; ?></p>
-                    <p><strong>Valor:</strong> $<?php echo number_format($op['valor_estimado'], 2); ?></p>
+                    <p><strong>Valor:</strong> S/. <?php echo number_format($op['valor_estimado'], 2); ?></p>
                     <a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=editar&id=<?php echo $op['id_oportunidad']; ?>" style="font-size: 12px; margin-top: 5px; display: inline-block;">Editar</a>
+                    <a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=eliminar&id=<?php echo $op['id_oportunidad']; ?>" onclick="return confirm('¿Está seguro de eliminar esta oportunidad?');" style="font-size: 12px; margin-top: 5px; display: inline-block; color: red; margin-left: 10px;">Eliminar</a>
                 </div>
             <?php endforeach; ?>
         </div>

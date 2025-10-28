@@ -23,7 +23,7 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="valor_estimado">Valor Estimado ($)</label>
+        <label for="valor_estimado">Valor Estimado (S/.)</label>
         <input type="number" step="0.01" name="valor_estimado" id="valor_estimado" value="<?php echo $data['oportunidad']['valor_estimado']; ?>">
     </div>
     <div class="form-group">
