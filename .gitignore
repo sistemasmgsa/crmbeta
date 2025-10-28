@@ -1,3 +1,6 @@
+# Archivos de configuración
+config/config.php
+
 # Archivos de registro
 debug.log
 server.log
