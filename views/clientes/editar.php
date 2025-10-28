@@ -13,12 +13,51 @@
         <input type="text" name="nombre_cliente" id="nombre_cliente" value="<?php echo $data['cliente']['nombre_cliente']; ?>" required>
     </div>
     <div class="form-group">
+        <label for="id_tipo_documento">Tipo de Documento</label>
+        <select name="id_tipo_documento" id="id_tipo_documento">
+            <?php foreach ($data['tipos_documento'] as $tipo) : ?>
+                <option value="<?php echo $tipo['id_tipo_documento']; ?>" <?php echo ($data['cliente']['id_tipo_documento'] == $tipo['id_tipo_documento']) ? 'selected' : ''; ?>><?php echo $tipo['nombre_documento']; ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="numero_documento">Número de Documento</label>
+        <input type="text" name="numero_documento" id="numero_documento" value="<?php echo $data['cliente']['numero_documento']; ?>">
+    </div>
+    <div class="form-group">
         <label for="direccion_cliente">Dirección</label>
         <input type="text" name="direccion_cliente" id="direccion_cliente" value="<?php echo $data['cliente']['direccion_cliente']; ?>">
     </div>
     <div class="form-group">
+        <label for="departamento">Departamento</label>
+        <select name="departamento" id="departamento">
+            <?php foreach ($data['departamentos'] as $departamento) : ?>
+                <option value="<?php echo $departamento; ?>" <?php echo ($data['cliente']['departamento'] == $departamento) ? 'selected' : ''; ?>><?php echo $departamento; ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="provincia">Provincia</label>
+        <select name="provincia" id="provincia">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="distrito">Distrito</label>
+        <select name="distrito" id="distrito">
+        </select>
+    </div>
+    <input type="hidden" name="id_ubigeo" id="id_ubigeo" value="<?php echo $data['cliente']['id_ubigeo']; ?>">
+    <div class="form-group">
         <label for="telefono_cliente">Teléfono</label>
         <input type="text" name="telefono_cliente" id="telefono_cliente" value="<?php echo $data['cliente']['telefono_cliente']; ?>">
+    </div>
+    <div class="form-group">
+        <label for="correo_electronico">Correo Electrónico</label>
+        <input type="email" name="correo_electronico" id="correo_electronico" value="<?php echo $data['cliente']['correo_electronico']; ?>">
+    </div>
+    <div class="form-group">
+        <label for="observaciones">Observaciones</label>
+        <textarea name="observaciones" id="observaciones"><?php echo $data['cliente']['observaciones']; ?></textarea>
     </div>
     <div class="form-group">
         <label for="website_cliente">Sitio Web</label>
@@ -27,6 +66,71 @@
     <button type="submit" class="btn btn-primary">Actualizar</button>
     <a href="<?php echo SITE_URL; ?>index.php?controller=clientes&action=index" class="btn btn-secondary">Cancelar</a>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ubigeos = <?php echo json_encode($data['ubigeos']); ?>;
+    const departamentoSelect = document.getElementById('departamento');
+    const provinciaSelect = document.getElementById('provincia');
+    const distritoSelect = document.getElementById('distrito');
+    const idUbigeoInput = document.getElementById('id_ubigeo');
+    const clienteUbigeo = <?php echo json_encode($data['cliente']['id_ubigeo']); ?>;
+
+    function populateProvincias() {
+        const selectedDepartamento = departamentoSelect.value;
+        provinciaSelect.innerHTML = '';
+        distritoSelect.innerHTML = '';
+        const provincias = [...new Set(ubigeos.filter(u => u.departamento === selectedDepartamento).map(u => u.provincia))];
+        provincias.forEach(provincia => {
+            const option = document.createElement('option');
+            option.value = provincia;
+            option.textContent = provincia;
+            provinciaSelect.appendChild(option);
+        });
+        populateDistritos();
+    }
+
+    function populateDistritos() {
+        const selectedProvincia = provinciaSelect.value;
+        distritoSelect.innerHTML = '';
+        const distritos = [...new Set(ubigeos.filter(u => u.provincia === selectedProvincia).map(u => u.distrito))];
+        distritos.forEach(distrito => {
+            const option = document.createElement('option');
+            option.value = distrito;
+            option.textContent = distrito;
+            distritoSelect.appendChild(option);
+        });
+        updateUbigeoId();
+    }
+
+    function updateUbigeoId() {
+        const selectedDepartamento = departamentoSelect.value;
+        const selectedProvincia = provinciaSelect.value;
+        const selectedDistrito = distritoSelect.value;
+        const ubigeo = ubigeos.find(u => u.departamento === selectedDepartamento && u.provincia === selectedProvincia && u.distrito === selectedDistrito);
+        if (ubigeo) {
+            idUbigeoInput.value = ubigeo.id_ubigeo;
+        }
+    }
+
+    departamentoSelect.addEventListener('change', populateProvincias);
+    provinciaSelect.addEventListener('change', populateDistritos);
+    distritoSelect.addEventListener('change', updateUbigeoId);
+
+    // Set initial values
+    const initialUbigeo = ubigeos.find(u => u.id_ubigeo == clienteUbigeo);
+    if (initialUbigeo) {
+        departamentoSelect.value = initialUbigeo.departamento;
+        populateProvincias();
+        provinciaSelect.value = initialUbigeo.provincia;
+        populateDistritos();
+        distritoSelect.value = initialUbigeo.distrito;
+        updateUbigeoId();
+    } else {
+        populateProvincias();
+    }
+});
+</script>
 
 <hr>
 

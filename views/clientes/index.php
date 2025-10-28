@@ -8,7 +8,11 @@
     <thead>
         <tr>
             <th>Nombre</th>
+            <th>Documento</th>
+            <th>Nro. Documento</th>
+            <th>Ubigeo</th>
             <th>Teléfono</th>
+            <th>Correo</th>
             <th>Website</th>
             <th>Acciones</th>
         </tr>
@@ -17,7 +21,11 @@
         <?php foreach ($data['clientes'] as $cliente) : ?>
             <tr>
                 <td><?php echo $cliente['nombre_cliente']; ?></td>
+                <td><?php echo $cliente['nombre_documento']; ?></td>
+                <td><?php echo $cliente['numero_documento']; ?></td>
+                <td><?php echo $cliente['ubigeo']; ?></td>
                 <td><?php echo $cliente['telefono_cliente']; ?></td>
+                <td><?php echo $cliente['correo_electronico']; ?></td>
                 <td><a href="<?php echo $cliente['website_cliente']; ?>" target="_blank"><?php echo $cliente['website_cliente']; ?></a></td>
                 <td>
                     <a href="<?php echo SITE_URL; ?>index.php?controller=clientes&action=editar&id=<?php echo $cliente['id_cliente']; ?>" class="btn btn-secondary">Editar</a>
