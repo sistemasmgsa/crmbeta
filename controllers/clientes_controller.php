@@ -48,6 +48,7 @@ class ClientesController extends Controller {
             $tipodocumento = new TipoDocumentoIdentidad($db);
             $stmt = $tipodocumento->listar();
             $data['tipos_documento'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
 
             $ubigeo = new Ubigeo($db);
             $stmt = $ubigeo->listar();
@@ -97,6 +98,7 @@ class ClientesController extends Controller {
             $tipodocumento = new TipoDocumentoIdentidad($db);
             $stmt = $tipodocumento->listar();
             $data['tipos_documento'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
 
             $ubigeo = new Ubigeo($db);
             $stmt = $ubigeo->listar();
