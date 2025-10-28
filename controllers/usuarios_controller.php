@@ -63,6 +63,7 @@ class UsuariosController extends Controller {
                 // Obtener la contraseña actual para no sobreescribirla
                 $stmt_usuario = $usuario->obtener();
                 $usuario_actual = $stmt_usuario->fetch(PDO::FETCH_ASSOC);
+                $stmt_usuario->closeCursor();
                 $usuario->clave_usuario = $usuario_actual['clave_usuario'];
             }
 
@@ -77,6 +78,7 @@ class UsuariosController extends Controller {
         $usuario->id_usuario = $_GET['id'];
         $stmt = $usuario->obtener();
         $data['usuario'] = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
 
         $perfil = new Perfil($db);
         $stmt_perfiles = $perfil->listar();
