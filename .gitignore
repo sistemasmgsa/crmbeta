@@ -1,0 +1,6 @@
+# Archivos de registro
+debug.log
+server.log
+
+# Directorio de trabajo temporal
+jules-scratch/
