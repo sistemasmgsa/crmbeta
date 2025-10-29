@@ -16,7 +16,7 @@
             <nav class="menu">
                 <ul>
                     <li><a href="<?php echo SITE_URL; ?>index.php?controller=dashboard&action=index"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li class="menu-item has-submenu">
+                    <li>
                         <a href="#"><i class="fas fa-briefcase"></i> Comercial</a>
                         <ul class="submenu">
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=clientes&action=index">Clientes</a></li>
@@ -24,7 +24,7 @@
                         </ul>
                     </li>
                     <?php if ($_SESSION['usuario']['id_perfil'] == 1) : ?>
-                    <li class="menu-item has-submenu">
+                    <li>
                         <a href="#"><i class="fas fa-cog"></i> Configuración</a>
                         <ul class="submenu">
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=tiposdocumentoidentidad&action=index">Tipos de Documento</a></li>
@@ -34,22 +34,9 @@
                         </ul>
                     </li>
                     <?php endif; ?>
+                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=login&action=logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
                 </ul>
             </nav>
         </aside>
         <div class="main-content">
-            <header class="topbar">
-                <div class="welcome-message">
-                    <h1>Bienvenido al CRM</h1>
-                </div>
-                <div class="user-menu">
-                    <div class="user-info">
-                        <span class="user-avatar">ML</span>
-                        <span class="user-name"><?php echo $_SESSION['usuario']['nombre_usuario']; ?></span>
-                    </div>
-                    <div class="dropdown-content">
-                        <a href="<?php echo SITE_URL; ?>index.php?controller=login&action=logout">Cerrar Sesión</a>
-                    </div>
-                </div>
-            </header>
             <main class="content">
