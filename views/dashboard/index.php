@@ -1,8 +1,5 @@
 <?php require_once 'views/layout/header.php'; ?>
 
-<!-- FullCalendar CSS -->
-<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/main.min.css' rel='stylesheet' />
-
 <style>
     .dashboard-container {
         display: flex;
@@ -46,8 +43,6 @@
     </div>
 </div>
 
-<!-- FullCalendar JS -->
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/main.min.js'></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const calendarEl = document.getElementById('calendar');
