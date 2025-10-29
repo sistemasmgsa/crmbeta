@@ -1,5 +1,9 @@
 <?php require_once 'views/layout/header.php'; ?>
 
+<!-- ✅ Agregar FullCalendar (CSS y JS) antes de usarlo -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
 <style>
     .dashboard-container {
         display: flex;
@@ -51,11 +55,12 @@
             $calendar_events = [];
             foreach ($data['actividades'] as $actividad) {
                 $calendar_events[] = [
-                    'title' => $actividad['asunto'],
-                    'start' => $actividad['fecha_actividad'],
+                    'title' => strtoupper($actividad['asunto']),
+                    'start' => date('Y-m-d\TH:i:s', strtotime($actividad['fecha_actividad'])),
                     'extendedProps' => [
                         'description' => $actividad['descripcion'],
-                        'type' => $actividad['tipo_actividad']
+                        'type' => $actividad['tipo_actividad'],
+                        'cliente' => $actividad['nombre_cliente'],
                     ]
                 ];
             }
@@ -70,9 +75,52 @@
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
             events: events,
+
+            eventContent: function(arg) {
+                // Formatear hora en formato AM/PM
+                const hora = arg.event.start
+                    ? arg.event.start.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                    }).toUpperCase()
+                    : '';
+
+                // Crear elementos
+                const horaEl = document.createElement('div');
+                horaEl.textContent = hora;
+                horaEl.style.fontWeight = 'bold';
+                horaEl.style.fontSize = '12px';
+
+                const titleEl = document.createElement('div');
+                titleEl.textContent = arg.event.title;
+                titleEl.style.fontSize = '13px';
+                titleEl.style.fontWeight = '600';
+
+                // Contenedor principal (cuadro azul)
+                const container = document.createElement('div');
+                container.style.display = 'flex';
+                container.style.flexDirection = 'column';
+                container.style.alignItems = 'flex-start'; // alineado a la izquierda
+                container.style.backgroundColor = '#007BFF'; // azul
+                container.style.color = 'white'; // texto blanco
+                container.style.padding = '3px 6px';
+                container.style.borderRadius = '4px';
+                container.style.boxShadow = '0 1px 2px rgba(0,0,0,0.2)';
+                container.style.lineHeight = '1.2';
+                container.style.width = '100%';
+                container.style.textAlign = 'left';
+
+                container.appendChild(horaEl);
+                container.appendChild(titleEl);
+
+                return { domNodes: [container] };
+            },
+
             eventClick: function(info) {
                 alert(
-                    'Actividad: ' + info.event.title + "\n" +
+                    'Cliente: ' + info.event.extendedProps.cliente + "\n" +
+                    'Asunto: ' + info.event.title + "\n" +
                     'Tipo: ' + info.event.extendedProps.type + "\n" +
                     'Descripción: ' + info.event.extendedProps.description + "\n" +
                     'Fecha: ' + info.event.start.toLocaleString()
@@ -83,5 +131,8 @@
         calendar.render();
     });
 </script>
+
+
+
 
 <?php require_once 'views/layout/footer.php'; ?>
