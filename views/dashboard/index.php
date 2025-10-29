@@ -31,18 +31,18 @@
     .fc-event {
         cursor: pointer;
     }
-</style>
+</style>    
 
-<h1>Bienvenido al CRM, <?php echo $_SESSION['usuario']['nombre_usuario']; ?></h1>
-<p>Aquí tienes un resumen de tu actividad:</p>
+<h2>Bienvenido al CRM, <?php echo $_SESSION['usuario']['nombre_usuario']; ?></h2>
+<!-- <p>Aquí tienes un resumen de tu actividad:</p> --> 
 
 <div class="dashboard-container">
     <div id="calendar-container">
-        <h2>Calendario de Actividades</h2>
+        <h3>Calendario de Actividades</h3>
         <div id='calendar'></div>
     </div>
     <div id="stats-container">
-        <h2>Otros reportes</h2>
+        <h3>Otros Reportes</h3>
         <p>Próximamente...</p>
     </div>
 </div>
