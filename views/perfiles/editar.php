@@ -10,7 +10,9 @@
     <input type="hidden" name="id_perfil" value="<?php echo $data['perfil']['id_perfil']; ?>">
     <div class="form-group">
         <label for="nombre_perfil">Nombre del Perfil</label>
-        <input type="text" name="nombre_perfil" id="nombre_perfil" value="<?php echo $data['perfil']['nombre_perfil']; ?>" required>
+        <input type="text" name="nombre_perfil" id="nombre_perfil" 
+         style="font-size: 16px; padding: 6px; width: 500px;"
+        value="<?php echo $data['perfil']['nombre_perfil']; ?>" required>
     </div>
     <button type="submit" class="btn btn-primary">Actualizar</button>
     <a href="<?php echo SITE_URL; ?>index.php?controller=perfiles&action=index" class="btn btn-secondary">Cancelar</a>

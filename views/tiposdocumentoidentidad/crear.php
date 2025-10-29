@@ -9,7 +9,9 @@
 <form action="<?php echo SITE_URL; ?>index.php?controller=tiposdocumentoidentidad&action=crear" method="POST">
     <div class="form-group">
         <label for="nombre_documento">Nombre del Tipo de Documento</label>
-        <input type="text" name="nombre_documento" id="nombre_documento" required>
+        <input type="text" name="nombre_documento" id="nombre_documento" 
+        style="font-size: 16px; padding: 6px; width: 500px;"
+        required>
     </div>
     <button type="submit" class="btn btn-primary">Crear</button>
     <a href="<?php echo SITE_URL; ?>index.php?controller=tiposdocumentoidentidad&action=index" class="btn btn-secondary">Cancelar</a>

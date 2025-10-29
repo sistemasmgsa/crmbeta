@@ -30,23 +30,41 @@
             text-align: center;
         }
     </style>
+    <!-- 🔹 Script oficial de Google reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <div class="login-container">
         <div class="login-form">
+             <h1 style="text-align: center; color: #8B0000; margin-bottom: 20px; font-family: Arial, sans-serif;">
+                CRM Beta V1.0
+            </h1>
             <h2>Iniciar Sesión</h2>
+
             <?php if (isset($data['error'])) : ?>
                 <p class="error-message"><?php echo $data['error']; ?></p>
             <?php endif; ?>
+
             <form action="<?php echo SITE_URL; ?>index.php?controller=login&action=login" method="POST">
                 <div class="form-group">
                     <label for="correo">Correo Electrónico</label>
-                    <input type="email" name="correo" id="correo" required>
+                    <input type="email" name="correo" id="correo" 
+                     style="font-size: 16px; padding: 6px; width: 335px;"
+                    required>
                 </div>
                 <div class="form-group">
                     <label for="clave">Contraseña</label>
-                    <input type="password" name="clave" id="clave" required>
+                    <input type="password" name="clave" id="clave" 
+                    style="font-size: 16px; padding: 6px; width: 335px;"
+                    required>
                 </div>
+
+                <!-- 🔹 reCAPTCHA colocado antes del botón -->
+                <div class="g-recaptcha" 
+                     data-sitekey="6Lf2h_srAAAAAGxGBvAMxMBQb7jxOROBq3rKVoao" 
+                     style="display: flex; justify-content: center; margin-bottom: 15px;">
+                </div>
+
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Ingresar</button>
             </form>
         </div>

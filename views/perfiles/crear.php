@@ -9,7 +9,9 @@
 <form action="<?php echo SITE_URL; ?>index.php?controller=perfiles&action=crear" method="POST">
     <div class="form-group">
         <label for="nombre_perfil">Nombre del Perfil</label>
-        <input type="text" name="nombre_perfil" id="nombre_perfil" required>
+        <input type="text" name="nombre_perfil" id="nombre_perfil" 
+        style="font-size: 16px; padding: 6px; width: 500px;"
+        required>
     </div>
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a href="<?php echo SITE_URL; ?>index.php?controller=perfiles&action=index" class="btn btn-secondary">Cancelar</a>

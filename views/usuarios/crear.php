@@ -9,23 +9,33 @@
 <form action="<?php echo SITE_URL; ?>index.php?controller=usuarios&action=crear" method="POST">
     <div class="form-group">
         <label for="nombre_usuario">Nombre</label>
-        <input type="text" name="nombre_usuario" id="nombre_usuario" required>
+        <input type="text" name="nombre_usuario" id="nombre_usuario" 
+        style="font-size: 16px; padding: 6px; width: 500px;"
+        required>
     </div>
     <div class="form-group">
         <label for="apellido_usuario">Apellido</label>
-        <input type="text" name="apellido_usuario" id="apellido_usuario" required>
+        <input type="text" name="apellido_usuario" id="apellido_usuario" 
+        style="font-size: 16px; padding: 6px; width: 500px;"
+        required>
     </div>
     <div class="form-group">
         <label for="correo_usuario">Correo Electrónico</label>
-        <input type="email" name="correo_usuario" id="correo_usuario" required>
+        <input type="email" name="correo_usuario" id="correo_usuario" 
+        style="font-size: 16px; padding: 6px; width: 500px;"
+        required>
     </div>
     <div class="form-group">
         <label for="clave_usuario">Contraseña</label>
-        <input type="password" name="clave_usuario" id="clave_usuario" required>
+        <input type="password" name="clave_usuario" id="clave_usuario"
+        style="font-size: 16px; padding: 6px; width: 500px;"
+        required>
     </div>
     <div class="form-group">
         <label for="id_perfil">Perfil</label>
-        <select name="id_perfil" id="id_perfil" required>
+        <select name="id_perfil" id="id_perfil" 
+        style="font-size: 16px; padding: 6px; width: 300px;"
+        required>
             <?php foreach ($data['perfiles'] as $perfil) : ?>
                 <option value="<?php echo $perfil['id_perfil']; ?>"><?php echo $perfil['nombre_perfil']; ?></option>
             <?php endforeach; ?>

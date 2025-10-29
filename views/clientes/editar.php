@@ -249,26 +249,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- Modal para crear/editar contactos (inicialmente oculto) -->
 <div id="modal-contacto" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
-    <div style="background:#fff; width:500px; margin:100px auto; padding:20px; border-radius:5px;">
+    <div style="background:#fff; width:500px; margin:100px auto; padding:30px; border-radius:5px;">
         <h3 id="modal-titulo"></h3>
         <form id="form-contacto">
             <input type="hidden" name="id_contacto" id="id_contacto">
             <input type="hidden" name="id_cliente" id="id_cliente_contacto" value="<?php echo $data['cliente']['id_cliente']; ?>">
             <div class="form-group">
                 <label for="nombre_contacto">Nombre</label>
-                <input type="text" name="nombre_contacto" id="nombre_contacto" required>
+                <input type="text" name="nombre_contacto" id="nombre_contacto" 
+                style="font-size: 16px; padding: 6px; width: 480px;"
+                
+                required>
             </div>
             <div class="form-group">
                 <label for="cargo_contacto">Cargo</label>
-                <input type="text" name="cargo_contacto" id="cargo_contacto">
+                <input type="text" name="cargo_contacto" id="cargo_contacto"
+                style="font-size: 16px; padding: 6px; width: 480px;"
+                >
             </div>
             <div class="form-group">
                 <label for="correo_contacto">Correo</label>
-                <input type="email" name="correo_contacto" id="correo_contacto">
+                <input type="email" name="correo_contacto" id="correo_contacto"
+                style="font-size: 16px; padding: 6px; width: 480px;"
+                >
             </div>
             <div class="form-group">
                 <label for="telefono_contacto">Teléfono</label>
-                <input type="text" name="telefono_contacto" id="telefono_contacto">
+                <input type="text" name="telefono_contacto" id="telefono_contacto"
+                style="font-size: 16px; padding: 6px; width: 480px;"
+                >
             </div>
             <button type="submit" class="btn btn-primary">Guardar</button>
             <button type="button" id="btn-cancelar-modal" class="btn btn-secondary">Cancelar</button>

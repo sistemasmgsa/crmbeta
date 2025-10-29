@@ -12,12 +12,28 @@ class LoginController extends Controller {
         $this->view('login/index');
     }
 
-    public function login() {
+     public function login() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            // 🔹 1. Verificar reCAPTCHA antes de todo
+            $recaptchaResponse = $_POST['g-recaptcha-response'] ?? '';
+            $secretKey = '6Lf2h_srAAAAAGkTLCt3MExbYmdff01p5RlTSjQR'; // <-- pon tu clave secreta aquí
+
+            $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secretKey}&response={$recaptchaResponse}");
+            $responseData = json_decode($verify);
+
+            if (!$responseData->success) {
+                $data['error'] = "Verificación reCAPTCHA fallida. Intente nuevamente.";
+                $this->view('login/index', $data);
+                exit;
+            }
+
+            // 🔹 2. Conexión a la base de datos
             $database = new Database();
             $db = $database->getConnection();
             $usuario = new Usuario($db);
 
+            // 🔹 3. Buscar usuario por correo
             $usuario->correo_usuario = $_POST['correo'];
             $stmt = $usuario->login();
 
@@ -25,6 +41,7 @@ class LoginController extends Controller {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 $clave_hash = $row['clave_usuario'];
 
+                // 🔹 4. Validar contraseña
                 if (password_verify($_POST['clave'], $clave_hash)) {
                     $_SESSION['usuario'] = $row;
                     header('Location: ' . SITE_URL . 'index.php?controller=dashboard&action=index');

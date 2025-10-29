@@ -10,7 +10,9 @@
     <input type="hidden" name="id_tipo_documento" value="<?php echo $data['tipodocumento']['id_tipo_documento']; ?>">
     <div class="form-group">
         <label for="nombre_documento">Nombre del Tipo de Documento</label>
-        <input type="text" name="nombre_documento" id="nombre_documento" value="<?php echo $data['tipodocumento']['nombre_documento']; ?>" required>
+        <input type="text" name="nombre_documento" id="nombre_documento" 
+        style="font-size: 16px; padding: 6px; width: 500px;"
+        value="<?php echo $data['tipodocumento']['nombre_documento']; ?>" required>
     </div>
     <button type="submit" class="btn btn-primary">Actualizar</button>
     <a href="<?php echo SITE_URL; ?>index.php?controller=tiposdocumentoidentidad&action=index" class="btn btn-secondary">Cancelar</a>

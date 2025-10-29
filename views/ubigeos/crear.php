@@ -9,15 +9,21 @@
 <form action="<?php echo SITE_URL; ?>index.php?controller=ubigeos&action=crear" method="POST">
     <div class="form-group">
         <label for="departamento">Departamento</label>
-        <input type="text" name="departamento" id="departamento" required>
+        <input type="text" name="departamento" id="departamento" 
+        style="font-size: 16px; padding: 6px; width: 500px;"
+        required>
     </div>
     <div class="form-group">
         <label for="provincia">Provincia</label>
-        <input type="text" name="provincia" id="provincia" required>
+        <input type="text" name="provincia" id="provincia" 
+        style="font-size: 16px; padding: 6px; width: 500px;"
+        required>
     </div>
     <div class="form-group">
         <label for="distrito">Distrito</label>
-        <input type="text" name="distrito" id="distrito" required>
+        <input type="text" name="distrito" id="distrito" 
+        style="font-size: 16px; padding: 6px; width: 500px;"
+        required>
     </div>
     <button type="submit" class="btn btn-primary">Crear</button>
     <a href="<?php echo SITE_URL; ?>index.php?controller=ubigeos&action=index" class="btn btn-secondary">Cancelar</a>
