@@ -14,20 +14,7 @@ class LoginController extends Controller {
 
      public function login() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-            // 🔹 1. Verificar reCAPTCHA antes de todo
-            $recaptchaResponse = $_POST['g-recaptcha-response'] ?? '';
-            $secretKey = '6Lf2h_srAAAAAGkTLCt3MExbYmdff01p5RlTSjQR'; // <-- pon tu clave secreta aquí
-
-            $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secretKey}&response={$recaptchaResponse}");
-            $responseData = json_decode($verify);
-
-            if (!$responseData->success) {
-                $data['error'] = "Verificación reCAPTCHA fallida. Intente nuevamente.";
-                $this->view('login/index', $data);
-                exit;
-            }
-
+            error_log('Login attempt with email: ' . $_POST['correo']);
             // 🔹 2. Conexión a la base de datos
             $database = new Database();
             $db = $database->getConnection();
@@ -40,18 +27,22 @@ class LoginController extends Controller {
             if ($stmt->rowCount() > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 $clave_hash = $row['clave_usuario'];
+                error_log('User found: ' . $row['nombre_usuario']);
 
                 // 🔹 4. Validar contraseña
                 if (password_verify($_POST['clave'], $clave_hash)) {
                     $_SESSION['usuario'] = $row;
+                    error_log('Password correct. Redirecting to dashboard.');
                     header('Location: ' . SITE_URL . 'index.php?controller=dashboard&action=index');
                     exit();
                 } else {
                     $data['error'] = "La contraseña es incorrecta.";
+                    error_log('Incorrect password for email: ' . $_POST['correo']);
                     $this->view('login/index', $data);
                 }
             } else {
                 $data['error'] = "El correo electrónico no existe.";
+                error_log('Email not found: ' . $_POST['correo']);
                 $this->view('login/index', $data);
             }
         }

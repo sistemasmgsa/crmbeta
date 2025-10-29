@@ -14,28 +14,15 @@ try {
     echo "Base de datos '" . DB_NAME . "' recreada.\n";
 
     // Ejecutar el script de la estructura de la base de datos y datos iniciales
-    $sql_structure = file_get_contents('database.sql');
-    $conn->exec($sql_structure);
-    echo "Script 'database.sql' ejecutado correctamente.\n";
+    $sql = file_get_contents('database.sql');
+    $queries = explode('$$', $sql);
 
-    // Ejecutar el script de los procedimientos almacenados
-    $sql_procedures = file_get_contents('stored_procedures.sql');
-
-    // 1. Quitar los comandos DELIMITER
-    $sql_procedures = preg_replace('/DELIMITER\s*\S+/s', '', $sql_procedures);
-
-    // 2. Dividir el script en procedimientos individuales usando '$$' como separador
-    $procedures = explode('$$', $sql_procedures);
-
-    // 3. Ejecutar cada procedimiento
-    foreach ($procedures as $procedure) {
-        $procedure = trim($procedure);
-        if (!empty($procedure)) {
-            $conn->exec($procedure);
+    foreach ($queries as $query) {
+        if (!empty(trim($query))) {
+            $conn->exec($query);
         }
     }
-
-    echo "Script 'stored_procedures.sql' ejecutado correctamente.\n";
+    echo "Script 'database.sql' ejecutado correctamente.\n";
 
 } catch(PDOException $e) {
     echo "Error: " . $e->getMessage() . "\n";

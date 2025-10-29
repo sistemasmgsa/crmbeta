@@ -1,23 +1,33 @@
 <?php
-// Cargar configuración
-require_once 'config/config.php';
-require_once 'config/database.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// Iniciar sesión
 session_start();
 
-// Enrutamiento
-$controller = isset($_GET['controller']) ? $_GET['controller'] : 'login';
-$action = isset($_GET['action']) ? $_GET['action'] : 'index';
+require_once 'config/config.php';
+require_once 'config/database.php';
+require_once 'controllers/controller.php';
 
-$controllerFile = 'controllers/' . $controller . '_controller.php';
+// Cargar modelos
+spl_autoload_register(function ($class_name) {
+    $model_path = 'models/' . strtolower($class_name) . '.php';
+    if (file_exists($model_path)) {
+        require_once $model_path;
+    }
+});
 
-if (file_exists($controllerFile)) {
-    require_once $controllerFile;
-    $controllerName = ucfirst($controller) . 'Controller';
-    $controller = new $controllerName();
-    if (method_exists($controller, $action)) {
-        $controller->$action();
+$controller_name = $_GET['controller'] ?? 'login';
+$action_name = $_GET['action'] ?? 'index';
+
+$controller_class = ucfirst($controller_name) . 'Controller';
+$controller_file = 'controllers/' . $controller_name . '_controller.php';
+
+if (file_exists($controller_file)) {
+    require_once $controller_file;
+    $controller = new $controller_class();
+    if (method_exists($controller, $action_name)) {
+        $controller->$action_name();
     } else {
         echo "Acción no encontrada";
     }
