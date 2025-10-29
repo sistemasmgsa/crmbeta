@@ -33,6 +33,22 @@ class OportunidadesController extends Controller {
         $this->view('oportunidades/index', $data);
     }
 
+    // Devuelve las oportunidades de un cliente en formato JSON
+    public function listarPorCliente() {
+        if (isset($_GET['id_cliente'])) {
+            $database = new Database();
+            $db = $database->getConnection();
+            $oportunidad = new Oportunidad($db);
+            $oportunidad->id_cliente = $_GET['id_cliente'];
+
+            $stmt = $oportunidad->listarPorCliente();
+            $oportunidades = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            header('Content-Type: application/json');
+            echo json_encode($oportunidades);
+        }
+    }
+
     public function crear() {
         $database = new Database();
         $db = $database->getConnection();
