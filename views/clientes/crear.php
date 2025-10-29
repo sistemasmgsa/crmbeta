@@ -7,10 +7,7 @@
 <?php endif; ?>
 
 <form action="<?php echo SITE_URL; ?>index.php?controller=clientes&action=crear" method="POST">
-    <div class="form-group">
-        <label for="nombre_cliente">Nombre del Cliente</label>
-        <input type="text" name="nombre_cliente" id="nombre_cliente" required>
-    </div>
+
     <div class="form-group">
         <label for="id_tipo_documento">Tipo de Documento</label>
         <select name="id_tipo_documento" id="id_tipo_documento">
@@ -22,6 +19,10 @@
     <div class="form-group">
         <label for="numero_documento">Número de Documento</label>
         <input type="text" name="numero_documento" id="numero_documento">
+    </div>
+        <div class="form-group">
+        <label for="nombre_cliente">Nombre del Cliente</label>
+        <input type="text" name="nombre_cliente" id="nombre_cliente" required>
     </div>
     <div class="form-group">
         <label for="direccion_cliente">Dirección</label>

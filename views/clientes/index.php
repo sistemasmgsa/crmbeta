@@ -10,6 +10,8 @@
             <th>Nombre</th>
             <th>Documento</th>
             <th>Nro. Documento</th>
+
+            <th>Nro. Documento</th>
             <th>Ubigeo</th>
             <th>Teléfono</th>
             <th>Correo</th>
@@ -23,6 +25,7 @@
                 <td><?php echo $cliente['nombre_cliente']; ?></td>
                 <td><?php echo $cliente['nombre_documento']; ?></td>
                 <td><?php echo $cliente['numero_documento']; ?></td>
+                <td><?php echo $cliente['direccion_cliente']; ?></td>
                 <td><?php echo $cliente['ubigeo']; ?></td>
                 <td><?php echo $cliente['telefono_cliente']; ?></td>
                 <td><?php echo $cliente['correo_electronico']; ?></td>
