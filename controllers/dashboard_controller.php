@@ -12,11 +12,11 @@ class DashboardController extends Controller {
         $database = new Database();
         $db = $database->getConnection();
 
-        $query = "CALL sp_dashboard_estadisticas()";
+        $query = "CALL sp_actividades_pendientes()";
         $stmt = $db->prepare($query);
         $stmt->execute();
 
-        $data['estadisticas'] = $stmt->fetch(PDO::FETCH_ASSOC);
+        $data['actividades'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
         $data['titulo'] = 'Dashboard';

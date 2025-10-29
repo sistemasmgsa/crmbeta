@@ -59,12 +59,6 @@
                     required>
                 </div>
 
-                <!-- 🔹 reCAPTCHA colocado antes del botón -->
-                <div class="g-recaptcha" 
-                     data-sitekey="6Lf2h_srAAAAAGxGBvAMxMBQb7jxOROBq3rKVoao" 
-                     style="display: flex; justify-content: center; margin-bottom: 15px;">
-                </div>
-
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Ingresar</button>
             </form>
         </div>
