@@ -82,7 +82,7 @@ class Oportunidad {
     }
 
     function eliminar() {
-        $query = "CALL usp_oportunidades_eliminar(:id_oportunidad)";
+        $query = "CALL sp_oportunidades_eliminar(:id_oportunidad)";
         $stmt = $this->conn->prepare($query);
         $this->id_oportunidad = htmlspecialchars(strip_tags($this->id_oportunidad));
         $stmt->bindParam(":id_oportunidad", $this->id_oportunidad);

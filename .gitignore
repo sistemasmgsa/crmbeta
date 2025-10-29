@@ -4,7 +4,6 @@ config/config.php
 # Archivos de registro
 debug.log
 server.log
-php_server.log
 
 # Directorio de trabajo temporal
 jules-scratch/
