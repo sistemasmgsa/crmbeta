@@ -214,12 +214,6 @@ document.addEventListener('DOMContentLoaded', function() {
         </select>
     </div>
     <div class="form-group">
-        <label for="id_oportunidad_actividad">Oportunidad (Opcional)</label>
-        <select name="id_oportunidad" id="id_oportunidad_actividad" style="font-size: 16px; padding: 6px; width: 300px;">
-            <option value="">-- Sin Oportunidad --</option>
-        </select>
-    </div>
-    <div class="form-group">
         <label for="asunto">Asunto</label>
         <input type="text" name="asunto" id="asunto" style="font-size: 16px; padding: 6px; width: 1000px;" required>
     </div>
@@ -323,7 +317,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const historialActividades = document.getElementById('historial-actividades');
     const formNuevaActividad = document.getElementById('form-nueva-actividad');
     const contactoActividadSelect = document.getElementById('id_contacto_actividad');
-    const oportunidadActividadSelect = document.getElementById('id_oportunidad_actividad');
     const tablaContactosBody = document.querySelector('#tabla-contactos tbody');
     const modal = document.getElementById('modal-contacto');
     const formContacto = document.getElementById('form-contacto');
@@ -481,24 +474,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    function cargarOportunidades() {
-        fetch(`<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=listarPorCliente&id_cliente=${idCliente}`)
-            .then(response => response.json())
-            .then(data => {
-                oportunidadActividadSelect.innerHTML = '<option value="">-- Sin Oportunidad --</option>';
-                data.forEach(oportunidad => {
-                    const option = document.createElement('option');
-                    option.value = oportunidad.id_oportunidad;
-                    option.textContent = oportunidad.nombre_oportunidad;
-                    oportunidadActividadSelect.appendChild(option);
-                });
-            });
-    }
-
     // Carga inicial
     cargarActividades();
     cargarContactos();
-    cargarOportunidades();
 });
 </script>
 

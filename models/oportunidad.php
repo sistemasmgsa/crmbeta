@@ -23,14 +23,6 @@ class Oportunidad {
         return $stmt;
     }
 
-    function listarPorCliente() {
-        $query = "CALL sp_oportunidades_listar_por_cliente(:id_cliente)";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":id_cliente", $this->id_cliente);
-        $stmt->execute();
-        return $stmt;
-    }
-
     function obtener() {
         $query = "CALL sp_oportunidades_obtener(:id_oportunidad)";
         $stmt = $this->conn->prepare($query);

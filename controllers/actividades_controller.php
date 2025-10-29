@@ -32,8 +32,8 @@ class ActividadesController extends Controller {
             $actividad = new Actividad($db);
 
             $actividad->id_cliente = $_POST['id_cliente'] ?? null;
-            $actividad->id_contacto = empty($_POST['id_contacto']) ? null : $_POST['id_contacto'];
-            $actividad->id_oportunidad = empty($_POST['id_oportunidad']) ? null : $_POST['id_oportunidad'];
+            $actividad->id_contacto = $_POST['id_contacto'] ?? null;
+            $actividad->id_oportunidad = $_POST['id_oportunidad'] ?? null;
             $actividad->id_usuario = $_SESSION['usuario']['id_usuario'];
             $actividad->tipo_actividad = $_POST['tipo_actividad'];
             $actividad->asunto = $_POST['asunto'];
