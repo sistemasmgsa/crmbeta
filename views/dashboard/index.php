@@ -42,7 +42,7 @@
         <div id='calendar'></div>
     </div>
     <div id="stats-container">
-        <h2>Estadísticas</h2>
+        <h2>Otros reportes</h2>
         <p>Próximamente...</p>
     </div>
 </div>
