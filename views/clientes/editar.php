@@ -200,10 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <input type="hidden" name="id_cliente" value="<?php echo $data['cliente']['id_cliente']; ?>">
     <div class="form-group">
         <label for="tipo_actividad">Tipo</label>
-        <select name="tipo_actividad" id="tipo_actividad" 
-        style="font-size: 16px; padding: 6px; width: 300px;">
-        
-        required>
+        <select name="tipo_actividad" id="tipo_actividad" style="font-size: 16px; padding: 6px; width: 300px;" required>
             <option value="Llamada">Llamada</option>
             <option value="Reunión">Reunión</option>
             <option value="Correo">Correo</option>
@@ -211,24 +208,22 @@ document.addEventListener('DOMContentLoaded', function() {
         </select>
     </div>
     <div class="form-group">
+        <label for="id_contacto_actividad">Contacto (Opcional)</label>
+        <select name="id_contacto" id="id_contacto_actividad" style="font-size: 16px; padding: 6px; width: 300px;">
+            <option value="">-- Sin Contacto --</option>
+        </select>
+    </div>
+    <div class="form-group">
         <label for="asunto">Asunto</label>
-        <input type="text" name="asunto" id="asunto" 
-        style="font-size: 16px; padding: 6px; width: 1000px;"
-        
-        required>
+        <input type="text" name="asunto" id="asunto" style="font-size: 16px; padding: 6px; width: 1000px;" required>
     </div>
     <div class="form-group">
         <label for="descripcion">Descripción</label>
-        <textarea name="descripcion" id="descripcion" rows="3"
-        style="font-size: 16px; padding: 6px; width: 1000px;"
-        ></textarea>
+        <textarea name="descripcion" id="descripcion" rows="3" style="font-size: 16px; padding: 6px; width: 1000px;"></textarea>
     </div>
     <div class="form-group">
         <label for="fecha_actividad">Fecha y Hora</label>
-        <input type="datetime-local" name="fecha_actividad" id="fecha_actividad" 
-        style="font-size: 16px; padding: 6px; width: 300px;"
-        
-        required>
+        <input type="datetime-local" name="fecha_actividad" id="fecha_actividad" style="font-size: 16px; padding: 6px; width: 300px;" required>
     </div>
     <button type="submit" class="btn btn-primary">Registrar Actividad</button>
 </form>
@@ -321,6 +316,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const idCliente = document.getElementById('id_cliente_form').value;
     const historialActividades = document.getElementById('historial-actividades');
     const formNuevaActividad = document.getElementById('form-nueva-actividad');
+    const contactoActividadSelect = document.getElementById('id_contacto_actividad');
     const tablaContactosBody = document.querySelector('#tabla-contactos tbody');
     const modal = document.getElementById('modal-contacto');
     const formContacto = document.getElementById('form-contacto');
@@ -374,7 +370,11 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 tablaContactosBody.innerHTML = '';
+                // Limpiar y poblar el dropdown de contactos en el form de actividades
+                contactoActividadSelect.innerHTML = '<option value="">-- Sin Contacto --</option>';
+
                 data.forEach(contacto => {
+                    // Poblar la tabla de contactos
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>${contacto.nombre_contacto}</td>
@@ -387,6 +387,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         </td>
                     `;
                     tablaContactosBody.appendChild(tr);
+
+                    // Poblar el dropdown
+                    const option = document.createElement('option');
+                    option.value = contacto.id_contacto;
+                    option.textContent = contacto.nombre_contacto;
+                    contactoActividadSelect.appendChild(option);
                 });
             });
     }
