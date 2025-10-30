@@ -43,7 +43,10 @@ else if ($tipo == "2") {
     echo json_encode([
         "success" => true,
         "nombre" => trim($data["lista"][0]["apenomdenunciado"]),
-        "direccion" => trim($data["lista"][0]["direstablecimiento"])
+        "direccion" => trim($data["lista"][0]["direstablecimiento"]),
+        "departamento" => trim($data["lista"][0]["desdepartamento"]),
+        "provincia" => trim($data["lista"][0]["desprovincia"]),
+        "distrito" => trim($data["lista"][0]["desdistrito"])
     ]);
 }
 

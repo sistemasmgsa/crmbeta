@@ -2,9 +2,23 @@
 
 <h1>Crear Cliente</h1>
 
+<!-- ✅ Incluye SweetAlert2 (solo una vez, en tu layout o aquí mismo) -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <?php if (isset($data['error'])) : ?>
-    <p class="error-message"><?php echo $data['error']; ?></p>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "<?php echo addslashes($data['error']); ?>",
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#d33"
+            });
+        });
+    </script>
 <?php endif; ?>
+
 
 <form action="<?php echo SITE_URL; ?>index.php?controller=clientes&action=crear" method="POST">
 
@@ -112,66 +126,116 @@
 document.addEventListener('DOMContentLoaded', function() {
 
 
-    // ➤ API para buscar  SUNAT
-    document.getElementById("btnBuscarSunat").addEventListener("click", function() {
-        const numero = document.getElementById("numero_documento").value;
-        const tipo = document.getElementById("id_tipo_documento").value;
+// ➤ API para buscar  SUNAT
+document.getElementById("btnBuscarSunat").addEventListener("click", function() {
+    const numero = document.getElementById("numero_documento").value;
+    const tipo = document.getElementById("id_tipo_documento").value;
 
-        if (numero.trim() === "") {
-            alert("Ingrese un número de documento");
-            return;
-        }
+    if (numero.trim() === "") {
+        alert("Ingrese un número de documento");
+        return;
+    }
 
-        if (tipo !== "1" && tipo !== "2") {
-            alert("SUNAT solo consulta DNI o RUC");
-            return;
-        }
+    if (tipo !== "1" && tipo !== "2") {
+        alert("SUNAT solo consulta DNI o RUC");
+        return;
+    }
 
-        fetch("<?php echo SITE_URL; ?>buscar_sunat.php?numero=" + numero + "&tipo=" + tipo)
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById("nombre_cliente").value = data.nombre;
-                    document.getElementById("direccion_cliente").value = data.direccion;
-                } else {
-                    alert("No se encontró información en SUNAT");
+    fetch("<?php echo SITE_URL; ?>buscar_sunat.php?numero=" + numero + "&tipo=" + tipo)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                // 🟢 Completar datos básicos
+                document.getElementById("nombre_cliente").value = data.nombre;
+                document.getElementById("direccion_cliente").value = data.direccion;
+
+                // 🟢 Si viene información de ubigeo
+                if (data.departamento && data.provincia && data.distrito) {
+                    const dep = data.departamento.trim().toUpperCase();
+                    const prov = data.provincia.trim().toUpperCase();
+                    const dist = data.distrito.trim().toUpperCase();
+
+                    // Buscar si existe el departamento en la lista
+                    const depOption = [...departamentoSelect.options]
+                        .find(o => o.value.trim().toUpperCase() === dep);
+                    if (depOption) {
+                        departamentoSelect.value = depOption.value;
+                        populateProvincias();
+
+                        // Buscar provincia
+                        const provOption = [...provinciaSelect.options]
+                            .find(o => o.value.trim().toUpperCase() === prov);
+                        if (provOption) {
+                            provinciaSelect.value = provOption.value;
+                            populateDistritos();
+
+                            // Buscar distrito
+                            const distOption = [...distritoSelect.options]
+                                .find(o => o.value.trim().toUpperCase() === dist);
+                            if (distOption) {
+                                distritoSelect.value = distOption.value;
+                                updateUbigeoId();
+                            }
+                        }
+                    }
                 }
-            })
-            .catch(() => alert("Error consultando SUNAT"));
-    });
+
+            } else {
+                alert("No se encontró información en SUNAT");
+            }
+        })
+        .catch(() => alert("Error consultando SUNAT"));
+});
+
 
 
     // ➤ UBIGEO dinámico
-    const ubigeos = <?php echo json_encode($data['ubigeos']); ?>;
-    const departamentoSelect = document.getElementById('departamento');
-    const provinciaSelect = document.getElementById('provincia');
-    const distritoSelect = document.getElementById('distrito');
-    const idUbigeoInput = document.getElementById('id_ubigeo');
+    const tipoDocumento = document.getElementById("id_tipo_documento");
+    const numeroDocumento = document.getElementById("numero_documento");
+    const nombreCliente = document.getElementById("nombre_cliente");
+    const direccion_cliente = document.getElementById("direccion_cliente");
+    const departamentoSelect = document.getElementById("departamento");
+    const provinciaSelect = document.getElementById("provincia");
+    const distritoSelect = document.getElementById("distrito");
+    const idUbigeoInput = document.getElementById("id_ubigeo");
 
+    const ubigeos = <?php echo json_encode($data['ubigeos']); ?>;
+
+     // --- FUNCIONES DE UBIGEO ---
     function populateProvincias() {
         const selectedDepartamento = departamentoSelect.value;
         provinciaSelect.innerHTML = '';
         distritoSelect.innerHTML = '';
-        const provincias = [...new Set(ubigeos.filter(u => u.departamento === selectedDepartamento).map(u => u.provincia))];
+
+        const provincias = [...new Set(
+            ubigeos.filter(u => u.departamento === selectedDepartamento).map(u => u.provincia)
+        )];
+
         provincias.forEach(provincia => {
             const option = document.createElement('option');
             option.value = provincia;
             option.textContent = provincia;
             provinciaSelect.appendChild(option);
         });
+
         populateDistritos();
     }
 
     function populateDistritos() {
         const selectedProvincia = provinciaSelect.value;
         distritoSelect.innerHTML = '';
-        const distritos = [...new Set(ubigeos.filter(u => u.provincia === selectedProvincia).map(u => u.distrito))];
+
+        const distritos = [...new Set(
+            ubigeos.filter(u => u.provincia === selectedProvincia).map(u => u.distrito)
+        )];
+
         distritos.forEach(distrito => {
             const option = document.createElement('option');
             option.value = distrito;
             option.textContent = distrito;
             distritoSelect.appendChild(option);
         });
+
         updateUbigeoId();
     }
 
@@ -179,7 +243,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedDepartamento = departamentoSelect.value;
         const selectedProvincia = provinciaSelect.value;
         const selectedDistrito = distritoSelect.value;
-        const ubigeo = ubigeos.find(u => u.departamento === selectedDepartamento && u.provincia === selectedProvincia && u.distrito === selectedDistrito);
+
+        const ubigeo = ubigeos.find(u =>
+            u.departamento === selectedDepartamento &&
+            u.provincia === selectedProvincia &&
+            u.distrito === selectedDistrito
+        );
+
         if (ubigeo) {
             idUbigeoInput.value = ubigeo.id_ubigeo;
         }
@@ -189,34 +259,37 @@ document.addEventListener('DOMContentLoaded', function() {
     provinciaSelect.addEventListener('change', populateDistritos);
     distritoSelect.addEventListener('change', updateUbigeoId);
 
+    // Inicializar
     populateProvincias();
-});
 
-    const tipoDocumento = document.getElementById("id_tipo_documento");
-    const numeroDocumento = document.getElementById("numero_documento");
-    const nombreCliente = document.getElementById("nombre_cliente");
-    const direccion_cliente = document.getElementById("direccion_cliente");
 
-    // ✅ Cuando cambia el tipo de documento
+    // --- CAMBIO DE TIPO DE DOCUMENTO ---
     tipoDocumento.addEventListener("change", function () {
         const tipo = tipoDocumento.value;
 
-        // Limpiar campos cada vez que se cambia de tipo
+        // 🔹 Limpiar los campos de texto
         numeroDocumento.value = "";
         nombreCliente.value = "";
         direccion_cliente.value = "";
 
+        // 🔹 Reiniciar ubigeo al valor inicial (guiones)
+        departamentoSelect.selectedIndex = 0;
+        populateProvincias();
+        provinciaSelect.selectedIndex = 0;
+        populateDistritos();
+        distritoSelect.selectedIndex = 0;
+        updateUbigeoId();
 
-        // Configuración según tipo
+        // 🔹 Configurar longitud según tipo de documento
         if (tipo === "1") { // DNI
             numeroDocumento.maxLength = 8;
         } else if (tipo === "2") { // RUC
             numeroDocumento.maxLength = 11;
-        } else { // Carnet u otro
+        } else {
             numeroDocumento.maxLength = 20;
         }
     });
-
+});
 
 </script>
 

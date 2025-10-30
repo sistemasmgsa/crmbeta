@@ -2,8 +2,21 @@
 
 <h1>Editar Cliente</h1>
 
+<!-- ✅ Incluye SweetAlert2 (solo una vez, en tu layout o aquí mismo) -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <?php if (isset($data['error'])) : ?>
-    <p class="error-message"><?php echo $data['error']; ?></p>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "<?php echo addslashes($data['error']); ?>",
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#d33"
+            });
+        });
+    </script>
 <?php endif; ?>
 
 <form action="<?php echo SITE_URL; ?>index.php?controller=clientes&action=editar" method="POST">
@@ -221,10 +234,14 @@ document.addEventListener('DOMContentLoaded', function() {
         <label for="descripcion">Descripción</label>
         <textarea name="descripcion" id="descripcion" rows="3" style="font-size: 16px; padding: 6px; width: 1000px;"></textarea>
     </div>
+
+
     <div class="form-group">
         <label for="fecha_actividad">Fecha y Hora</label>
         <input type="datetime-local" name="fecha_actividad" id="fecha_actividad" style="font-size: 16px; padding: 6px; width: 300px;" required>
     </div>
+
+
     <button type="submit" class="btn btn-primary">Registrar Actividad</button>
 </form>
 
@@ -284,6 +301,11 @@ document.addEventListener('DOMContentLoaded', function() {
         </form>
     </div>
 </div>
+
+
+
+
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

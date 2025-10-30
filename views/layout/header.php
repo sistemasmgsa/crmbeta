@@ -33,6 +33,7 @@
                         <ul class="submenu">
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=clientes&action=index">Clientes</a></li>
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=index">Oportunidades</a></li>
+                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=calendario&action=index">Calendario</a></li>
                         </ul>
                     </li>
 
