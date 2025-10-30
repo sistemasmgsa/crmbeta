@@ -41,8 +41,18 @@ body {
     transition: background-color 0.3s;
 }
 
+.menu ul li a i {
+    color: #fff;
+    margin-right: 10px;
+}
+
 .menu ul li a:hover {
     background-color: #555;
+}
+
+.submenu {
+    display: none;
+    padding-left: 20px;
 }
 
 /* Content styles */
