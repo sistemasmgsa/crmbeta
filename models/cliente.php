@@ -27,6 +27,20 @@ class Cliente {
         return $stmt;
     }
 
+    public function listar_filtrado($nombre = null, $documento = null) {
+        $query = "CALL sp_clientes_listar_filtrado(:nombre, :documento)";
+        $stmt = $this->conn->prepare($query);
+        
+        // Para que si está vacío envíe NULL
+        $stmt->bindValue(':nombre', !empty($nombre) ? $nombre : null);
+        $stmt->bindValue(':documento', !empty($documento) ? $documento : null);
+        
+        $stmt->execute();
+        return $stmt;
+    }
+
+
+
     function obtener() {
         $query = "CALL sp_clientes_obtener(:id_cliente)";
         $stmt = $this->conn->prepare($query);

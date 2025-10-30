@@ -67,6 +67,39 @@
 class="btn btn-primary">Nuevo Cliente</a>
 <p></p>
 
+
+<!-- ✅ Filtros de búsqueda con campos más grandes y botones con iconos -->
+<div style="margin-top: 15px; margin-bottom: 15px; display: flex; gap: 10px; align-items: center;">
+    <form method="GET" action="<?php echo SITE_URL; ?>index.php" style="display: flex; gap: 10px; align-items: center;">
+        <input type="hidden" name="controller" value="clientes">
+        <input type="hidden" name="action" value="index">
+
+        <!-- Campo Nombre más grande -->
+        <input type="text" name="filtro_nombre" placeholder="Buscar por Nombre" 
+               value="<?php echo isset($_GET['filtro_nombre']) ? htmlspecialchars($_GET['filtro_nombre']) : ''; ?>" 
+               style="padding: 8px 12px; font-size: 16px; border-radius: 6px; border: 1px solid #ccc; width: 650px;">
+
+        <!-- Campo Documento más grande -->
+        <input type="text" name="filtro_documento" placeholder="Buscar por Documento" 
+               value="<?php echo isset($_GET['filtro_documento']) ? htmlspecialchars($_GET['filtro_documento']) : ''; ?>" 
+               style="padding: 8px 12px; font-size: 16px; border-radius: 6px; border: 1px solid #ccc; width: 250px;">
+
+        <!-- Botón Buscar con icono -->
+        <button type="submit" class="btn btn-primary" style="padding: 8px 14px; display: flex; align-items: center; gap: 6px;">
+            <i class="fa fa-search"></i> Buscar
+        </button>
+
+        <!-- Botón Limpiar con icono -->
+        <a href="<?php echo SITE_URL; ?>index.php?controller=clientes&action=index" class="btn btn-secondary" style="padding: 8px 14px; display: flex; align-items: center; gap: 6px;">
+            <i class="fa fa-times"></i> Limpiar
+        </a>
+    </form>
+</div>
+
+
+
+<p></p>
+
 <div class="table-wrapper">
     <table class="table">
         <thead>

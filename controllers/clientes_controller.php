@@ -13,7 +13,12 @@ class ClientesController extends Controller {
         $db = $database->getConnection();
         $cliente = new Cliente($db);
 
-        $stmt = $cliente->listar();
+        // Capturar filtros
+        $filtro_nombre = isset($_GET['filtro_nombre']) ? $_GET['filtro_nombre'] : null;
+        $filtro_documento = isset($_GET['filtro_documento']) ? $_GET['filtro_documento'] : null;
+
+        // Obtener clientes filtrados desde el procedimiento
+        $stmt = $cliente->listar_filtrado($filtro_nombre, $filtro_documento);
         $data['clientes'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $data['titulo'] = 'Clientes';
