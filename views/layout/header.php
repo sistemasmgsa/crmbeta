@@ -23,6 +23,8 @@
                         <ul class="submenu">
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=tiposdocumentoidentidad&action=index">Tipos de Documento</a></li>
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=ubigeos&action=index">Ubigeos</a></li>
+                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=usuarios&action=index">Usuarios</a></li>
+                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=perfiles&action=index">Perfiles</a></li>
                         </ul>
                     </li>
 
@@ -34,7 +36,12 @@
                         </ul>
                     </li>
 
-                    <li><a href="#"><i class="far fa-chart-bar"></i> Reportes</a></li>
+                    <li class="has-submenu">
+                        <a href="#"><i class="far fa-chart-bar"></i> Reportes</a>
+                        <ul class="submenu">
+                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=reportes&action=dinamicos">Reportes Dinamicos</a></li>
+                        </ul>
+                    </li>
 
                     <?php if ($_SESSION['usuario']['id_perfil'] == 1) : ?>
                     <li class="has-submenu">
