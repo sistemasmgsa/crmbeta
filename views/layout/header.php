@@ -16,10 +16,10 @@
             </div>
             <nav class="menu">
                 <ul>
-                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=dashboard&action=index"><i class="far fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=dashboard&action=index"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
 
                     <li class="has-submenu">
-                        <a href="#"><i class="far fa-cogs"></i> Mantenimiento</a>
+                        <a href="#"><i class="fas fa-cogs"></i> Mantenimiento</a>
                         <ul class="submenu">
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=tiposdocumentoidentidad&action=index">Tipos de Documento</a></li>
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=ubigeos&action=index">Ubigeos</a></li>
@@ -29,7 +29,7 @@
                     </li>
 
                     <li class="has-submenu">
-                        <a href="#"><i class="far fa-tasks"></i> Operaciones</a>
+                        <a href="#"><i class="fas fa-tasks"></i> Operaciones</a>
                         <ul class="submenu">
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=clientes&action=index">Clientes</a></li>
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=index">Oportunidades</a></li>
@@ -37,7 +37,7 @@
                     </li>
 
                     <li class="has-submenu">
-                        <a href="#"><i class="far fa-chart-bar"></i> Reportes</a>
+                        <a href="#"><i class="fas fa-chart-bar"></i> Reportes</a>
                         <ul class="submenu">
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=reportes&action=dinamicos">Reportes Dinamicos</a></li>
                         </ul>
@@ -45,7 +45,7 @@
 
                     <?php if ($_SESSION['usuario']['id_perfil'] == 1) : ?>
                     <li class="has-submenu">
-                        <a href="#"><i class="far fa-lock"></i> Seguridad</a>
+                        <a href="#"><i class="fas fa-lock"></i> Seguridad</a>
                         <ul class="submenu">
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=usuarios&action=index">Usuarios</a></li>
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=perfiles&action=index">Perfiles</a></li>
@@ -53,7 +53,7 @@
                     </li>
                     <?php endif; ?>
 
-                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=login&action=logout"><i class="far fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=login&action=logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
                 </ul>
             </nav>
         </aside>
