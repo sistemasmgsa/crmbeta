@@ -118,12 +118,30 @@
             },
 
             eventClick: function(info) {
+                const fecha = info.event.start;
+
+                // Formatear fecha a DD/MM/YYYY
+                const fechaFormateada = fecha.toLocaleDateString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+
+                // Formatear hora a 12 horas (AM/PM)
+                const horaFormateada = fecha.toLocaleTimeString('es-ES', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                }).toUpperCase();
+
+
                 alert(
                     'Cliente: ' + info.event.extendedProps.cliente + "\n" +
                     'Asunto: ' + info.event.title + "\n" +
                     'Tipo: ' + info.event.extendedProps.type + "\n" +
                     'Descripción: ' + info.event.extendedProps.description + "\n" +
-                    'Fecha: ' + info.event.start.toLocaleString()
+                    'Fecha: ' + fechaFormateada + "\n" +
+                    'Hora: ' + horaFormateada
                 );
             }
         });
