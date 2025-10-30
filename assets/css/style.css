@@ -151,3 +151,45 @@ table th {
         min-height: auto;
     }
 }
+
+/* Tab container styles */
+.tab-container {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.tab-nav {
+    overflow: hidden;
+    border-bottom: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+.tab-nav button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+.tab-nav button:hover {
+    background-color: #ddd;
+}
+
+.tab-nav button.active {
+    background-color: #ccc;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.tab-content.active {
+    display: block;
+}

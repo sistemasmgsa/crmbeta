@@ -19,125 +19,221 @@
     </script>
 <?php endif; ?>
 
-<form action="<?php echo SITE_URL; ?>index.php?controller=clientes&action=editar" method="POST">
-    <input type="hidden" name="id_cliente" id="id_cliente_form" value="<?php echo $data['cliente']['id_cliente']; ?>">
+<div class="tab-container">
+    <div class="tab-nav">
+        <button class="tab-link active" onclick="openTab(event, 'cliente')">Cliente</button>
+        <button class="tab-link" onclick="openTab(event, 'actividades')">Actividades</button>
+        <button class="tab-link" onclick="openTab(event, 'contacto')">Contacto</button>
+    </div>
 
-<div class="form-group">
-    <label for="id_tipo_documento">Tipo de Documento</label>
-    <select name="id_tipo_documento" id="id_tipo_documento"
-        style="font-size: 16px; padding: 6px; width: 200px;">
-        <?php foreach ($data['tipos_documento'] as $tipo) : ?>
-            <option value="<?php echo $tipo['id_tipo_documento']; ?>"
-                <?php echo ($data['cliente']['id_tipo_documento'] == $tipo['id_tipo_documento']) ? 'selected' : ''; ?>>
-                <?php echo $tipo['nombre_documento']; ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
+    <!-- Contenido de la Pestaña Cliente -->
+    <div id="cliente" class="tab-content active">
+        <form action="<?php echo SITE_URL; ?>index.php?controller=clientes&action=editar" method="POST">
+            <input type="hidden" name="id_cliente" id="id_cliente_form" value="<?php echo $data['cliente']['id_cliente']; ?>">
+
+            <div class="form-group">
+                <label for="id_tipo_documento">Tipo de Documento</label>
+                <select name="id_tipo_documento" id="id_tipo_documento"
+                    style="font-size: 16px; padding: 6px; width: 200px;">
+                    <?php foreach ($data['tipos_documento'] as $tipo) : ?>
+                        <option value="<?php echo $tipo['id_tipo_documento']; ?>"
+                            <?php echo ($data['cliente']['id_tipo_documento'] == $tipo['id_tipo_documento']) ? 'selected' : ''; ?>>
+                            <?php echo $tipo['nombre_documento']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="form-group"
+                style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                <label for="numero_documento"
+                    style="font-size: 16px; margin: 0; white-space: nowrap;">
+                    Número de Documento
+                </label>
+                <input type="text" name="numero_documento" id="numero_documento"
+                    style="font-size: 16px; padding: 6px; width: 200px;"
+                    value="<?php echo $data['cliente']['numero_documento']; ?>"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                    required>
+                <button type="button" id="btnBuscarSunat"
+                        style="background: #007bff; color: #fff; border: none;
+                            padding: 6px 12px; font-size: 14px; cursor: pointer;
+                            border-radius: 4px; margin: 0;">
+                    Buscar SUNAT
+                </button>
+            </div>
+
+            <div class="form-group">
+                <label for="nombre_cliente">Nombre del Cliente</label>
+                <input type="text" name="nombre_cliente" id="nombre_cliente"
+                    value="<?php echo htmlspecialchars($data['cliente']['nombre_cliente']); ?>"
+                    style="font-size: 16px; padding: 6px; width: 800px;"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="direccion_cliente">Dirección</label>
+                <input type="text" name="direccion_cliente" id="direccion_cliente"
+                    value="<?php echo htmlspecialchars($data['cliente']['direccion_cliente']); ?>"
+                    style="font-size: 16px; padding: 6px; width: 800px;">
+            </div>
+
+            <div class="form-group">
+                <label for="departamento">Departamento</label>
+                <select name="departamento" id="departamento"
+                    style="font-size: 16px; padding: 6px; width: 300px;">
+                    <?php foreach ($data['departamentos'] as $departamento) : ?>
+                        <option value="<?php echo $departamento; ?>"
+                            <?php echo ($data['cliente']['departamento'] == $departamento) ? 'selected' : ''; ?>>
+                            <?php echo $departamento; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="provincia">Provincia</label>
+                <select name="provincia" id="provincia"
+                    style="font-size: 16px; padding: 6px; width: 300px;">
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="distrito">Distrito</label>
+                <select name="distrito" id="distrito"
+                    style="font-size: 16px; padding: 6px; width: 300px;">
+                </select>
+            </div>
+
+            <input type="hidden" name="id_ubigeo" id="id_ubigeo"
+                value="<?php echo $data['cliente']['id_ubigeo']; ?>">
+
+            <div class="form-group">
+                <label for="telefono_cliente">Teléfono</label>
+                <input type="text" name="telefono_cliente" id="telefono_cliente"
+                    value="<?php echo htmlspecialchars($data['cliente']['telefono_cliente']); ?>"
+                    style="font-size: 16px; padding: 6px; width: 400px;">
+            </div>
+
+            <div class="form-group">
+                <label for="correo_electronico">Correo Electrónico</label>
+                <input type="email" name="correo_electronico" id="correo_electronico"
+                    value="<?php echo htmlspecialchars($data['cliente']['correo_electronico']); ?>"
+                    style="font-size: 16px; padding: 6px; width: 600px;">
+            </div>
+
+            <div class="form-group">
+                <label for="observaciones">Observaciones</label>
+                <textarea name="observaciones" id="observaciones"
+                    style="font-size: 16px; padding: 6px; width: 1000px;"><?php echo htmlspecialchars($data['cliente']['observaciones']); ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="website_cliente">Sitio Web</label>
+                <input type="url" name="website_cliente" id="website_cliente"
+                    value="<?php echo htmlspecialchars($data['cliente']['website_cliente']); ?>"
+                    style="font-size: 16px; padding: 6px; width: 600px;">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Actualizar</button>
+            <a href="<?php echo SITE_URL; ?>index.php?controller=clientes&action=index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+
+    <!-- Contenido de la Pestaña Actividades -->
+    <div id="actividades" class="tab-content">
+        <h2>Actividades</h2>
+        <div id="historial-actividades">
+            <!-- Las actividades se cargarán aquí con AJAX -->
+        </div>
+        <hr>
+        <h3>Registrar Nueva Actividad</h3>
+        <form id="form-nueva-actividad">
+            <input type="hidden" name="id_cliente" value="<?php echo $data['cliente']['id_cliente']; ?>">
+            <div class="form-group">
+                <label for="tipo_actividad">Tipo</label>
+                <select name="tipo_actividad" id="tipo_actividad" style="font-size: 16px; padding: 6px; width: 300px;" required>
+                    <option value="Llamada">Llamada</option>
+                    <option value="Reunión">Reunión</option>
+                    <option value="Correo">Correo</option>
+                    <option value="Tarea">Tarea</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="id_contacto_actividad">Contacto (Opcional)</label>
+                <select name="id_contacto" id="id_contacto_actividad" style="font-size: 16px; padding: 6px; width: 300px;">
+                    <option value="">-- Sin Contacto --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="asunto">Asunto</label>
+                <input type="text" name="asunto" id="asunto" style="font-size: 16px; padding: 6px; width: 1000px;" required>
+            </div>
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea name="descripcion" id="descripcion" rows="3" style="font-size: 16px; padding: 6px; width: 1000px;"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="fecha_actividad">Fecha y Hora</label>
+                <input type="datetime-local" name="fecha_actividad" id="fecha_actividad" style="font-size: 16px; padding: 6px; width: 300px;" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar Actividad</button>
+        </form>
+    </div>
+
+    <!-- Contenido de la Pestaña Contacto -->
+    <div id="contacto" class="tab-content">
+        <h2>Contactos</h2>
+        <button id="btn-nuevo-contacto" class="btn btn-primary">Nuevo Contacto</button>
+        <table id="tabla-contactos">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Cargo</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Los contactos se cargarán aquí con AJAX -->
+            </tbody>
+        </table>
+
+        <!-- Modal para crear/editar contactos (inicialmente oculto) -->
+        <div id="modal-contacto" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+            <div style="background:#fff; width:500px; margin:100px auto; padding:30px; border-radius:5px;">
+                <h3 id="modal-titulo"></h3>
+                <form id="form-contacto">
+                    <input type="hidden" name="id_contacto" id="id_contacto">
+                    <input type="hidden" name="id_cliente" id="id_cliente_contacto" value="<?php echo $data['cliente']['id_cliente']; ?>">
+                    <div class="form-group">
+                        <label for="nombre_contacto">Nombre</label>
+                        <input type="text" name="nombre_contacto" id="nombre_contacto" style="font-size: 16px; padding: 6px; width: 480px;" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cargo_contacto">Cargo</label>
+                        <input type="text" name="cargo_contacto" id="cargo_contacto" style="font-size: 16px; padding: 6px; width: 480px;">
+                    </div>
+                    <div class="form-group">
+                        <label for="correo_contacto">Correo</label>
+                        <input type="email" name="correo_contacto" id="correo_contacto" style="font-size: 16px; padding: 6px; width: 480px;">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono_contacto">Teléfono</label>
+                        <input type="text" name="telefono_contacto" id="telefono_contacto" style="font-size: 16px; padding: 6px; width: 480px;">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" id="btn-cancelar-modal" class="btn btn-secondary">Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-
-<div class="form-group"
-    style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-
-    <label for="numero_documento"
-        style="font-size: 16px; margin: 0; white-space: nowrap;">
-        Número de Documento
-    </label>
-
-    <input type="text" name="numero_documento" id="numero_documento"
-        style="font-size: 16px; padding: 6px; width: 200px;"
-        value="<?php echo $data['cliente']['numero_documento']; ?>"
-        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-        required>
-
-    <button type="button" id="btnBuscarSunat"
-            style="background: #007bff; color: #fff; border: none;
-                padding: 6px 12px; font-size: 14px; cursor: pointer;
-                border-radius: 4px; margin: 0;">
-        Buscar SUNAT
-    </button>
-</div>
-
-<div class="form-group">
-    <label for="nombre_cliente">Nombre del Cliente</label>
-    <input type="text" name="nombre_cliente" id="nombre_cliente"
-        value="<?php echo $data['cliente']['nombre_cliente']; ?>"
-        style="font-size: 16px; padding: 6px; width: 800px;"
-        required>
-</div>
-
-<div class="form-group">
-    <label for="direccion_cliente">Dirección</label>
-    <input type="text" name="direccion_cliente" id="direccion_cliente"
-        value="<?php echo $data['cliente']['direccion_cliente']; ?>"
-        style="font-size: 16px; padding: 6px; width: 800px;">
-</div>
-
-<div class="form-group">
-    <label for="departamento">Departamento</label>
-    <select name="departamento" id="departamento"
-        style="font-size: 16px; padding: 6px; width: 300px;">
-        <?php foreach ($data['departamentos'] as $departamento) : ?>
-            <option value="<?php echo $departamento; ?>"
-                <?php echo ($data['cliente']['departamento'] == $departamento) ? 'selected' : ''; ?>>
-                <?php echo $departamento; ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</div>
-
-<div class="form-group">
-    <label for="provincia">Provincia</label>
-    <select name="provincia" id="provincia"
-        style="font-size: 16px; padding: 6px; width: 300px;">
-    </select>
-</div>
-
-<div class="form-group">
-    <label for="distrito">Distrito</label>
-    <select name="distrito" id="distrito"
-        style="font-size: 16px; padding: 6px; width: 300px;">
-    </select>
-</div>
-
-<input type="hidden" name="id_ubigeo" id="id_ubigeo"
-    value="<?php echo $data['cliente']['id_ubigeo']; ?>">
-
-<div class="form-group">
-    <label for="telefono_cliente">Teléfono</label>
-    <input type="text" name="telefono_cliente" id="telefono_cliente"
-        value="<?php echo $data['cliente']['telefono_cliente']; ?>"
-        style="font-size: 16px; padding: 6px; width: 400px;">
-</div>
-
-<div class="form-group">
-    <label for="correo_electronico">Correo Electrónico</label>
-    <input type="email" name="correo_electronico" id="correo_electronico"
-        value="<?php echo $data['cliente']['correo_electronico']; ?>"
-        style="font-size: 16px; padding: 6px; width: 600px;">
-</div>
-
-<div class="form-group">
-    <label for="observaciones">Observaciones</label>
-    <textarea name="observaciones" id="observaciones"
-        style="font-size: 16px; padding: 6px; width: 1000px;"><?php echo $data['cliente']['observaciones']; ?></textarea>
-</div>
-
-<div class="form-group">
-    <label for="website_cliente">Sitio Web</label>
-    <input type="url" name="website_cliente" id="website_cliente"
-        value="<?php echo $data['cliente']['website_cliente']; ?>"
-        style="font-size: 16px; padding: 6px; width: 600px;">
-</div>
-
-
-
-    <button type="submit" class="btn btn-primary">Actualizar</button>
-    <a href="<?php echo SITE_URL; ?>index.php?controller=clientes&action=index" class="btn btn-secondary">Cancelar</a>
-</form>
-
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Script para Ubigeo
     const ubigeos = <?php echo json_encode($data['ubigeos']); ?>;
     const departamentoSelect = document.getElementById('departamento');
     const provinciaSelect = document.getElementById('provincia');
@@ -186,7 +282,6 @@ document.addEventListener('DOMContentLoaded', function() {
     provinciaSelect.addEventListener('change', populateDistritos);
     distritoSelect.addEventListener('change', updateUbigeoId);
 
-    // Set initial values
     const initialUbigeo = ubigeos.find(u => u.id_ubigeo == clienteUbigeo);
     if (initialUbigeo) {
         departamentoSelect.value = initialUbigeo.departamento;
@@ -198,134 +293,14 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         populateProvincias();
     }
-});
-</script>
 
-<hr>
-
-<h2>Actividades</h2>
-<div id="historial-actividades">
-    <!-- Las actividades se cargarán aquí con AJAX -->
-</div>
-<hr>
-<h3>Registrar Nueva Actividad</h3>
-<form id="form-nueva-actividad">
-    <input type="hidden" name="id_cliente" value="<?php echo $data['cliente']['id_cliente']; ?>">
-    <div class="form-group">
-        <label for="tipo_actividad">Tipo</label>
-        <select name="tipo_actividad" id="tipo_actividad" style="font-size: 16px; padding: 6px; width: 300px;" required>
-            <option value="Llamada">Llamada</option>
-            <option value="Reunión">Reunión</option>
-            <option value="Correo">Correo</option>
-            <option value="Tarea">Tarea</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="id_contacto_actividad">Contacto (Opcional)</label>
-        <select name="id_contacto" id="id_contacto_actividad" style="font-size: 16px; padding: 6px; width: 300px;">
-            <option value="">-- Sin Contacto --</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="asunto">Asunto</label>
-        <input type="text" name="asunto" id="asunto" style="font-size: 16px; padding: 6px; width: 1000px;" required>
-    </div>
-    <div class="form-group">
-        <label for="descripcion">Descripción</label>
-        <textarea name="descripcion" id="descripcion" rows="3" style="font-size: 16px; padding: 6px; width: 1000px;"></textarea>
-    </div>
-
-
-    <div class="form-group">
-        <label for="fecha_actividad">Fecha y Hora</label>
-        <input type="datetime-local" name="fecha_actividad" id="fecha_actividad" style="font-size: 16px; padding: 6px; width: 300px;" required>
-    </div>
-
-
-    <button type="submit" class="btn btn-primary">Registrar Actividad</button>
-</form>
-
-<hr>
-
-<h2>Contactos</h2>
-<button id="btn-nuevo-contacto" class="btn btn-primary">Nuevo Contacto</button>
-<table id="tabla-contactos">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Cargo</th>
-            <th>Correo</th>
-            <th>Teléfono</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Los contactos se cargarán aquí con AJAX -->
-    </tbody>
-</table>
-
-<!-- Modal para crear/editar contactos (inicialmente oculto) -->
-<div id="modal-contacto" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
-    <div style="background:#fff; width:500px; margin:100px auto; padding:30px; border-radius:5px;">
-        <h3 id="modal-titulo"></h3>
-        <form id="form-contacto">
-            <input type="hidden" name="id_contacto" id="id_contacto">
-            <input type="hidden" name="id_cliente" id="id_cliente_contacto" value="<?php echo $data['cliente']['id_cliente']; ?>">
-            <div class="form-group">
-                <label for="nombre_contacto">Nombre</label>
-                <input type="text" name="nombre_contacto" id="nombre_contacto" 
-                style="font-size: 16px; padding: 6px; width: 480px;"
-                
-                required>
-            </div>
-            <div class="form-group">
-                <label for="cargo_contacto">Cargo</label>
-                <input type="text" name="cargo_contacto" id="cargo_contacto"
-                style="font-size: 16px; padding: 6px; width: 480px;"
-                >
-            </div>
-            <div class="form-group">
-                <label for="correo_contacto">Correo</label>
-                <input type="email" name="correo_contacto" id="correo_contacto"
-                style="font-size: 16px; padding: 6px; width: 480px;"
-                >
-            </div>
-            <div class="form-group">
-                <label for="telefono_contacto">Teléfono</label>
-                <input type="text" name="telefono_contacto" id="telefono_contacto"
-                style="font-size: 16px; padding: 6px; width: 480px;"
-                >
-            </div>
-            <button type="submit" class="btn btn-primary">Guardar</button>
-            <button type="button" id="btn-cancelar-modal" class="btn btn-secondary">Cancelar</button>
-        </form>
-    </div>
-</div>
-
-
-
-
-
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-
-        // ➤ API para buscar  SUNAT
+    // Script para SUNAT
     document.getElementById("btnBuscarSunat").addEventListener("click", function() {
         const numero = document.getElementById("numero_documento").value;
         const tipo = document.getElementById("id_tipo_documento").value;
-
-        if (numero.trim() === "") {
-            alert("Ingrese un número de documento");
-            return;
-        }
-
-        if (tipo !== "1" && tipo !== "2") {
-            alert("SUNAT solo consulta DNI o RUC");
-            return;
-        }
-
-        fetch("<?php echo SITE_URL; ?>buscar_sunat.php?numero=" + numero + "&tipo=" + tipo)
+        if (numero.trim() === "") { alert("Ingrese un número de documento"); return; }
+        if (tipo !== "1" && tipo !== "2") { alert("SUNAT solo consulta DNI o RUC"); return; }
+        fetch(`<?php echo SITE_URL; ?>buscar_sunat.php?numero=${numero}&tipo=${tipo}`)
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
@@ -338,12 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(() => alert("Error consultando SUNAT"));
     });
 
-
-
-
-
-
-    
+    // Scripts para Actividades y Contactos
     const idCliente = document.getElementById('id_cliente_form').value;
     const historialActividades = document.getElementById('historial-actividades');
     const formNuevaActividad = document.getElementById('form-nueva-actividad');
@@ -380,7 +350,6 @@ document.addEventListener('DOMContentLoaded', function() {
     formNuevaActividad.addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = new FormData(this);
-
         fetch(`<?php echo SITE_URL; ?>index.php?controller=actividades&action=crear`, {
             method: 'POST',
             body: formData
@@ -401,11 +370,8 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 tablaContactosBody.innerHTML = '';
-                // Limpiar y poblar el dropdown de contactos en el form de actividades
                 contactoActividadSelect.innerHTML = '<option value="">-- Sin Contacto --</option>';
-
                 data.forEach(contacto => {
-                    // Poblar la tabla de contactos
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>${contacto.nombre_contacto}</td>
@@ -418,8 +384,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         </td>
                     `;
                     tablaContactosBody.appendChild(tr);
-
-                    // Poblar el dropdown
                     const option = document.createElement('option');
                     option.value = contacto.id_contacto;
                     option.textContent = contacto.nombre_contacto;
@@ -445,30 +409,21 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.style.display = 'block';
     }
 
-    document.getElementById('btn-nuevo-contacto').addEventListener('click', () => {
-        abrirModal('Nuevo Contacto');
-    });
-
-    document.getElementById('btn-cancelar-modal').addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
+    document.getElementById('btn-nuevo-contacto').addEventListener('click', () => abrirModal('Nuevo Contacto'));
+    document.getElementById('btn-cancelar-modal').addEventListener('click', () => modal.style.display = 'none');
 
     tablaContactosBody.addEventListener('click', function(e) {
         if (e.target.classList.contains('btn-editar-contacto')) {
             const idContacto = e.target.dataset.id;
             fetch(`<?php echo SITE_URL; ?>index.php?controller=contactos&action=obtener&id_contacto=${idContacto}`)
                 .then(response => response.json())
-                .then(data => {
-                    abrirModal('Editar Contacto', data);
-                });
+                .then(data => abrirModal('Editar Contacto', data));
         }
-
         if (e.target.classList.contains('btn-eliminar-contacto')) {
             if (confirm('¿Estás seguro de que quieres eliminar este contacto?')) {
                 const idContacto = e.target.dataset.id;
                 const formData = new FormData();
                 formData.append('id_contacto', idContacto);
-
                 fetch(`<?php echo SITE_URL; ?>index.php?controller=contactos&action=eliminar`, {
                     method: 'POST',
                     body: formData
@@ -489,11 +444,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         const formData = new FormData(this);
         const url = editando ? `<?php echo SITE_URL; ?>index.php?controller=contactos&action=actualizar` : `<?php echo SITE_URL; ?>index.php?controller=contactos&action=crear`;
-
-        fetch(url, {
-            method: 'POST',
-            body: formData
-        })
+        fetch(url, { method: 'POST', body: formData })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -505,9 +456,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Carga inicial
+    // Carga inicial de datos
     cargarActividades();
     cargarContactos();
+});
+
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tab-link");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+// Ensure the first tab is displayed by default
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('.tab-content.active').style.display = 'block';
 });
 </script>
 
