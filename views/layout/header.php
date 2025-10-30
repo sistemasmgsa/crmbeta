@@ -6,6 +6,7 @@
     <title><?php echo isset($data['titulo']) ? $data['titulo'] . ' - CRM Beta' : 'CRM Beta'; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/main.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -15,17 +16,37 @@
             </div>
             <nav class="menu">
                 <ul>
-                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=dashboard&action=index">Dashboard</a></li>
-                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=clientes&action=index">Clientes</a></li>
-                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=index">Oportunidades</a></li>
+                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=dashboard&action=index"><i class="far fa-tachometer-alt"></i> Dashboard</a></li>
+
+                    <li class="has-submenu">
+                        <a href="#"><i class="far fa-cogs"></i> Mantenimiento</a>
+                        <ul class="submenu">
+                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=tiposdocumentoidentidad&action=index">Tipos de Documento</a></li>
+                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=ubigeos&action=index">Ubigeos</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="has-submenu">
+                        <a href="#"><i class="far fa-tasks"></i> Operaciones</a>
+                        <ul class="submenu">
+                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=clientes&action=index">Clientes</a></li>
+                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=index">Oportunidades</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#"><i class="far fa-chart-bar"></i> Reportes</a></li>
+
                     <?php if ($_SESSION['usuario']['id_perfil'] == 1) : ?>
-                        <li class="menu-header">Mantenimiento</li>
-                        <li><a href="<?php echo SITE_URL; ?>index.php?controller=tiposdocumentoidentidad&action=index">Tipos de Documento</a></li>
-                        <li><a href="<?php echo SITE_URL; ?>index.php?controller=ubigeos&action=index">Ubigeos</a></li>
-                        <li><a href="<?php echo SITE_URL; ?>index.php?controller=usuarios&action=index">Usuarios</a></li>
-                        <li><a href="<?php echo SITE_URL; ?>index.php?controller=perfiles&action=index">Perfiles</a></li>
+                    <li class="has-submenu">
+                        <a href="#"><i class="far fa-lock"></i> Seguridad</a>
+                        <ul class="submenu">
+                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=usuarios&action=index">Usuarios</a></li>
+                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=perfiles&action=index">Perfiles</a></li>
+                        </ul>
+                    </li>
                     <?php endif; ?>
-                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=login&action=logout">Cerrar Sesión</a></li>
+
+                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=login&action=logout"><i class="far fa-sign-out-alt"></i> Cerrar Sesión</a></li>
                 </ul>
             </nav>
         </aside>
