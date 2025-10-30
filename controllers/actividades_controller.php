@@ -26,25 +26,35 @@ class ActividadesController extends Controller {
 
     // Crea una nueva actividad
     public function crear() {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $database = new Database();
-            $db = $database->getConnection();
-            $actividad = new Actividad($db);
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $database = new Database();
+        $db = $database->getConnection();
+        $actividad = new Actividad($db);
 
-            $actividad->id_cliente = $_POST['id_cliente'] ?? null;
-            $actividad->id_contacto = $_POST['id_contacto'] ?? null;
-            $actividad->id_oportunidad = $_POST['id_oportunidad'] ?? null;
-            $actividad->id_usuario = $_SESSION['usuario']['id_usuario'];
-            $actividad->tipo_actividad = $_POST['tipo_actividad'];
-            $actividad->asunto = $_POST['asunto'];
-            $actividad->descripcion = $_POST['descripcion'];
-            $actividad->fecha_actividad = $_POST['fecha_actividad'];
+        $actividad->id_cliente = $_POST['id_cliente'] ?? null;
+        $actividad->id_contacto = $_POST['id_contacto'] ?? null;
+        $actividad->id_oportunidad = $_POST['id_oportunidad'] ?? null;
+        $actividad->id_usuario = $_SESSION['usuario']['id_usuario'];
+        $actividad->tipo_actividad = $_POST['tipo_actividad'];
+        $actividad->asunto = $_POST['asunto'];
+        $actividad->descripcion = $_POST['descripcion'];
+        $actividad->fecha_actividad = $_POST['fecha_actividad'];
 
-            if ($actividad->crear()) {
-                echo json_encode(['success' => true]);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Error al crear la actividad.']);
-            }
+        // El método crear() devuelve {resultado, mensaje}
+        $resultado = $actividad->crear();
+
+        if ($resultado && isset($resultado['resultado'])) {
+            echo json_encode([
+                'success' => $resultado['resultado'] == 1,
+                'message' => $resultado['mensaje']
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error inesperado al crear la actividad.'
+            ]);
         }
     }
+}
+
 }

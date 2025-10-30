@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }).then((result) => {
                 if (result.dismiss === Swal.DismissReason.cancel) {
                     const idCliente = info.event.extendedProps.id_cliente; 
+                    localStorage.setItem("tabActivoEditarCliente", "actividades");
                     window.location.href = '<?php echo SITE_URL; ?>index.php?controller=clientes&action=editar&id=' + idCliente;
                 }
             });

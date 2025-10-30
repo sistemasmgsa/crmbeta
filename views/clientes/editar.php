@@ -19,6 +19,91 @@
     </script>
 <?php endif; ?>
 
+<style>
+/* --- Contenedor general de tabs --- */
+.tab-container {
+    margin-top: 20px;
+    background: #fff;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+/* --- Barra de navegación de tabs --- */
+.tab-nav {
+    display: flex;
+    background: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+/* --- Botones de las pestañas --- */
+.tab-link {
+    flex: 1;
+    text-align: center;
+    background: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 12px 0;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border-right: 1px solid #dee2e6;
+}
+
+.tab-link:last-child {
+    border-right: none;
+}
+
+/* --- Efecto hover --- */
+.tab-link:hover {
+    background: #e9ecef;
+    color: #212529;
+}
+
+/* --- Tab activo --- */
+.tab-link.active {
+    background: #007bff;
+    color: #000000ff;
+    box-shadow: inset 0 -4px 0 #800000ff;
+}
+
+/* --- Contenido de cada pestaña --- */
+.tab-content { 
+    display: none;
+    padding: 25px;
+    background: #fff;
+    border-radius: 0 0 10px 10px;
+    min-height: 300px;
+}
+
+/* --- Contenido visible (activo) --- */
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* --- Animación suave al cambiar --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive (móviles) --- */
+@media (max-width: 768px) {
+    .tab-link {
+        font-size: 14px;
+        padding: 10px;
+    }
+    .tab-content {
+        padding: 15px;
+    }
+}
+</style>
+
+
 <div class="tab-container">
     <div class="tab-nav">
         <button class="tab-link active" onclick="openTab(event, 'cliente')">Cliente</button>
@@ -142,11 +227,7 @@
 
     <!-- Contenido de la Pestaña Actividades -->
     <div id="actividades" class="tab-content">
-        <h2>Actividades</h2>
-        <div id="historial-actividades">
-            <!-- Las actividades se cargarán aquí con AJAX -->
-        </div>
-        <hr>
+
         <h3>Registrar Nueva Actividad</h3>
         <form id="form-nueva-actividad">
             <input type="hidden" name="id_cliente" value="<?php echo $data['cliente']['id_cliente']; ?>">
@@ -178,7 +259,15 @@
                 <input type="datetime-local" name="fecha_actividad" id="fecha_actividad" style="font-size: 16px; padding: 6px; width: 300px;" required>
             </div>
             <button type="submit" class="btn btn-primary">Registrar Actividad</button>
+             <a href="<?php echo SITE_URL; ?>index.php?controller=calendario&action=index" class="btn btn-secondary">Regresar</a>
         </form>
+        <hr>
+        <h2>Actividades</h2>
+        <div id="historial-actividades">
+            <!-- Las actividades se cargarán aquí con AJAX -->
+        </div>
+      
+
     </div>
 
     <!-- Contenido de la Pestaña Contacto -->
@@ -324,6 +413,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let editando = false;
 
     function cargarActividades() {
+
         fetch(`<?php echo SITE_URL; ?>index.php?controller=actividades&action=listarPorCliente&id_cliente=${idCliente}`)
             .then(response => response.json())
             .then(data => {
@@ -360,7 +450,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 formNuevaActividad.reset();
                 cargarActividades();
             } else {
-                alert(data.message);
+            Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: data.message || "Ocurrió un error al crear la actividad.",
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "#d33"
+        });
             }
         });
     });
@@ -460,24 +556,44 @@ document.addEventListener('DOMContentLoaded', function() {
     cargarActividades();
     cargarContactos();
 });
-
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tab-content");
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
+        tabcontent[i].classList.remove("active");
     }
     tablinks = document.getElementsByClassName("tab-link");
     for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
+        tablinks[i].classList.remove("active");
     }
+
     document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+
+
 }
 
 // Ensure the first tab is displayed by default
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('.tab-content.active').style.display = 'block';
+    const tabGuardado = localStorage.getItem("tabActivoEditarCliente") || "cliente";
+
+    document.querySelectorAll(".tab-content").forEach(tc => tc.style.display = "none");
+    document.querySelectorAll(".tab-link").forEach(tl => tl.classList.remove("active"));
+
+    const tabActivo = document.getElementById(tabGuardado);
+    if (tabActivo) {
+        tabActivo.style.display = "block";
+        tabActivo.classList.add("active");
+        document.querySelector(`.tab-link[onclick*="${tabGuardado}"]`).classList.add("active");
+    } else {
+        document.getElementById("cliente").style.display = "block";
+        document.querySelector('.tab-link').classList.add("active");
+    }
+
+    // ✅ Limpia el localStorage después de usarlo
+    localStorage.removeItem("tabActivoEditarCliente");
 });
 </script>
 

@@ -52,9 +52,8 @@ class Actividad {
         $stmt->bindParam(":descripcion", $this->descripcion);
         $stmt->bindParam(":fecha", $this->fecha_actividad);
 
-        if ($stmt->execute()) {
-            return true;
-        }
-        return false;
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado;
     }
 }
