@@ -259,7 +259,7 @@
                 <input type="datetime-local" name="fecha_actividad" id="fecha_actividad" style="font-size: 16px; padding: 6px; width: 300px;" required>
             </div>
             <button type="submit" class="btn btn-primary">Registrar Actividad</button>
-             <a href="<?php echo SITE_URL; ?>index.php?controller=calendario&action=index" class="btn btn-secondary">Regresar</a>
+             <a href="<?php echo SITE_URL; ?>index.php?controller=calendario&action=index" class="btn btn-secondary">Ver Calendario</a>
         </form>
         <hr>
         <h2>Actividades</h2>

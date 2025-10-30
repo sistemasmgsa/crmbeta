@@ -1,8 +1,5 @@
 <?php require_once 'views/layout/header.php'; ?>
 
-<!-- ✅ FullCalendar + Bootstrap 5 -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="1">
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="1">
 
 <style>
 /* Contenedor general estilo dashboard */
@@ -14,6 +11,7 @@
 
 /* Contenedor calendario */
 #calendar-container {
+    width: 0px;
     flex: 3;
     min-width: 600px;
     background-color: #fff;
@@ -142,28 +140,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     calendar.render();
 
-    function actualizarAgenda(eventos) {
-        const proximos = eventos
-        .filter(e => new Date(e.start) >= new Date()) // eventos futuros
-        .sort((a,b) => new Date(b.start) - new Date(a.start)) // DESC
-        .slice(0,10);
-        agendaList.innerHTML = '';
-        if(proximos.length === 0) {
-            agendaList.innerHTML = '<p>No hay actividades próximas.</p>';
-            return;
-        }
-        proximos.forEach(e => {
-            const fecha = new Date(e.start);
-            const fechaTexto = fecha.toLocaleDateString('es-ES', { weekday:'long', day:'2-digit', month:'short' });
-            const hora = fecha.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', hour12:true });
-            const div = document.createElement('div');
-            div.className = 'agenda-item';
-            div.innerHTML = `<strong>${e.title}</strong><br>
-                             <small>${fechaTexto} - ${hora}</small><br>
-                             <em>${e.extendedProps.cliente || ''}</em>`;
-            agendaList.appendChild(div);
-        });
+function actualizarAgenda(eventos) {
+    // Ordenamos todos los eventos por fecha descendente (más recientes primero)
+    const todosEventos = eventos
+        .sort((a, b) => new Date(b.start) - new Date(a.start));
+
+    // Limpiamos la lista
+    agendaList.innerHTML = '';
+
+    if (todosEventos.length === 0) {
+        agendaList.innerHTML = '<p>No hay actividades registradas.</p>';
+        return;
     }
+
+    // Creamos los elementos de la agenda
+    todosEventos.forEach(e => {
+        const fecha = new Date(e.start);
+        const fechaTexto = fecha.toLocaleDateString('es-ES', { weekday:'long', day:'2-digit', month:'short', year:'numeric' });
+        const hora = fecha.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', hour12:true });
+        
+        const div = document.createElement('div');
+        div.className = 'agenda-item';
+        div.innerHTML = `<strong>${e.title}</strong><br>
+                         <small>${fechaTexto} - ${hora}</small><br>
+                         <em>${e.extendedProps.cliente || ''}</em>`;
+        agendaList.appendChild(div);
+    });
+}
 });
 </script>
 
