@@ -52,6 +52,10 @@ body {
 
 .submenu {
     display: none;
+    padding-left: 20px;
+}
+
+.menu .submenu li a {
     padding-left: 40px;
 }
 
