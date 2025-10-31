@@ -13,8 +13,21 @@ class OportunidadesController extends Controller {
         $db = $database->getConnection();
         $oportunidad = new Oportunidad($db);
 
-        $stmt = $oportunidad->listar();
+        // Filtros
+        $anio = $_GET['anio'] ?? date('Y');
+        $mes = $_GET['mes'] ?? date('m');
+        $etapa = $_GET['etapa'] ?? 'Todos';
+        $id_usuario = null;
+        if (isset($_SESSION['usuario']['id_perfil']) && $_SESSION['usuario']['id_perfil'] == 1 && isset($_GET['id_usuario'])) {
+            $id_usuario = $_GET['id_usuario'];
+        } else if (isset($_SESSION['usuario']['id_usuario'])) {
+            $id_usuario = $_SESSION['usuario']['id_usuario'];
+        }
+
+
+        $stmt = $oportunidad->listar($anio, $mes, $etapa, $id_usuario);
         $oportunidades = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
 
         // Organizar oportunidades por etapa para el Kanban
         $data['oportunidades_por_etapa'] = [
@@ -29,7 +42,22 @@ class OportunidadesController extends Controller {
             $data['oportunidades_por_etapa'][$op['etapa']][] = $op;
         }
 
+        // Cargar usuarios para el filtro si es administrador
+        if (isset($_SESSION['usuario']['id_perfil']) && $_SESSION['usuario']['id_perfil'] == 1) {
+            $usuario = new Usuario($db);
+            $stmt_usuarios = $usuario->listar();
+            $data['usuarios'] = $stmt_usuarios->fetchAll(PDO::FETCH_ASSOC);
+            $stmt_usuarios->closeCursor();
+        } else {
+            $data['usuarios'] = [];
+        }
+
         $data['titulo'] = 'Oportunidades';
+        $data['anio'] = $anio;
+        $data['mes'] = $mes;
+        $data['etapa'] = $etapa;
+        $data['id_usuario_seleccionado'] = $id_usuario;
+
         $this->view('oportunidades/index', $data);
     }
 
@@ -44,6 +72,7 @@ class OportunidadesController extends Controller {
             $oportunidad->valor_estimado = $_POST['valor_estimado'];
             $oportunidad->fecha_cierre = $_POST['fecha_cierre'];
             $oportunidad->etapa = $_POST['etapa'];
+            $oportunidad->usuario_creacion_id = $_SESSION['usuario']['id_usuario'];
 
             if ($oportunidad->crear()) {
                 header('Location: ' . SITE_URL . 'index.php?controller=oportunidades&action=index');

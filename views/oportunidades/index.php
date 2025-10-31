@@ -73,6 +73,52 @@
 <h1>Oportunidades</h1>
 <a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=crear" class="btn btn-primary">Nueva Oportunidad</a>
 
+<form method="GET" action="<?php echo SITE_URL; ?>index.php" class="form-inline mb-3">
+    <input type="hidden" name="controller" value="oportunidades">
+    <input type="hidden" name="action" value="index">
+    <div class="form-group mr-2">
+        <label for="anio" class="mr-2">Año:</label>
+        <select name="anio" id="anio" class="form-control">
+            <?php for ($i = date('Y'); $i >= 2020; $i--) : ?>
+                <option value="<?php echo $i; ?>" <?php echo ($data['anio'] == $i) ? 'selected' : ''; ?>><?php echo $i; ?></option>
+            <?php endfor; ?>
+        </select>
+    </div>
+    <div class="form-group mr-2">
+        <label for="mes" class="mr-2">Mes:</label>
+        <select name="mes" id="mes" class="form-control">
+            <?php for ($i = 1; $i <= 12; $i++) : ?>
+                <option value="<?php echo $i; ?>" <?php echo ($data['mes'] == $i) ? 'selected' : ''; ?>><?php echo date('F', mktime(0, 0, 0, $i, 10)); ?></option>
+            <?php endfor; ?>
+        </select>
+    </div>
+    <div class="form-group mr-2">
+        <label for="etapa" class="mr-2">Etapa:</label>
+        <select name="etapa" id="etapa" class="form-control">
+            <option value="Todos" <?php echo ($data['etapa'] == 'Todos') ? 'selected' : ''; ?>>Todos</option>
+            <option value="Calificación" <?php echo ($data['etapa'] == 'Calificación') ? 'selected' : ''; ?>>Calificación</option>
+            <option value="Propuesta" <?php echo ($data['etapa'] == 'Propuesta') ? 'selected' : ''; ?>>Propuesta</option>
+            <option value="Negociación" <?php echo ($data['etapa'] == 'Negociación') ? 'selected' : ''; ?>>Negociación</option>
+            <option value="Ganada" <?php echo ($data['etapa'] == 'Ganada') ? 'selected' : ''; ?>>Ganada</option>
+            <option value="Perdida" <?php echo ($data['etapa'] == 'Perdida') ? 'selected' : ''; ?>>Perdida</option>
+        </select>
+    </div>
+    <?php if (isset($_SESSION['usuario']['id_perfil']) && $_SESSION['usuario']['id_perfil'] == 1) : ?>
+        <div class="form-group mr-2">
+            <label for="id_usuario" class="mr-2">Usuario:</label>
+            <select name="id_usuario" id="id_usuario" class="form-control">
+                <option value="0" <?php echo ($data['id_usuario_seleccionado'] == 0) ? 'selected' : ''; ?>>Todos</option>
+                <?php foreach ($data['usuarios'] as $usuario) : ?>
+                    <option value="<?php echo $usuario['id_usuario']; ?>" <?php echo ($data['id_usuario_seleccionado'] == $usuario['id_usuario']) ? 'selected' : ''; ?>>
+                        <?php echo $usuario['nombre_usuario']; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    <?php endif; ?>
+    <button type="submit" class="btn btn-secondary">Filtrar</button>
+</form>
+
 <div class="kanban-container">
     <div class="kanban-board">
         <?php foreach ($data['oportunidades_por_etapa'] as $etapa => $oportunidades) : ?>
@@ -82,6 +128,7 @@
                     <div class="kanban-card" draggable="true" id="op-<?php echo $op['id_oportunidad']; ?>" data-id="<?php echo $op['id_oportunidad']; ?>">
                         <h4><?php echo $op['nombre_oportunidad']; ?></h4>
                         <p><?php echo $op['nombre_cliente']; ?></p>
+                        <p style="font-size: 12px; color: #888;"><?php echo $op['nombre_usuario_creacion']; ?> - <?php echo date('d/m/Y H:i', strtotime($op['fecha_creacion'])); ?></p>
                         <p><strong>Valor:</strong> S/. <?php echo number_format($op['valor_estimado'], 2); ?></p>
                         <a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=editar&id=<?php echo $op['id_oportunidad']; ?>" style="font-size: 12px; margin-top: 5px; display: inline-block;">Editar</a>
                         <a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=eliminar&id=<?php echo $op['id_oportunidad']; ?>" onclick="return confirm('¿Está seguro de eliminar esta oportunidad?');" style="font-size: 12px; margin-top: 5px; display: inline-block; color: red; margin-left: 10px;">Eliminar</a>
