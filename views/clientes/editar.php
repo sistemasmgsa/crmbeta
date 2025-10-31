@@ -234,6 +234,7 @@
             <div class="form-group">
                 <label for="tipo_actividad">Tipo</label>
                 <select name="tipo_actividad" id="tipo_actividad" style="font-size: 16px; padding: 6px; width: 300px;" required>
+                    <option value="Llamada">Mensajes</option>                    
                     <option value="Llamada">Llamada</option>
                     <option value="Reunión">Reunión</option>
                     <option value="Correo">Correo</option>
