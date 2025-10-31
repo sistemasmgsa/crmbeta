@@ -1,6 +1,6 @@
 <?php
 // Cargar configuración
-require_once '../config/config.php';
+require_once 'config/config.php';
 
 try {
     // Conexión sin especificar la base de datos para poder crearla
@@ -14,7 +14,11 @@ try {
     echo "Base de datos '" . DB_NAME . "' recreada.\n";
 
     // Ejecutar el script de la estructura de la base de datos y datos iniciales
-    $sql = file_get_contents('database.sql');
+    $sql = file_get_contents('db/database.sql');
+    // Remove DELIMITER statements
+    $sql = str_replace('DELIMITER $$', '', $sql);
+    $sql = str_replace('DELIMITER ;', '', $sql);
+
     $queries = explode('$$', $sql);
 
     foreach ($queries as $query) {

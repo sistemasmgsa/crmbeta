@@ -601,6 +601,21 @@ $$
 
 
 
+CREATE TABLE etapas (
+  id_etapa int NOT NULL AUTO_INCREMENT,
+  nombre_etapa varchar(50) NOT NULL,
+  orden int NOT NULL,
+  estado tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (id_etapa)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO etapas (id_etapa, nombre_etapa, orden, estado) VALUES
+(1, 'Calificación', 1, 1),
+(2, 'Propuesta', 2, 1),
+(3, 'Negociación', 3, 1),
+(4, 'Ganada', 4, 1),
+(5, 'Perdida', 5, 1);
+
 CREATE TABLE oportunidades (
   id_oportunidad int NOT NULL AUTO_INCREMENT,
   id_cliente int NOT NULL,
@@ -1255,3 +1270,74 @@ CREATE
             fecha_actividad >= CURDATE();
     END;
 $$
+
+DELIMITER $$
+
+CREATE PROCEDURE `sp_dashboard_anios`()
+BEGIN
+    SELECT DISTINCT YEAR(fecha_creacion) AS anio
+    FROM oportunidades
+    ORDER BY anio DESC;
+END$$
+
+CREATE PROCEDURE `sp_dashboard_etapas`()
+BEGIN
+    SELECT id_etapa, nombre_etapa
+    FROM etapas
+    WHERE estado = 1
+    ORDER BY orden;
+END$$
+
+CREATE PROCEDURE `sp_dashboard_usuarios`()
+BEGIN
+    SELECT id_usuario, nombre_usuario
+    FROM usuarios
+    WHERE estado = 1
+    ORDER BY nombre_usuario;
+END$$
+
+CREATE PROCEDURE `sp_dashboard_funnel`(
+    IN p_anio INT,
+    IN p_mes INT,
+    IN p_id_etapa INT,
+    IN p_id_usuario INT
+)
+BEGIN
+    SELECT
+        e.nombre_etapa,
+        SUM(o.valor_estimado) AS valor_estimado
+    FROM oportunidades o
+    JOIN etapas e ON o.id_etapa = e.id_etapa
+    WHERE
+        YEAR(o.fecha_creacion) = p_anio
+        AND MONTH(o.fecha_creacion) = p_mes
+        AND (p_id_etapa IS NULL OR o.id_etapa = p_id_etapa)
+        AND (p_id_usuario IS NULL OR o.id_usuario = p_id_usuario)
+    GROUP BY e.nombre_etapa
+    ORDER BY e.orden;
+END$$
+
+CREATE PROCEDURE `sp_dashboard_barras`(
+    IN p_anio INT,
+    IN p_mes INT,
+    IN p_id_etapa INT,
+    IN p_id_usuario INT
+)
+BEGIN
+    SELECT
+        e.nombre_etapa,
+        MONTHNAME(o.fecha_cierre) AS mes,
+        SUM(o.valor_estimado) AS total_ventas
+    FROM oportunidades o
+    JOIN etapas e ON o.id_etapa = e.id_etapa
+    WHERE
+        YEAR(o.fecha_cierre) = p_anio
+        AND (p_mes IS NULL OR MONTH(o.fecha_cierre) = p_mes)
+        AND (p_id_etapa IS NULL OR o.id_etapa = p_id_etapa)
+        AND (p_id_usuario IS NULL OR o.id_usuario = p_id_usuario)
+        AND o.id_etapa = (SELECT id_etapa FROM etapas WHERE nombre_etapa = 'Ganada')
+    GROUP BY e.nombre_etapa, mes
+    ORDER BY MONTH(o.fecha_cierre);
+END$$
+
+DELIMITER ;
