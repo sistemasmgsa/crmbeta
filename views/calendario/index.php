@@ -55,6 +55,20 @@ body { background-color: #f4f6f8; }
 
 <h2>Calendario de Actividades</h2>
 
+<?php if ($_SESSION['usuario']['nombre_perfil'] === 'Administrador'): ?>
+<div class="mb-3">
+    <label for="filtroUsuario" class="form-label">Filtrar por Usuario:</label>
+    <select id="filtroUsuario" class="form-select" style="width: 200px; display: inline-block; vertical-align: middle;">
+        <option value="">Todos</option>
+        <?php foreach ($data['usuarios'] as $usuario): ?>
+            <option value="<?php echo $usuario['id_usuario']; ?>" <?php echo (isset($data['id_usuario_seleccionado']) && $data['id_usuario_seleccionado'] == $usuario['id_usuario']) ? 'selected' : ''; ?>>
+                <?php echo $usuario['nombre_usuario'] . ' ' . $usuario['apellido_usuario']; ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
+<?php endif; ?>
+
 <div class="dashboard-container">
     <!-- Contenedor calendario -->
     <div id="calendar-container">
@@ -167,6 +181,13 @@ function actualizarAgenda(eventos) {
         agendaList.appendChild(div);
     });
 }
+
+<?php if ($_SESSION['usuario']['nombre_perfil'] === 'Administrador'): ?>
+document.getElementById('filtroUsuario').addEventListener('change', function() {
+    var idUsuario = this.value;
+    window.location.href = 'index.php?controller=calendario&action=index&id_usuario=' + idUsuario;
+});
+<?php endif; ?>
 });
 </script>
 
