@@ -3,6 +3,9 @@
 class Controller {
 
     public function __construct() {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
         // Cargar modelos
         foreach (glob(__DIR__ . "/../models/*.php") as $filename) {
             require_once $filename;

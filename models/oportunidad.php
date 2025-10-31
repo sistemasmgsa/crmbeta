@@ -11,14 +11,21 @@ class Oportunidad {
     public $fecha_cierre;
     public $etapa;
     public $estado;
+    public $usuario_creacion_id;
 
     public function __construct($db) {
         $this->conn = $db;
     }
 
-    function listar() {
-        $query = "CALL sp_oportunidades_listar()";
+    function listar($anio, $mes, $etapa, $id_usuario) {
+        $query = "CALL sp_oportunidades_listar(:anio, :mes, :etapa, :id_usuario)";
         $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(":anio", $anio);
+        $stmt->bindParam(":mes", $mes);
+        $stmt->bindParam(":etapa", $etapa);
+        $stmt->bindParam(":id_usuario", $id_usuario);
+
         $stmt->execute();
         return $stmt;
     }
@@ -32,7 +39,7 @@ class Oportunidad {
     }
 
     function crear() {
-        $query = "CALL sp_oportunidades_crear(:id_cliente, :nombre, :valor, :fecha, :etapa)";
+        $query = "CALL sp_oportunidades_crear(:id_cliente, :nombre, :valor, :fecha, :etapa, :usuario_creacion_id)";
         $stmt = $this->conn->prepare($query);
 
         // Limpiar datos
@@ -41,6 +48,7 @@ class Oportunidad {
         $this->valor_estimado = htmlspecialchars(strip_tags($this->valor_estimado));
         $this->fecha_cierre = htmlspecialchars(strip_tags($this->fecha_cierre));
         $this->etapa = htmlspecialchars(strip_tags($this->etapa));
+        $this->usuario_creacion_id = htmlspecialchars(strip_tags($this->usuario_creacion_id));
 
         // Enlazar parámetros
         $stmt->bindParam(":id_cliente", $this->id_cliente);
@@ -48,6 +56,7 @@ class Oportunidad {
         $stmt->bindParam(":valor", $this->valor_estimado);
         $stmt->bindParam(":fecha", $this->fecha_cierre);
         $stmt->bindParam(":etapa", $this->etapa);
+        $stmt->bindParam(":usuario_creacion_id", $this->usuario_creacion_id);
 
         if ($stmt->execute()) {
             return true;
