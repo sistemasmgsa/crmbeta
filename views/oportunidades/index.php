@@ -1,5 +1,8 @@
 <?php require_once 'views/layout/header.php'; ?>
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+
 <style>
 /* Contenedor principal Kanban con scroll limitado */
 .kanban-container {
@@ -73,28 +76,54 @@
 <h1>Oportunidades</h1>
 <a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=crear" class="btn btn-primary">Nueva Oportunidad</a>
 
-<form method="GET" action="<?php echo SITE_URL; ?>index.php" class="form-inline mb-3">
+<form method="GET" action="<?php echo SITE_URL; ?>index.php" 
+    class="form-inline mb-3" 
+    style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: #f9f9f9; padding: 10px; border-radius: 6px;">
+
     <input type="hidden" name="controller" value="oportunidades">
     <input type="hidden" name="action" value="index">
-    <div class="form-group mr-2">
-        <label for="anio" class="mr-2">Año:</label>
-        <select name="anio" id="anio" class="form-control">
-            <?php for ($i = date('Y'); $i >= 2020; $i--) : ?>
-                <option value="<?php echo $i; ?>" <?php echo ($data['anio'] == $i) ? 'selected' : ''; ?>><?php echo $i; ?></option>
+
+    <div class="form-group" style="display: flex; align-items: center; gap: 5px;">
+        <label for="anio" style="margin: 0;">Año:</label>
+        <select name="anio" id="anio" class="form-control" style="width: 80px;">
+            <?php for ($i = date('Y'); $i >= 2025; $i--) : ?>
+                <option value="<?php echo $i; ?>" <?php echo ($data['anio'] == $i) ? 'selected' : ''; ?>>
+                    <?php echo $i; ?>
+                </option>
             <?php endfor; ?>
         </select>
     </div>
-    <div class="form-group mr-2">
-        <label for="mes" class="mr-2">Mes:</label>
-        <select name="mes" id="mes" class="form-control">
-            <?php for ($i = 1; $i <= 12; $i++) : ?>
-                <option value="<?php echo $i; ?>" <?php echo ($data['mes'] == $i) ? 'selected' : ''; ?>><?php echo date('F', mktime(0, 0, 0, $i, 10)); ?></option>
-            <?php endfor; ?>
-        </select>
-    </div>
-    <div class="form-group mr-2">
-        <label for="etapa" class="mr-2">Etapa:</label>
-        <select name="etapa" id="etapa" class="form-control">
+
+<div class="form-group" style="display: flex; align-items: center; gap: 5px;">
+    <label for="mes" style="margin: 0;">Mes:</label>
+    <select name="mes" id="mes" class="form-control" style="width: 180px;">
+        <?php 
+        $meses = [
+            1 => 'Enero',
+            2 => 'Febrero',
+            3 => 'Marzo',
+            4 => 'Abril',
+            5 => 'Mayo',
+            6 => 'Junio',
+            7 => 'Julio',
+            8 => 'Agosto',
+            9 => 'Septiembre',
+            10 => 'Octubre',
+            11 => 'Noviembre',
+            12 => 'Diciembre'
+        ];
+        foreach ($meses as $num => $nombre) : ?>
+            <option value="<?php echo $num; ?>" <?php echo ($data['mes'] == $num) ? 'selected' : ''; ?>>
+                <?php echo $nombre; ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
+
+
+    <div class="form-group" style="display: flex; align-items: center; gap: 5px;">
+        <label for="etapa" style="margin: 0;">Etapa:</label>
+        <select name="etapa" id="etapa" class="form-control" style="width: 180px;">
             <option value="Todos" <?php echo ($data['etapa'] == 'Todos') ? 'selected' : ''; ?>>Todos</option>
             <option value="Calificación" <?php echo ($data['etapa'] == 'Calificación') ? 'selected' : ''; ?>>Calificación</option>
             <option value="Propuesta" <?php echo ($data['etapa'] == 'Propuesta') ? 'selected' : ''; ?>>Propuesta</option>
@@ -103,21 +132,32 @@
             <option value="Perdida" <?php echo ($data['etapa'] == 'Perdida') ? 'selected' : ''; ?>>Perdida</option>
         </select>
     </div>
+
     <?php if (isset($_SESSION['usuario']['id_perfil']) && $_SESSION['usuario']['id_perfil'] == 1) : ?>
-        <div class="form-group mr-2">
-            <label for="id_usuario" class="mr-2">Usuario:</label>
-            <select name="id_usuario" id="id_usuario" class="form-control">
+        <div class="form-group" style="display: flex; align-items: center; gap: 5px;">
+            <label for="id_usuario" style="margin: 0;">Usuario:</label>
+            <select name="id_usuario" id="id_usuario" class="form-control" style="width: 200px;">
                 <option value="0" <?php echo ($data['id_usuario_seleccionado'] == 0) ? 'selected' : ''; ?>>Todos</option>
                 <?php foreach ($data['usuarios'] as $usuario) : ?>
-                    <option value="<?php echo $usuario['id_usuario']; ?>" <?php echo ($data['id_usuario_seleccionado'] == $usuario['id_usuario']) ? 'selected' : ''; ?>>
+                    <option value="<?php echo $usuario['id_usuario']; ?>" 
+                        <?php echo ($data['id_usuario_seleccionado'] == $usuario['id_usuario']) ? 'selected' : ''; ?>>
                         <?php echo $usuario['nombre_usuario']; ?>
                     </option>
                 <?php endforeach; ?>
             </select>
         </div>
     <?php endif; ?>
-    <button type="submit" class="btn btn-secondary">Filtrar</button>
+
+<div class="form-group" style="display: flex; align-items: center; gap: 5px;">
+    <label style="margin: 0; visibility: hidden;">_</label>
+    <button type="submit" class="btn btn-secondary" style="padding: 6px 16px; width: 100px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+        <i class="bi bi-search"></i> Filtrar
+    </button>
+</div>
+
 </form>
+
+
 
 <div class="kanban-container">
     <div class="kanban-board">
@@ -128,7 +168,8 @@
                     <div class="kanban-card" draggable="true" id="op-<?php echo $op['id_oportunidad']; ?>" data-id="<?php echo $op['id_oportunidad']; ?>">
                         <h4><?php echo $op['nombre_oportunidad']; ?></h4>
                         <p><?php echo $op['nombre_cliente']; ?></p>
-                        <p style="font-size: 12px; color: #888;"><?php echo $op['nombre_usuario_creacion']; ?> - <?php echo date('d/m/Y H:i', strtotime($op['fecha_creacion'])); ?></p>
+                        <p>---</p>
+                        <p style="font-size: 14px; color: #888;"><?php echo $op['nombre_usuario_creacion']; ?> - <?php echo date('d/m/Y H:i', strtotime($op['fecha_creacion'])); ?></p>
                         <p><strong>Valor:</strong> S/. <?php echo number_format($op['valor_estimado'], 2); ?></p>
                         <a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=editar&id=<?php echo $op['id_oportunidad']; ?>" style="font-size: 12px; margin-top: 5px; display: inline-block;">Editar</a>
                         <a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=eliminar&id=<?php echo $op['id_oportunidad']; ?>" onclick="return confirm('¿Está seguro de eliminar esta oportunidad?');" style="font-size: 12px; margin-top: 5px; display: inline-block; color: red; margin-left: 10px;">Eliminar</a>
