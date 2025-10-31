@@ -1,6 +1,5 @@
 <?php require_once 'views/layout/header.php'; ?>
 
-
 <style>
 /* Contenedor general estilo dashboard */
 .dashboard-container {
@@ -55,20 +54,6 @@ body { background-color: #f4f6f8; }
 
 <h2>Calendario de Actividades</h2>
 
-<?php if ($_SESSION['usuario']['nombre_perfil'] === 'Administrador'): ?>
-<div class="mb-3">
-    <label for="filtroUsuario" class="form-label">Filtrar por Usuario:</label>
-    <select id="filtroUsuario" class="form-select" style="width: 200px; display: inline-block; vertical-align: middle;">
-        <option value="">Todos</option>
-        <?php foreach ($data['usuarios'] as $usuario): ?>
-            <option value="<?php echo $usuario['id_usuario']; ?>" <?php echo (isset($data['id_usuario_seleccionado']) && $data['id_usuario_seleccionado'] == $usuario['id_usuario']) ? 'selected' : ''; ?>>
-                <?php echo $usuario['nombre_usuario'] . ' ' . $usuario['apellido_usuario']; ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</div>
-<?php endif; ?>
-
 <div class="dashboard-container">
     <!-- Contenedor calendario -->
     <div id="calendar-container">
@@ -101,7 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     'description' => $actividad['descripcion'],
                     'type' => $actividad['tipo_actividad'],
                     'cliente' => $actividad['nombre_cliente'],
-                    'id_cliente' => $actividad['id_cliente']
+                    'id_cliente' => $actividad['id_cliente'],
+                    'nombre_usuario' => $actividad['nombre_usuario'],
                 ],
                 'color' => '#007bff',
             ];
@@ -132,11 +118,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 html: `<b>Cliente:</b> ${info.event.extendedProps.cliente}<br>
                     <b>Tipo:</b> ${info.event.extendedProps.type}<br>
                     <b>Descripción:</b> ${info.event.extendedProps.description}<br>
-                    <b>Fecha:</b> ${fechaFormateada} ${horaFormateada}`,
+                    
+                    <b>Fecha:</b> ${fechaFormateada} ${horaFormateada}<br>
+                    <b>Registrado por:</b> ${info.event.extendedProps.nombre_usuario}`,
                 icon: 'info',
-                showCancelButton: true,          // botón extra
-                cancelButtonText: 'Ver Detalle', // texto del botón rojo
-                confirmButtonText: 'Cerrar',     // texto del botón azul
+                showCancelButton: true,
+                cancelButtonText: 'Ver Detalle',
+                confirmButtonText: 'Cerrar',
                 confirmButtonColor: '#0078d4',
                 cancelButtonColor: '#dc3545'
             }).then((result) => {
@@ -154,40 +142,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     calendar.render();
 
-function actualizarAgenda(eventos) {
-    // Ordenamos todos los eventos por fecha descendente (más recientes primero)
-    const todosEventos = eventos
-        .sort((a, b) => new Date(b.start) - new Date(a.start));
+    function actualizarAgenda(eventos) {
+        const todosEventos = eventos.sort((a, b) => new Date(b.start) - new Date(a.start));
+        agendaList.innerHTML = '';
 
-    // Limpiamos la lista
-    agendaList.innerHTML = '';
+        if (todosEventos.length === 0) {
+            agendaList.innerHTML = '<p>No hay actividades registradas.</p>';
+            return;
+        }
 
-    if (todosEventos.length === 0) {
-        agendaList.innerHTML = '<p>No hay actividades registradas.</p>';
-        return;
+        todosEventos.forEach(e => {
+            const fecha = new Date(e.start);
+            const fechaTexto = fecha.toLocaleDateString('es-ES', { weekday:'long', day:'2-digit', month:'short', year:'numeric' });
+            const hora = fecha.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', hour12:true });
+            
+            const div = document.createElement('div');
+            div.className = 'agenda-item';
+            div.innerHTML = `<strong>${e.title}</strong><br>
+                             <small>${fechaTexto} - ${hora}</small><br>
+                             <p><p>
+                             <em><b>Cliente: </b>${e.extendedProps.cliente || ''}</em>
+                             
+                             
+                             <small><b>Registrado por:</b> ${e.extendedProps.nombre_usuario || ''}</small><br>`;
+                             
+            agendaList.appendChild(div);
+        });
     }
-
-    // Creamos los elementos de la agenda
-    todosEventos.forEach(e => {
-        const fecha = new Date(e.start);
-        const fechaTexto = fecha.toLocaleDateString('es-ES', { weekday:'long', day:'2-digit', month:'short', year:'numeric' });
-        const hora = fecha.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', hour12:true });
-        
-        const div = document.createElement('div');
-        div.className = 'agenda-item';
-        div.innerHTML = `<strong>${e.title}</strong><br>
-                         <small>${fechaTexto} - ${hora}</small><br>
-                         <em>${e.extendedProps.cliente || ''}</em>`;
-        agendaList.appendChild(div);
-    });
-}
-
-<?php if ($_SESSION['usuario']['nombre_perfil'] === 'Administrador'): ?>
-document.getElementById('filtroUsuario').addEventListener('change', function() {
-    var idUsuario = this.value;
-    window.location.href = 'index.php?controller=calendario&action=index&id_usuario=' + idUsuario;
-});
-<?php endif; ?>
 });
 </script>
 
