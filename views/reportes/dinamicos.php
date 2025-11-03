@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle column selection
     document.addEventListener('click', function(e) {
-        if (e.target.tagName === 'LI' && e.target.parentElement.classList.contains('list-box')) {
+        if (e.target.tagName === 'LI' && e.target.parentElement.parentElement.classList.contains('list-box')) {
             e.target.classList.toggle('selected');
         }
     });
@@ -199,9 +199,9 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('report_type', reportType);
         selectedColumns.forEach(col => formData.append('selected_columns[]', col));
 
-        fetch('index.php?controller=reportes&action=ajax&action=generate_report', {
+        fetch('index.php?controller=reportes&action=ajax&action=generate_report&report_type=' + reportType, {
             method: 'POST',
-            body: formData
+            body: new URLSearchParams(formData)
         })
         .then(response => response.json())
         .then(data => {
@@ -254,12 +254,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const formData = new FormData();
         formData.append('template_name', templateName);
-        formData.append('report_type', reportType);
         selectedColumns.forEach(col => formData.append('selected_columns[]', col));
 
-        fetch('index.php?controller=reportes&action=ajax&action=save_template', {
+        fetch('index.php?controller=reportes&action=ajax&action=save_template&report_type=' + reportType, {
             method: 'POST',
-            body: formData
+            body: new URLSearchParams(formData)
         })
         .then(response => response.json())
         .then(data => {

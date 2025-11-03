@@ -16,7 +16,7 @@ class reportesController extends Controller {
         $data['selected_columns'] = [];
         $data['report_data'] = [];
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
             if (isset($_POST['generate_report']) && isset($_POST['selected_columns'])) {
                 $data['selected_columns'] = $_POST['selected_columns'];
                 $data['report_data'] = $reportesModel->generar_reporte($report_type, $_POST['selected_columns']);
@@ -35,45 +35,43 @@ class reportesController extends Controller {
         header('Content-Type: application/json');
         $reportesModel = new ReportesModel($this->db);
         $response = ['status' => 'error', 'data' => []];
+        $action = $_GET['action'] ?? '';
+        $report_type = $_GET['report_type'] ?? '';
 
-        if (isset($_GET['action'])) {
-            $action = $_GET['action'];
-            $report_type = isset($_GET['report_type']) ? $_GET['report_type'] : '';
+        switch ($action) {
+            case 'get_columns_and_templates':
+                if ($report_type) {
+                    $response['status'] = 'success';
+                    $response['data']['columns'] = $reportesModel->obtener_columnas($report_type);
+                    $response['data']['templates'] = $reportesModel->listar_plantillas($report_type);
+                }
+                break;
 
-            switch ($action) {
-                case 'get_columns_and_templates':
-                    if ($report_type) {
+            case 'load_template':
+                if (isset($_GET['template_id'])) {
+                    $response['status'] = 'success';
+                    $response['data']['columns'] = $reportesModel->cargar_plantilla($_GET['template_id']);
+                }
+                break;
+
+            case 'save_template':
+                if (isset($_POST['template_name']) && $report_type && isset($_POST['selected_columns'])) {
+                    $result = $reportesModel->guardar_plantilla($_POST['template_name'], $report_type, $_POST['selected_columns']);
+                    if($result) {
                         $response['status'] = 'success';
-                        $response['data']['columns'] = $reportesModel->obtener_columnas($report_type);
                         $response['data']['templates'] = $reportesModel->listar_plantillas($report_type);
                     }
-                    break;
+                }
+                break;
 
-                case 'load_template':
-                    if (isset($_GET['template_id'])) {
-                        $response['status'] = 'success';
-                        $response['data']['columns'] = $reportesModel->cargar_plantilla($_GET['template_id']);
-                    }
-                    break;
-
-                case 'save_template':
-                    if (isset($_POST['template_name']) && $report_type && isset($_POST['selected_columns'])) {
-                        $result = $reportesModel->guardar_plantilla($_POST['template_name'], $report_type, $_POST['selected_columns']);
-                        if($result) {
-                            $response['status'] = 'success';
-                            $response['data']['templates'] = $reportesModel->listar_plantillas($report_type);
-                        }
-                    }
-                    break;
-
-                case 'generate_report':
-                     if ($report_type && isset($_POST['selected_columns'])) {
-                        $response['status'] = 'success';
-                        $response['data'] = $reportesModel->generar_reporte($report_type, $_POST['selected_columns']);
-                    }
-                    break;
-            }
+            case 'generate_report':
+                 if ($report_type && isset($_POST['selected_columns'])) {
+                    $response['status'] = 'success';
+                    $response['data'] = $reportesModel->generar_reporte($report_type, $_POST['selected_columns']);
+                }
+                break;
         }
+
         echo json_encode($response);
         exit;
     }
