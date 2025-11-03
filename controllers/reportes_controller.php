@@ -16,7 +16,7 @@ class reportesController extends Controller {
         $data['selected_columns'] = [];
         $data['report_data'] = [];
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['ajax_action'])) {
             if (isset($_POST['generate_report']) && isset($_POST['selected_columns'])) {
                 $data['selected_columns'] = $_POST['selected_columns'];
                 $data['report_data'] = $reportesModel->generar_reporte($report_type, $_POST['selected_columns']);
@@ -35,7 +35,7 @@ class reportesController extends Controller {
         header('Content-Type: application/json');
         $reportesModel = new ReportesModel($this->db);
         $response = ['status' => 'error', 'data' => []];
-        $action = $_GET['action'] ?? '';
+        $action = $_GET['ajax_action'] ?? '';
         $report_type = $_GET['report_type'] ?? '';
 
         switch ($action) {
