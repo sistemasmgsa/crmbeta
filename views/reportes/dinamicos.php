@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateColumnsAndTemplates() {
         const reportType = reportTypeSelect.value;
-        fetch(`index.php?controller=reportes&action=ajax&action=get_columns_and_templates&report_type=${reportType}`)
+        fetch(`index.php?controller=reportes&action=ajax&ajax_action=get_columns_and_templates&report_type=${reportType}`)
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('report_type', reportType);
         selectedColumns.forEach(col => formData.append('selected_columns[]', col));
 
-        fetch('index.php?controller=reportes&action=ajax&action=generate_report&report_type=' + reportType, {
+        fetch('index.php?controller=reportes&action=ajax&ajax_action=generate_report&report_type=' + reportType, {
             method: 'POST',
             body: new URLSearchParams(formData)
         })
@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('template_name', templateName);
         selectedColumns.forEach(col => formData.append('selected_columns[]', col));
 
-        fetch('index.php?controller=reportes&action=ajax&action=save_template&report_type=' + reportType, {
+        fetch('index.php?controller=reportes&action=ajax&ajax_action=save_template&report_type=' + reportType, {
             method: 'POST',
             body: new URLSearchParams(formData)
         })
@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch(`index.php?controller=reportes&action=ajax&action=load_template&template_id=${templateId}`)
+        fetch(`index.php?controller=reportes&action=ajax&ajax_action=load_template&template_id=${templateId}`)
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
