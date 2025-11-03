@@ -28,12 +28,8 @@ class LoginController extends Controller {
                 exit;
             }
 
-            // 🔹 2. Conexión a la base de datos
-            $database = new Database();
-            $db = $database->getConnection();
-            $usuario = new Usuario($db);
+            $usuario = new Usuario($this->db);
 
-            // 🔹 3. Buscar usuario por correo
             $usuario->correo_usuario = $_POST['correo'];
             $stmt = $usuario->login();
 
@@ -41,7 +37,6 @@ class LoginController extends Controller {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 $clave_hash = $row['clave_usuario'];
 
-                // 🔹 4. Validar contraseña
                 if (password_verify($_POST['clave'], $clave_hash)) {
                     $_SESSION['usuario'] = $row;
                     header('Location: ' . SITE_URL . 'index.php?controller=dashboard&action=index');
@@ -59,7 +54,7 @@ class LoginController extends Controller {
 
     public function logout() {
         session_destroy();
-        header('Location: ' . SITE_URL . 'index.php?controller=login&action=index');
+        header('Location: '. SITE_URL . 'index.php?controller=login&action=index');
         exit();
     }
 }

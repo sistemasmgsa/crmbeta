@@ -1,15 +1,14 @@
 <?php
 
 class Controller {
+    public $db;
 
     public function __construct() {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-        // Cargar modelos
-        foreach (glob(__DIR__ . "/../models/*.php") as $filename) {
-            require_once $filename;
-        }
+        $database = new Database();
+        $this->db = $database->getConnection();
     }
 
     public function view($view, $data = []) {
