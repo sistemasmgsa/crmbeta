@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
                              <p><p>
                              <em><b>Cliente: </b>${e.extendedProps.cliente || ''}</em>
                              
-                             
+                             <br>
                              <small><b>Registrado por:</b> ${e.extendedProps.nombre_usuario || ''}</small><br>`;
                              
             agendaList.appendChild(div);
