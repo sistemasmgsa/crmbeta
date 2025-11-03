@@ -71,90 +71,130 @@
 .btn-primary {
     margin-bottom: 20px;
 }
+
+    .filtros-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 15px;
+        background: #f8f9fa;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .filtro-item label {
+        font-weight: 600;
+        color: #333;
+        font-size: 14px;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .filtro-item select {
+        border-radius: 6px;
+        border: 1px solid #bbb;
+        padding: 10px 12px;
+        font-size: 15px;
+        width: 100%;
+        background-color: #fff;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+    }
+
+    .filtro-item select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 3px rgba(0, 123, 255, 0.4);
+        outline: none;
+    }
+
+    .filtro-boton {
+        display: flex;
+        align-items: end;
+    }
+
+    .filtro-boton button {
+        width: 100%;
+        padding: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
 </style>
 
 <h1>Oportunidades</h1>
 <a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=crear" class="btn btn-primary">Nueva Oportunidad</a>
 
-<form method="GET" action="<?php echo SITE_URL; ?>index.php" 
-    class="form-inline mb-3" 
-    style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: #f9f9f9; padding: 10px; border-radius: 6px;">
-
+<form method="GET" action="<?php echo SITE_URL; ?>index.php">
     <input type="hidden" name="controller" value="oportunidades">
     <input type="hidden" name="action" value="index">
 
-    <div class="form-group" style="display: flex; align-items: center; gap: 5px;">
-        <label for="anio" style="margin: 0;">Año:</label>
-        <select name="anio" id="anio" class="form-control" style="width: 80px;">
-            <?php for ($i = date('Y'); $i >= 2025; $i--) : ?>
-                <option value="<?php echo $i; ?>" <?php echo ($data['anio'] == $i) ? 'selected' : ''; ?>>
-                    <?php echo $i; ?>
-                </option>
-            <?php endfor; ?>
-        </select>
-    </div>
+    <div class="filtros-container">
 
-<div class="form-group" style="display: flex; align-items: center; gap: 5px;">
-    <label for="mes" style="margin: 0;">Mes:</label>
-    <select name="mes" id="mes" class="form-control" style="width: 180px;">
-        <?php 
-        $meses = [
-            1 => 'Enero',
-            2 => 'Febrero',
-            3 => 'Marzo',
-            4 => 'Abril',
-            5 => 'Mayo',
-            6 => 'Junio',
-            7 => 'Julio',
-            8 => 'Agosto',
-            9 => 'Septiembre',
-            10 => 'Octubre',
-            11 => 'Noviembre',
-            12 => 'Diciembre'
-        ];
-        foreach ($meses as $num => $nombre) : ?>
-            <option value="<?php echo $num; ?>" <?php echo ($data['mes'] == $num) ? 'selected' : ''; ?>>
-                <?php echo $nombre; ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</div>
+        <div class="filtro-item">
+            <label for="anio">Año</label>
+            <select name="anio" id="anio" class="form-control">
+                <?php for ($i = date('Y'); $i >= 2025; $i--) : ?>
+                    <option value="<?php echo $i; ?>" <?php echo ($data['anio'] == $i) ? 'selected' : ''; ?>>
+                        <?php echo $i; ?>
+                    </option>
+                <?php endfor; ?>
+            </select>
+        </div>
 
-
-    <div class="form-group" style="display: flex; align-items: center; gap: 5px;">
-        <label for="etapa" style="margin: 0;">Etapa:</label>
-        <select name="etapa" id="etapa" class="form-control" style="width: 180px;">
-            <option value="Todos" <?php echo ($data['etapa'] == 'Todos') ? 'selected' : ''; ?>>Todos</option>
-            <option value="Calificación" <?php echo ($data['etapa'] == 'Calificación') ? 'selected' : ''; ?>>Calificación</option>
-            <option value="Propuesta" <?php echo ($data['etapa'] == 'Propuesta') ? 'selected' : ''; ?>>Propuesta</option>
-            <option value="Negociación" <?php echo ($data['etapa'] == 'Negociación') ? 'selected' : ''; ?>>Negociación</option>
-            <option value="Ganada" <?php echo ($data['etapa'] == 'Ganada') ? 'selected' : ''; ?>>Ganada</option>
-            <option value="Perdida" <?php echo ($data['etapa'] == 'Perdida') ? 'selected' : ''; ?>>Perdida</option>
-        </select>
-    </div>
-
-    <?php if (isset($_SESSION['usuario']['id_perfil']) && $_SESSION['usuario']['id_perfil'] == 1) : ?>
-        <div class="form-group" style="display: flex; align-items: center; gap: 5px;">
-            <label for="id_usuario" style="margin: 0;">Usuario:</label>
-            <select name="id_usuario" id="id_usuario" class="form-control" style="width: 200px;">
-                <option value="0" <?php echo ($data['id_usuario_seleccionado'] == 0) ? 'selected' : ''; ?>>Todos</option>
-                <?php foreach ($data['usuarios'] as $usuario) : ?>
-                    <option value="<?php echo $usuario['id_usuario']; ?>" 
-                        <?php echo ($data['id_usuario_seleccionado'] == $usuario['id_usuario']) ? 'selected' : ''; ?>>
-                        <?php echo $usuario['nombre_usuario']; ?>
+        <div class="filtro-item">
+            <label for="mes">Mes</label>
+            <select name="mes" id="mes" class="form-control">
+                <?php 
+                $meses = [
+                    1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
+                    5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
+                    9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
+                ];
+                foreach ($meses as $num => $nombre) : ?>
+                    <option value="<?php echo $num; ?>" <?php echo ($data['mes'] == $num) ? 'selected' : ''; ?>>
+                        <?php echo $nombre; ?>
                     </option>
                 <?php endforeach; ?>
             </select>
         </div>
-    <?php endif; ?>
 
-<div class="form-group" style="display: flex; align-items: center; gap: 5px;">
-    <label style="margin: 0; visibility: hidden;">_</label>
-    <button type="submit" class="btn btn-secondary" style="padding: 6px 16px; width: 100px; display: flex; align-items: center; justify-content: center; gap: 5px;">
-        <i class="bi bi-search"></i> Filtrar
-    </button>
-</div>
+        <div class="filtro-item">
+            <label for="etapa">Etapa</label>
+            <select name="etapa" id="etapa" class="form-control">
+                <option value="Todos" <?php echo ($data['etapa'] == 'Todos') ? 'selected' : ''; ?>>Todos</option>
+                <option value="Calificación" <?php echo ($data['etapa'] == 'Calificación') ? 'selected' : ''; ?>>Calificación</option>
+                <option value="Propuesta" <?php echo ($data['etapa'] == 'Propuesta') ? 'selected' : ''; ?>>Propuesta</option>
+                <option value="Negociación" <?php echo ($data['etapa'] == 'Negociación') ? 'selected' : ''; ?>>Negociación</option>
+                <option value="Ganada" <?php echo ($data['etapa'] == 'Ganada') ? 'selected' : ''; ?>>Ganada</option>
+                <option value="Perdida" <?php echo ($data['etapa'] == 'Perdida') ? 'selected' : ''; ?>>Perdida</option>
+            </select>
+        </div>
 
+        <?php if (isset($_SESSION['usuario']['id_perfil']) && $_SESSION['usuario']['id_perfil'] == 1) : ?>
+            <div class="filtro-item">
+                <label for="id_usuario">Usuario</label>
+                <select name="id_usuario" id="id_usuario" class="form-control">
+                    <option value="0" <?php echo ($data['id_usuario_seleccionado'] == 0) ? 'selected' : ''; ?>>Todos</option>
+                    <?php foreach ($data['usuarios'] as $usuario) : ?>
+                        <option value="<?php echo $usuario['id_usuario']; ?>" 
+                            <?php echo ($data['id_usuario_seleccionado'] == $usuario['id_usuario']) ? 'selected' : ''; ?>>
+                            <?php echo $usuario['nombre_usuario']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        <?php endif; ?>
+
+        <div class="filtro-item filtro-boton">
+            <button type="submit" class="btn btn-secondary">
+                <i class="bi bi-search"></i> Filtrar
+            </button>
+        </div>
+    </div>
 </form>
 
 

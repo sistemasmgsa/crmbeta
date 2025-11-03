@@ -17,6 +17,8 @@ class DashboardController extends Controller
         $data['etapas'] = $this->getEtapas();
         $data['usuarios'] = $this->getUsuarios();
         $this->view('dashboard/index', $data);
+
+        
     }
 
     public function getAnios()
@@ -52,6 +54,53 @@ class DashboardController extends Controller
         return $result;
     }
 
+
+
+        public function getGanadas()
+    {
+        header('Content-Type: application/json');
+        $anio = $_POST['anio'] ?? date('Y');
+        $mes = $_POST['mes'] ?? 0;
+        $usuario = $_POST['usuario'] ?? 0;
+
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $stmt = $db->prepare("CALL sp_dashboard_ganadas(:p_anio, :p_mes, :p_id_usuario)");
+        $stmt->bindParam(':p_anio', $anio, PDO::PARAM_INT);
+        $stmt->bindParam(':p_mes', $mes, PDO::PARAM_INT);
+        $stmt->bindParam(':p_id_usuario', $usuario, PDO::PARAM_INT);
+        $stmt->execute();
+        $ganadasData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        echo json_encode(['ganadas' => $ganadasData]);
+    }
+
+
+    public function getPerdidas()
+    {
+        header('Content-Type: application/json');
+        $anio = $_POST['anio'] ?? date('Y');
+        $mes = $_POST['mes'] ?? 0;
+        $usuario = $_POST['usuario'] ?? 0;
+
+        $database = new Database();
+        $db = $database->getConnection();
+
+        // 🔹 Cambiado a SP de pérdidas
+        $stmt = $db->prepare("CALL sp_dashboard_perdidas(:p_anio, :p_mes, :p_id_usuario)");
+        $stmt->bindParam(':p_anio', $anio, PDO::PARAM_INT);
+        $stmt->bindParam(':p_mes', $mes, PDO::PARAM_INT);
+        $stmt->bindParam(':p_id_usuario', $usuario, PDO::PARAM_INT);
+        $stmt->execute();
+        $perdidasData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        echo json_encode(['perdidas' => $perdidasData]);
+    }
+
+
     public function getData()
     {
         header('Content-Type: application/json');
@@ -64,20 +113,20 @@ class DashboardController extends Controller
         $db = $database->getConnection();
 
         // Funnel data
-        $stmt = $db->prepare("CALL sp_dashboard_funnel(:p_anio, :p_mes, :p_id_etapa, :p_id_usuario)");
+        $stmt = $db->prepare("CALL sp_dashboard_funnel(:p_anio, :p_mes, :p_etapa, :p_id_usuario)");
         $stmt->bindParam(':p_anio', $anio, PDO::PARAM_INT);
         $stmt->bindParam(':p_mes', $mes, PDO::PARAM_INT);
-        $stmt->bindParam(':p_id_etapa', $etapa, PDO::PARAM_INT);
+        $stmt->bindParam(':p_etapa', $etapa, PDO::PARAM_STR);
         $stmt->bindParam(':p_id_usuario', $usuario, PDO::PARAM_INT);
         $stmt->execute();
         $funnelData = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
         // Bar chart data
-        $stmt = $db->prepare("CALL sp_dashboard_barras(:p_anio, :p_mes, :p_id_etapa, :p_id_usuario)");
+        $stmt = $db->prepare("CALL sp_dashboard_barras(:p_anio, :p_mes, :p_etapa, :p_id_usuario)");
         $stmt->bindParam(':p_anio', $anio, PDO::PARAM_INT);
         $stmt->bindParam(':p_mes', $mes, PDO::PARAM_INT);
-        $stmt->bindParam(':p_id_etapa', $etapa, PDO::PARAM_INT);
+        $stmt->bindParam(':p_etapa', $etapa, PDO::PARAM_STR);
         $stmt->bindParam(':p_id_usuario', $usuario, PDO::PARAM_INT);
         $stmt->execute();
         $barrasData = $stmt->fetchAll(PDO::FETCH_ASSOC);
