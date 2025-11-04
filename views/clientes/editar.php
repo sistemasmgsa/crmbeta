@@ -107,7 +107,11 @@
 <div class="tab-container">
     <div class="tab-nav">
         <button class="tab-link active" onclick="openTab(event, 'cliente')">Cliente</button>
+
         <button class="tab-link" onclick="openTab(event, 'actividades')">Actividades</button>
+        <button class="tab-link" onclick="openTab(event, 'registro')">Registro</button>
+
+
         <button class="tab-link" onclick="openTab(event, 'contacto')">Contacto</button>
     </div>
 
@@ -116,7 +120,8 @@
         <form action="<?php echo SITE_URL; ?>index.php?controller=clientes&action=editar" method="POST">
             <input type="hidden" name="id_cliente" id="id_cliente_form" value="<?php echo $data['cliente']['id_cliente']; ?>">
 
-            <div class="form-group">
+            <div class="form-group"
+                style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
                 <label for="id_tipo_documento">Tipo de Documento</label>
                 <select name="id_tipo_documento" id="id_tipo_documento"
                     style="font-size: 16px; padding: 6px; width: 200px;">
@@ -127,11 +132,8 @@
                         </option>
                     <?php endforeach; ?>
                 </select>
-            </div>
 
-            <div class="form-group"
-                style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-                <label for="numero_documento"
+                 <label for="numero_documento"
                     style="font-size: 16px; margin: 0; white-space: nowrap;">
                     Número de Documento
                 </label>
@@ -146,7 +148,9 @@
                             border-radius: 4px; margin: 0;">
                     Buscar SUNAT
                 </button>
+
             </div>
+
 
             <div class="form-group">
                 <label for="nombre_cliente">Nombre del Cliente</label>
@@ -163,48 +167,59 @@
                     style="font-size: 16px; padding: 6px; width: 800px;">
             </div>
 
-            <div class="form-group">
-                <label for="departamento">Departamento</label>
-                <select name="departamento" id="departamento"
-                    style="font-size: 16px; padding: 6px; width: 300px;">
+
+            <div class="form-group" 
+            style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+
+            <label for="departamento">Departamento</label>
+            <select name="departamento" id="departamento"
+                    style="font-size: 16px; padding: 6px; width: 250px;">
                     <?php foreach ($data['departamentos'] as $departamento) : ?>
                         <option value="<?php echo $departamento; ?>"
                             <?php echo ($data['cliente']['departamento'] == $departamento) ? 'selected' : ''; ?>>
                             <?php echo $departamento; ?>
                         </option>
                     <?php endforeach; ?>
-                </select>
-            </div>
+            </select>
 
-            <div class="form-group">
                 <label for="provincia">Provincia</label>
                 <select name="provincia" id="provincia"
-                    style="font-size: 16px; padding: 6px; width: 300px;">
+                    style="font-size: 16px; padding: 6px; width: 250px;">
                 </select>
-            </div>
 
-            <div class="form-group">
                 <label for="distrito">Distrito</label>
                 <select name="distrito" id="distrito"
-                    style="font-size: 16px; padding: 6px; width: 300px;">
+                    style="font-size: 16px; padding: 6px; width: 250px;">
                 </select>
+        
+
+
             </div>
+
 
             <input type="hidden" name="id_ubigeo" id="id_ubigeo"
                 value="<?php echo $data['cliente']['id_ubigeo']; ?>">
 
-            <div class="form-group">
+
+            <div class="form-group" 
+                style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+
                 <label for="telefono_cliente">Teléfono</label>
                 <input type="text" name="telefono_cliente" id="telefono_cliente"
                     value="<?php echo htmlspecialchars($data['cliente']['telefono_cliente']); ?>"
-                    style="font-size: 16px; padding: 6px; width: 400px;">
-            </div>
+                    style="font-size: 16px; padding: 6px; width: 200px;">
 
-            <div class="form-group">
-                <label for="correo_electronico">Correo Electrónico</label>
+                                    <label for="correo_electronico">Correo Electrónico</label>
                 <input type="email" name="correo_electronico" id="correo_electronico"
                     value="<?php echo htmlspecialchars($data['cliente']['correo_electronico']); ?>"
-                    style="font-size: 16px; padding: 6px; width: 600px;">
+                    style="font-size: 16px; padding: 6px; width: 200px;">
+
+                <label for="website_cliente">Sitio Web</label>
+                <input type="url" name="website_cliente" id="website_cliente"
+                    value="<?php echo htmlspecialchars($data['cliente']['website_cliente']); ?>"
+                    style="font-size: 16px; padding: 6px; width: 350px;">
+
+
             </div>
 
             <div class="form-group">
@@ -213,12 +228,7 @@
                     style="font-size: 16px; padding: 6px; width: 1000px;"><?php echo htmlspecialchars($data['cliente']['observaciones']); ?></textarea>
             </div>
 
-            <div class="form-group">
-                <label for="website_cliente">Sitio Web</label>
-                <input type="url" name="website_cliente" id="website_cliente"
-                    value="<?php echo htmlspecialchars($data['cliente']['website_cliente']); ?>"
-                    style="font-size: 16px; padding: 6px; width: 600px;">
-            </div>
+
 
             <button type="submit" class="btn btn-primary">Actualizar</button>
             <a href="<?php echo SITE_URL; ?>index.php?controller=clientes&action=index" class="btn btn-secondary">Cancelar</a>
@@ -228,25 +238,36 @@
     <!-- Contenido de la Pestaña Actividades -->
     <div id="actividades" class="tab-content">
 
-        <h3>Registrar Nueva Actividad</h3>
+        <h2>Registrar Nueva Actividad</h2>
+
         <form id="form-nueva-actividad">
             <input type="hidden" name="id_cliente" value="<?php echo $data['cliente']['id_cliente']; ?>">
-            <div class="form-group">
+            <div class="form-group"
+            style="display: flex; align-items: center; gap: 25px; margin-bottom: 20px;">
+
                 <label for="tipo_actividad">Tipo</label>
                 <select name="tipo_actividad" id="tipo_actividad" style="font-size: 16px; padding: 6px; width: 300px;" required>
-                    <option value="Llamada">Mensajes</option>                    
+                    <option value="Mensajes">Mensajes</option>                    
                     <option value="Llamada">Llamada</option>
                     <option value="Reunión">Reunión</option>
                     <option value="Correo">Correo</option>
                     <option value="Tarea">Tarea</option>
                 </select>
+
+                  <label for="fecha_actividad">Fecha y Hora</label>
+                <input type="datetime-local" name="fecha_actividad" id="fecha_actividad" 
+                style="font-size: 16px; padding: 6px; width: 300px;" required>
+
             </div>
+
+
             <div class="form-group">
                 <label for="id_contacto_actividad">Contacto (Opcional)</label>
                 <select name="id_contacto" id="id_contacto_actividad" style="font-size: 16px; padding: 6px; width: 300px;">
                     <option value="">-- Sin Contacto --</option>
                 </select>
             </div>
+
             <div class="form-group">
                 <label for="asunto">Asunto</label>
                 <input type="text" name="asunto" id="asunto" style="font-size: 16px; padding: 6px; width: 1000px;" required>
@@ -255,21 +276,31 @@
                 <label for="descripcion">Descripción</label>
                 <textarea name="descripcion" id="descripcion" rows="3" style="font-size: 16px; padding: 6px; width: 1000px;"></textarea>
             </div>
-            <div class="form-group">
-                <label for="fecha_actividad">Fecha y Hora</label>
-                <input type="datetime-local" name="fecha_actividad" id="fecha_actividad" style="font-size: 16px; padding: 6px; width: 300px;" required>
-            </div>
+
+
             <button type="submit" class="btn btn-primary">Registrar Actividad</button>
              <a href="<?php echo SITE_URL; ?>index.php?controller=calendario&action=index" class="btn btn-secondary">Ver Calendario</a>
         </form>
-        <hr>
-        <h2>Actividades</h2>
+     
+
+    </div>
+
+
+
+    <div id="registro" class="tab-content">
+
+        <h2>Registro de Actividades</h2>
         <div id="historial-actividades">
             <!-- Las actividades se cargarán aquí con AJAX -->
+        </div>
+        <div id="paginacion-actividades" style="margin-top: 20px; display:flex; gap:5px; flex-wrap:wrap;">
+            <!-- Botones de paginación aparecerán aquí -->
         </div>
       
 
     </div>
+
+    
 
     <!-- Contenido de la Pestaña Contacto -->
     <div id="contacto" class="tab-content">
@@ -322,7 +353,10 @@
 </div>
 
 <script>
+
+
 document.addEventListener('DOMContentLoaded', function() {
+    
     // Script para Ubigeo
     const ubigeos = <?php echo json_encode($data['ubigeos']); ?>;
     const departamentoSelect = document.getElementById('departamento');
@@ -413,17 +447,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const formContacto = document.getElementById('form-contacto');
     let editando = false;
 
-    function cargarActividades() {
+function cargarActividades() {
+    fetch(`<?php echo SITE_URL; ?>index.php?controller=actividades&action=listarPorCliente&id_cliente=${idCliente}`)
+        .then(response => response.json())
+        .then(data => {
+            const actividadesPorPagina = 5;
+            let paginaActual = 1;
+            const totalPaginas = Math.ceil(data.length / actividadesPorPagina);
 
-        fetch(`<?php echo SITE_URL; ?>index.php?controller=actividades&action=listarPorCliente&id_cliente=${idCliente}`)
-            .then(response => response.json())
-            .then(data => {
+            function mostrarPagina(pagina) {
                 historialActividades.innerHTML = '';
-                if (data.length === 0) {
+                const inicio = (pagina - 1) * actividadesPorPagina;
+                const fin = inicio + actividadesPorPagina;
+                const actividadesPagina = data.slice(inicio, fin);
+
+                if (actividadesPagina.length === 0) {
                     historialActividades.innerHTML = '<p>No hay actividades registradas.</p>';
                     return;
                 }
-                data.forEach(actividad => {
+
+                actividadesPagina.forEach(actividad => {
                     const actividadDiv = document.createElement('div');
                     actividadDiv.style.border = '1px solid #ddd';
                     actividadDiv.style.padding = '10px';
@@ -435,8 +478,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                     historialActividades.appendChild(actividadDiv);
                 });
-            });
-    }
+
+                // Generar botones de paginación
+                const paginacionDiv = document.getElementById('paginacion-actividades');
+                paginacionDiv.innerHTML = '';
+                for (let i = 1; i <= totalPaginas; i++) {
+                    const btn = document.createElement('button');
+                    btn.textContent = i;
+                    btn.style.padding = '5px 10px';
+                    btn.style.cursor = 'pointer';
+                    btn.style.border = '1px solid #ccc';
+                    btn.style.background = (i === pagina) ? '#790000ff' : '#fff';
+                    btn.style.color = (i === pagina) ? '#fff' : '#000';
+                    btn.addEventListener('click', () => mostrarPagina(i));
+                    paginacionDiv.appendChild(btn);
+                }
+            }
+
+            mostrarPagina(paginaActual);
+        });
+}
+
 
     formNuevaActividad.addEventListener('submit', function(e) {
         e.preventDefault();

@@ -90,6 +90,46 @@
 .fc-event { border-radius: 6px !important; padding: 2px 4px; font-size: 13px; }
 
 body { background-color: #f4f6f8; }
+
+
+.agenda-busqueda {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.agenda-busqueda input {
+    flex: 1;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 8px 10px;
+    font-size: 14px;
+}
+
+.agenda-busqueda button {
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.agenda-busqueda button:hover {
+    background-color: #0056b3;
+}
+
+
+.agenda-busqueda .btn-secondary {
+    background-color: #6c757d;
+}
+
+.agenda-busqueda .btn-secondary:hover {
+    background-color: #5a6268;
+}
+
 </style>
 
 <h2>Calendario de Actividades</h2>
@@ -125,9 +165,18 @@ body { background-color: #f4f6f8; }
 
     <!-- Contenedor agenda lateral -->
     <div id="agenda">
-        <h5>🗓️ Actividades Próximas</h5>
+       <h3 style="text-align:center;">🗓️ Actividades Próximas</h3>
+
+        <div class="agenda-busqueda">
+            <input type="text" id="buscarAgenda" placeholder="Buscar..." class="form-control">
+            <button id="btnFiltrarAgenda" class="btn btn-primary">Filtrar</button>
+            <button id="btnLimpiarAgenda" class="btn btn-secondary">Limpiar</button>
+        </div>
+
         <div id="agenda-list"></div>
     </div>
+
+
 </div>
 
 <!-- ✅ JS FullCalendar + SweetAlert2 -->
@@ -135,6 +184,14 @@ body { background-color: #f4f6f8; }
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+
+
+
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
     const agendaList = document.getElementById('agenda-list');
@@ -157,6 +214,73 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         echo json_encode($calendar_events); 
     ?>;
+
+
+        // referencias (asegúrate de tenerlas ya definidas)
+        const inputBuscar = document.getElementById('buscarAgenda');
+        const btnFiltrar = document.getElementById('btnFiltrarAgenda');
+        const btnLimpiar = document.getElementById('btnLimpiarAgenda');
+
+        // función de normalización (quita espacios extras y pasa a minúsculas)
+        function norm(text) {
+            return (text || '').toString().toLowerCase().trim();
+        }
+
+        function filtrarAgenda() {
+            const texto = norm(inputBuscar.value);
+            if (!texto) {
+                // si está vacío, mostramos todo
+                actualizarAgenda(events);
+                return;
+            }
+
+            const filtrados = events.filter(e => {
+                // campos disponibles
+                const title = norm(e.title);
+                const type = norm(e.extendedProps && e.extendedProps.type);
+                const cliente = norm(e.extendedProps && e.extendedProps.cliente);
+                const usuario = norm(e.extendedProps && e.extendedProps.nombre_usuario);
+                const desc = norm(e.extendedProps && e.extendedProps.description);
+
+                // fechas: versión larga con weekday y versión corta numérica
+                const fechaObj = new Date(e.start);
+                const fechaConDia = norm(fechaObj.toLocaleDateString('es-ES', {
+                    weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
+                })); // ej: "martes, 04 de noviembre de 2025"
+                const fechaCorta = norm(fechaObj.toLocaleDateString('es-ES')); // ej: "04/11/2025"
+                const hora = norm(fechaObj.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })); // ej: "10:00"
+
+                // Buscamos coincidencia parcial en cualquiera de los campos
+                return (
+                    title.includes(texto) ||
+                    type.includes(texto) ||
+                    cliente.includes(texto) ||
+                    usuario.includes(texto) ||
+                    desc.includes(texto) ||
+                    fechaConDia.includes(texto) ||
+                    fechaCorta.includes(texto) ||
+                    hora.includes(texto)
+                );
+            });
+
+            actualizarAgenda(filtrados);
+        }
+
+        // listeners
+        btnFiltrar.addEventListener('click', filtrarAgenda);
+
+        inputBuscar.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') filtrarAgenda();
+        });
+
+        // Limpiar (restaurar)
+        btnLimpiar.addEventListener('click', () => {
+            inputBuscar.value = '';
+            actualizarAgenda(events);
+        });
+
+
+
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
@@ -200,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }).then((result) => {
                 if (result.dismiss === Swal.DismissReason.cancel) {
                     const idCliente = info.event.extendedProps.id_cliente; 
-                    localStorage.setItem("tabActivoEditarCliente", "actividades");
+                    localStorage.setItem("tabActivoEditarCliente", "registro");
                     window.location.href = '<?php echo SITE_URL; ?>index.php?controller=clientes&action=editar&id=' + idCliente;
                 }
             });
@@ -212,33 +336,63 @@ document.addEventListener('DOMContentLoaded', function() {
 
     calendar.render();
 
-    function actualizarAgenda(eventos) {
-        const todosEventos = eventos.sort((a, b) => new Date(b.start) - new Date(a.start));
-        agendaList.innerHTML = '';
+function actualizarAgenda(eventos) {
+    const todosEventos = eventos.sort((a, b) => new Date(b.start) - new Date(a.start));
+    agendaList.innerHTML = '';
 
-        if (todosEventos.length === 0) {
-            agendaList.innerHTML = '<p>No hay actividades registradas.</p>';
-            return;
-        }
-
-        todosEventos.forEach(e => {
-            const fecha = new Date(e.start);
-            const fechaTexto = fecha.toLocaleDateString('es-ES', { weekday:'long', day:'2-digit', month:'short', year:'numeric' });
-            const hora = fecha.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', hour12:true });
-            
-            const div = document.createElement('div');
-            div.className = 'agenda-item';
-            div.innerHTML = `<strong>${e.title}</strong><br>
-                             <small>${fechaTexto} - ${hora}</small><br>
-                             <p><p>
-                             <em><b>Cliente: </b>${e.extendedProps.cliente || ''}</em>
-                             
-                             <br>
-                             <small><b>Registrado por:</b> ${e.extendedProps.nombre_usuario || ''}</small><br>`;
-                             
-            agendaList.appendChild(div);
-        });
+    if (todosEventos.length === 0) {
+        agendaList.innerHTML = '<p>No hay actividades registradas.</p>';
+        return;
     }
+
+    todosEventos.forEach((e, index) => {
+        const fecha = new Date(e.start);
+        const fechaTexto = fecha.toLocaleDateString('es-ES', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
+        const hora = fecha.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', hour12:true });
+
+        const div = document.createElement('div');
+        div.className = 'agenda-item';
+        div.setAttribute('data-index', index); // identificador
+        div.innerHTML = `
+            <strong>${e.extendedProps.type}: </strong>${e.title} <br>
+            <strong>Fecha: </strong>${fechaTexto}<br>
+            <strong>Hora: </strong>${hora}<br>
+            <strong>Cliente:</strong> ${e.extendedProps.cliente || ''} <br>
+            <strong>Creado por: </strong>${e.extendedProps.nombre_usuario || ''}<br>
+            <p></p>
+            <strong>Comentario: </strong>${e.extendedProps.description || '—'}
+        `;
+        agendaList.appendChild(div);
+
+        // ✅ Cuando haces clic en una actividad del listado
+        div.addEventListener('click', function() {
+            const fechaFormateada = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const horaFormateada = fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase();
+
+            Swal.fire({
+                title: e.title,
+                html: `<b>Cliente:</b> ${e.extendedProps.cliente}<br>
+                    <b>Tipo:</b> ${e.extendedProps.type}<br>
+                    <b>Descripción:</b> ${e.extendedProps.description}<br>
+                    <b>Fecha:</b> ${fechaFormateada} ${horaFormateada}<br>
+                    <b>Registrado por:</b> ${e.extendedProps.nombre_usuario}`,
+                icon: 'info',
+                showCancelButton: true,
+                cancelButtonText: 'Ver Detalle',
+                confirmButtonText: 'Cerrar',
+                confirmButtonColor: '#0078d4',
+                cancelButtonColor: '#dc3545'
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.cancel) {
+                    const idCliente = e.extendedProps.id_cliente;
+                    localStorage.setItem("tabActivoEditarCliente", "registro");
+                    window.location.href = '<?php echo SITE_URL; ?>index.php?controller=clientes&action=editar&id=' + idCliente;
+                }
+            });
+        });
+    });
+}
+
 
 
     <?php if ($_SESSION['usuario']['id_perfil'] == 1): ?>

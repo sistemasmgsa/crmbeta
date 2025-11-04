@@ -17,7 +17,7 @@
 /* Tablero Kanban */
 .kanban-board {
     display: flex;
-    gap: 0px;
+    gap: px;
     min-height: 100px; /* evita colapsar si no hay tarjetas */
 }
 
@@ -145,22 +145,26 @@
             </select>
         </div>
 
-        <div class="filtro-item">
-            <label for="mes">Mes</label>
-            <select name="mes" id="mes" class="form-control">
-                <?php 
-                $meses = [
-                    1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
-                    5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
-                    9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
-                ];
-                foreach ($meses as $num => $nombre) : ?>
-                    <option value="<?php echo $num; ?>" <?php echo ($data['mes'] == $num) ? 'selected' : ''; ?>>
-                        <?php echo $nombre; ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+    <div class="filtro-item">
+        <label for="mes">Mes</label>
+        <select name="mes" id="mes" class="form-control">
+            <option value="0" <?php echo (!isset($data['mes']) || $data['mes'] == 0) ? 'selected' : ''; ?>>Todos</option>
+            <?php 
+            $meses = [
+                1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
+                5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
+                9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
+            ];
+            foreach ($meses as $num => $nombre) : ?>
+                <option value="<?php echo $num; ?>" <?php echo (isset($data['mes']) && $data['mes'] == $num) ? 'selected' : ''; ?>>
+                    <?php echo $nombre; ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+
+
+
 
         <div class="filtro-item">
             <label for="etapa">Etapa</label>
@@ -205,14 +209,34 @@
             <div class="kanban-column" id="etapa-<?php echo str_replace(' ', '-', $etapa); ?>" data-etapa="<?php echo $etapa; ?>">
                 <h3><?php echo $etapa; ?></h3>
                 <?php foreach ($oportunidades as $op) : ?>
-                    <div class="kanban-card" draggable="true" id="op-<?php echo $op['id_oportunidad']; ?>" data-id="<?php echo $op['id_oportunidad']; ?>">
-                        <h4><?php echo $op['nombre_oportunidad']; ?></h4>
-                        <p><?php echo $op['nombre_cliente']; ?></p>
-                        <p>---</p>
-                        <p style="font-size: 14px; color: #888;"><?php echo $op['nombre_usuario_creacion']; ?> - <?php echo date('d/m/Y H:i', strtotime($op['fecha_creacion'])); ?></p>
-                        <p><strong>Valor:</strong> S/. <?php echo number_format($op['valor_estimado'], 2); ?></p>
-                        <a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=editar&id=<?php echo $op['id_oportunidad']; ?>" style="font-size: 12px; margin-top: 5px; display: inline-block;">Editar</a>
-                        <a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=eliminar&id=<?php echo $op['id_oportunidad']; ?>" onclick="return confirm('¿Está seguro de eliminar esta oportunidad?');" style="font-size: 12px; margin-top: 5px; display: inline-block; color: red; margin-left: 10px;">Eliminar</a>
+                    <div class="kanban-card" draggable="true" id="op-<?php echo $op['id_oportunidad']; ?>" data-id="<?php echo $op['id_oportunidad']; ?>" style="padding: 10px; margin-bottom: 10px;">
+                        <h4 style="margin: 0 0 5px 0;"><?php echo $op['nombre_oportunidad']; ?></h4>
+
+                    <div style="display: flex; font-size: 14px; color: #555; margin-bottom: 3px;">
+                        <strong style="width: 70px; flex-shrink: 0;">Cliente:</strong>
+                        <span style="flex: 1; word-wrap: break-word;"><?php echo $op['nombre_cliente']; ?></span>
+                    </div>
+
+                    <div style="display: flex; font-size: 14px; color: #555; margin-bottom: 3px;">
+                        <strong style="width: 70px; flex-shrink: 0;">Usuario:</strong>
+                        <span style="flex: 1;"><?php echo $op['nombre_usuario_creacion']; ?></span>
+                    </div>
+
+                    <div style="display: flex; font-size: 14px; color: #555; margin-bottom: 5px;">
+                        <strong style="width: 70px; flex-shrink: 0;">Fecha:</strong>
+                        <span style="flex: 1;"><?php echo date('d/m/Y H:i', strtotime($op['fecha_creacion'])); ?></span>
+                    </div>
+
+                <div style="display: flex; font-size: 14px; color: #555; margin-bottom: 5px;">
+                    <strong style="width: 70px; flex-shrink: 0;">Valor:</strong>
+                    <span>S/. <?php echo number_format($op['valor_estimado'], 2); ?></span>
+                </div>
+
+
+                        <div style="display: flex; gap: 10px; font-size: 12px;">
+                            <a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=editar&id=<?php echo $op['id_oportunidad']; ?>">Editar</a>
+                            <a href="<?php echo SITE_URL; ?>index.php?controller=oportunidades&action=eliminar&id=<?php echo $op['id_oportunidad']; ?>" onclick="return confirm('¿Está seguro de eliminar esta oportunidad?');" style="color: red;">Eliminar</a>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>

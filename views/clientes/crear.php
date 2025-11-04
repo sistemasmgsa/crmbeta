@@ -22,18 +22,18 @@
 
 <form action="<?php echo SITE_URL; ?>index.php?controller=clientes&action=crear" method="POST">
 
-    <div class="form-group">
+
+    <div class="form-group" 
+        style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+
         <label for="id_tipo_documento">Tipo de Documento</label>
         <select name="id_tipo_documento" id="id_tipo_documento" 
-        style="font-size: 16px; padding: 6px; width: 200px;">
+        style="font-size: 16px; padding: 6px; width: 150px;">
             <?php foreach ($data['tipos_documento'] as $tipo) : ?>
                 <option value="<?php echo $tipo['id_tipo_documento']; ?>"><?php echo $tipo['nombre_documento']; ?></option>
             <?php endforeach; ?>
         </select>
-    </div>
 
-    <div class="form-group" 
-        style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
         
         <label for="numero_documento" 
             style="font-size: 16px; margin: 0; white-space: nowrap;">
@@ -52,6 +52,7 @@
         </button>
     </div>
 
+
         <div class="form-group">
         <label for="nombre_cliente">Nombre del Cliente</label>
         <input type="text" name="nombre_cliente" id="nombre_cliente" 
@@ -65,56 +66,67 @@
         required>
     </div>
 
-    <div class="form-group">
+
+    <div class="form-group" 
+        style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+
+        
         <label for="departamento">Departamento</label>
         <select name="departamento" id="departamento" 
-                style="font-size: 16px; padding: 6px; width: 300px;">
+                style="font-size: 16px; padding: 6px; width: 250px;">
             <?php foreach ($data['departamentos'] as $departamento) : ?>
                 <option value="<?php echo $departamento; ?>">
                     <?php echo $departamento; ?>
                 </option>
             <?php endforeach; ?>
         </select>
-    </div>
 
-    <div class="form-group">
         <label for="provincia">Provincia</label>
         <select name="provincia" id="provincia"
-        style="font-size: 16px; padding: 6px; width: 300px;">
+        style="font-size: 16px; padding: 6px; width: 250px;">
         </select>
-    </div>
 
-    <div class="form-group">
         <label for="distrito">Distrito</label>
         <select name="distrito" id="distrito"
-            style="font-size: 16px; padding: 6px; width: 300px;">
+            style="font-size: 16px; padding: 6px; width: 250px;">
         </select>
+
     </div>
+
+    
     <input type="hidden" name="id_ubigeo" id="id_ubigeo">
-    <div class="form-group">
+
+    <div class="form-group" 
+        style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+
         <label for="telefono_cliente">Teléfono</label>
         <input type="text" name="telefono_cliente" id="telefono_cliente"
-        style="font-size: 16px; padding: 6px; width: 400px;"
+        style="font-size: 16px; padding: 6px; width: 250px;"
         required>
-    </div>
-    <div class="form-group">
+
         <label for="correo_electronico">Correo Electrónico</label>
         <input type="email" name="correo_electronico" id="correo_electronico"
-        style="font-size: 16px; padding: 6px; width: 600px;"
-        >
+        style="font-size: 16px; padding: 6px; width: 250px;">
+
+        <label for="website_cliente">Sitio Web</label>
+        <input type="url" name="website_cliente" id="website_cliente"
+        style="font-size: 16px; padding: 6px; width: 350px;">
+
+
+
+
     </div>
+
+
+
+
     <div class="form-group">
         <label for="observaciones">Observaciones</label>
         <textarea name="observaciones" id="observaciones"
         style="font-size: 16px; padding: 6px; width: 1000px;"
         ></textarea>
     </div>
-    <div class="form-group">
-        <label for="website_cliente">Sitio Web</label>
-        <input type="url" name="website_cliente" id="website_cliente"
-        style="font-size: 16px; padding: 6px; width: 600px;"
-        >
-    </div>
+
 
 
     
