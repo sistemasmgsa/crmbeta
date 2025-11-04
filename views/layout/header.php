@@ -59,3 +59,4 @@
             </nav>
         </aside>
         <main class="content">
+            <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>

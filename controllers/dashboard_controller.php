@@ -106,7 +106,7 @@ class DashboardController extends Controller
         header('Content-Type: application/json');
         $anio = $_POST['anio'] ?? date('Y');
         $mes = $_POST['mes'] ?? date('m');
-        $etapa = $_POST['etapa'] ?? null;
+        $etapa = isset($_POST['etapa']) ? (int)$_POST['etapa'] : null;
         $usuario = $_POST['usuario'] ?? null;
 
         $database = new Database();

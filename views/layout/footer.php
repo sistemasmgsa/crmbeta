@@ -15,6 +15,15 @@
                     }
                 });
             });
+
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
+
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('visible');
+                });
+            }
         });
     </script>
 </body>
