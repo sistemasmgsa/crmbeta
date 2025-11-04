@@ -8,14 +8,16 @@ body {
 
 .container {
     display: flex;
+    min-height: 100vh;
 }
 
-/* Sidebar styles */
+/* Sidebar */
 .sidebar {
     width: 250px;
     background-color: #333;
     color: #fff;
     min-height: 100vh;
+    transition: left 0.3s ease;
 }
 
 .sidebar-header {
@@ -29,8 +31,9 @@ body {
 }
 
 .menu ul {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .menu ul li a {
@@ -42,7 +45,6 @@ body {
 }
 
 .menu ul li a i {
-    color: #fff;
     margin-right: 10px;
 }
 
@@ -50,26 +52,33 @@ body {
     background-color: #555;
 }
 
+/* Submenu animado */
 .submenu {
-    display: none;
-    padding-left: 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.submenu.open {
+    max-height: 500px; /* Ajusta según cantidad de items */
 }
 
 .menu .submenu li a {
     padding-left: 40px;
 }
 
-/* Content styles */
+/* Contenido principal */
 .content {
     flex-grow: 1;
     padding: 20px;
+    transition: margin-left 0.3s ease;
 }
 
 .content h1, .content h2 {
     color: #8B0000;
 }
 
-/* Table styles */
+/* Table */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -86,7 +95,7 @@ table th {
     background-color: #f2f2f2;
 }
 
-/* Button styles */
+/* Buttons */
 .btn {
     display: inline-block;
     padding: 10px 20px;
@@ -100,15 +109,15 @@ table th {
 }
 
 .btn-primary {
-    background-color: #8B0000; /* Rojo granate */
+    background-color: #8B0000;
 }
 
 .btn-primary:hover {
-    background-color: #a52a2a; /* Rojo ladrillo */
+    background-color: #a52a2a;
 }
 
 .btn-secondary {
-    background-color: #6c757d; /* Gris */
+    background-color: #6c757d;
 }
 
 .btn-secondary:hover {
@@ -123,7 +132,7 @@ table th {
     background-color: #c82333;
 }
 
-/* Form styles */
+/* Forms */
 .form-group {
     margin-bottom: 15px;
 }
@@ -140,7 +149,7 @@ table th {
     border-radius: 4px;
 }
 
-/* Sidebar Toggle Button */
+/* Sidebar toggle button */
 .sidebar-toggle {
     display: none;
     position: fixed;
@@ -152,18 +161,27 @@ table th {
     border: none;
     padding: 10px 15px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
+.sidebar-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Mostrar en responsive */
+@media (max-width: 1024px) {
+    .sidebar-toggle {
+        display: flex;
+    }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
     .sidebar {
         position: fixed;
         left: -250px;
         top: 0;
-        height: 100%;
         z-index: 1000;
-        transition: left 0.3s ease;
     }
 
     .sidebar.visible {
@@ -179,7 +197,23 @@ table th {
     }
 }
 
-/* Tab container styles */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        min-height: auto;
+    }
+
+    .submenu li a {
+        padding-left: 30px;
+    }
+}
+
+/* Tabs */
 .tab-container {
     width: 100%;
     margin-top: 20px;
@@ -220,3 +254,90 @@ table th {
 .tab-content.active {
     display: block;
 }
+/* Topbar */
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #8B0000;
+    color: #fff;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 1002;
+}
+
+.topbar .logo {
+    margin-left: 15px;
+    font-size: 1.5rem;
+}
+
+/* Sidebar toggle button - estilo círculo blanco */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 8px;
+    left: 12px;
+    z-index: 1003;
+    background-color: #cccccc;       /* círculo blanco */
+    color: #8B0000;               /* color del icono */
+    border: none;
+    padding: 12px;                /* tamaño del círculo */
+    cursor: pointer;
+    border-radius: 100%;           /* lo hace circular */
+    font-size: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2); /* sombra sutil */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0; /* por defecto */
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    color: #fff;
+    transition: left 0.3s ease;
+    z-index: 1001;
+}
+
+.sidebar.visible {
+    left: 0;
+}
+
+/* Ajuste de contenido */
+.content {
+    margin-top: 60px; /* espacio para topbar */
+    padding: 0px;
+    transition: margin-left 0.3s ease;
+}
+
+@media(min-width:1025px){
+    .sidebar {
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+
+    .sidebar-toggle {
+        display: none;
+    }
+
+    .content {
+        margin-top: 0;
+        margin-left: 30px; /* ancho sidebar */
+    }
+
+    .topbar {
+        display: none; /* ocultar topbar en escritorio */
+    }
+}
+
