@@ -1,3 +1,5 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <style>
 :root {
     --primary: #7d0000ff;
@@ -422,7 +424,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedColumns = Array.from(selectedColumnsUl.children).map(li => li.dataset.value);
 
         if (selectedColumns.length === 0) {
-            alert('Por favor, seleccione al menos una columna.');
+
+                Swal.fire({
+                icon: 'warning',
+                title: 'Atención',
+                text: 'Por favor, seleccione al menos una columna.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar'
+            });
+
+
+
             return;
         }
 
@@ -475,11 +487,34 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedColumns = Array.from(selectedColumnsUl.children).map(li => li.dataset.value);
 
         if (!templateName) {
-            alert('Por favor, ingrese un nombre para la plantilla.');
+
+
+                Swal.fire({
+                icon: 'warning',
+                title: 'Atención',
+                text: 'Por favor, ingrese un nombre para la plantilla.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar'
+            });
+
+
             return;
         }
+
+
         if (selectedColumns.length === 0) {
-            alert('Por favor, seleccione al menos una columna para guardar en la plantilla.');
+
+
+            Swal.fire({
+            icon: 'warning',
+            title: 'Atención',
+            text: 'Por favor, seleccione al menos una columna para guardar en la plantilla.',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Aceptar'
+        });
+
+
+            
             return;
         }
 
@@ -494,7 +529,16 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                alert('Plantilla guardada exitosamente.');
+
+                Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: 'Plantilla guardada exitosamente.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar'
+            });
+
+
                 templateSelect.innerHTML = '<option value="">Seleccione una plantilla</option>';
                 data.data.templates.forEach(template => {
                     const option = document.createElement('option');
@@ -503,7 +547,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     templateSelect.appendChild(option);
                 });
             } else {
-                alert('Error al guardar la plantilla.');
+
+                Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error al guardar la plantilla.',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Aceptar'
+            });
+                
             }
         });
     });
@@ -511,7 +563,16 @@ document.addEventListener('DOMContentLoaded', function() {
     loadTemplateBtn.addEventListener('click', function() {
         const templateId = templateSelect.value;
         if (!templateId) {
-            alert('Por favor, seleccione una plantilla para cargar.');
+
+            Swal.fire({
+            icon: 'warning',
+            title: 'Atención',
+            text: 'Por favor, seleccione una plantilla para cargar.',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Aceptar'
+        });
+
+
             return;
         }
 

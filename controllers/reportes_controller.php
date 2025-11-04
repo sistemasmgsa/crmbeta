@@ -76,35 +76,83 @@ class reportesController extends Controller {
         exit;
     }
 
-    public function exportar_excel() {
-        $this->checkAuth();
-        if (isset($_POST['report_type']) && isset($_POST['selected_columns'])) {
-            $report_type = $_POST['report_type'];
-            $selected_columns = json_decode($_POST['selected_columns'], true);
+public function exportar_excel() {
+    $this->checkAuth();
+    if (isset($_POST['report_type']) && isset($_POST['selected_columns'])) {
+        $report_type = $_POST['report_type'];
+        $selected_columns = json_decode($_POST['selected_columns'], true);
 
-            $reportesModel = new ReportesModel($this->db);
-            $data = $reportesModel->generar_reporte($report_type, $selected_columns);
+        $reportesModel = new ReportesModel($this->db);
+        $data = $reportesModel->generar_reporte($report_type, $selected_columns);
 
-            header('Content-Type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment;filename="reporte_' . $report_type . '.xls"');
-            header('Cache-Control: max-age=0');
+        // Nombre del archivo
+    date_default_timezone_set('America/Lima'); // Ajusta la zona horaria a Perú
+    $fechaHora = date('Y-m-d_H-i-s'); // Año-Mes-Día_Hora-Minuto-Segundo
+    $filename = "reporte_{$report_type}_{$fechaHora}.xls";
 
-            $output = fopen('php://output', 'w');
+        // Headers para descarga
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header("Cache-Control: max-age=0");
 
-            // Encabezados
-            fputcsv($output, $selected_columns, "\t");
+        // Generar XML de Excel simple
+        echo '<?xml version="1.0"?>';
+        echo '<?mso-application progid="Excel.Sheet"?>';
+        echo '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+                xmlns:o="urn:schemas-microsoft-com:office:office"
+                xmlns:x="urn:schemas-microsoft-com:office:excel"
+                xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+                xmlns:html="http://www.w3.org/TR/REC-html40">';
+        
+        // Estilos
+        echo '<Styles>
+                <Style ss:ID="Header">
+                    <Font ss:Bold="1" ss:Color="#FFFFFF"/>
+                    <Interior ss:Color="#003366" ss:Pattern="Solid"/>
+                    <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+                </Style>
+              </Styles>';
 
-            // Datos
-            foreach ($data as $row) {
-                $filtered_row = [];
-                foreach($selected_columns as $col){
-                    $filtered_row[] = $row[$col];
-                }
-                fputcsv($output, $filtered_row, "\t");
-            }
-            fclose($output);
-            exit();
+        // Hoja
+        echo '<Worksheet ss:Name="Reporte">';
+        
+        // Freeze pane (inmovilizar primera fila)
+        echo '<Table ss:DefaultColumnWidth="110">';
+        
+        // Cabecera
+        echo '<Row ss:StyleID="Header">';
+        foreach ($selected_columns as $col) {
+            echo "<Cell><Data ss:Type=\"String\">$col</Data></Cell>";
         }
+        echo '</Row>';
+
+        // Datos
+        foreach ($data as $row) {
+            echo '<Row>';
+            foreach ($selected_columns as $col) {
+                $valor = htmlspecialchars($row[$col]);
+                echo "<Cell><Data ss:Type=\"String\">$valor</Data></Cell>";
+            }
+            echo '</Row>';
+        }
+
+        echo '</Table>';
+
+        // SheetViews para congelar fila 1
+        echo '<WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+                <FreezePanes/>
+                <FrozenNoSplit/>
+                <SplitHorizontal>1</SplitHorizontal>
+                <TopRowBottomPane>1</TopRowBottomPane>
+                <ActivePane>2</ActivePane>
+              </WorksheetOptions>';
+
+        echo '</Worksheet>';
+        echo '</Workbook>';
+        exit();
     }
+}
+
+
 }
 ?>
