@@ -44,6 +44,45 @@
     background-color: #eef4ff;
 }
 
+.filtros-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    background: #f8f9fa;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.filtro-item label {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.filtro-item select {
+    border-radius: 6px;
+    border: 1px solid #bbb;
+    padding: 10px 12px;
+    font-size: 15px;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.filtro-item select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 3px rgba(0, 123, 255, 0.4);
+    outline: none;
+}
+
+
+
+
 /* FullCalendar estilos */
 .fc-toolbar-title { font-size: 1.5rem !important; font-weight: 600 !important; color: #333; }
 .fc-button { border-radius: 8px !important; }
@@ -56,18 +95,26 @@ body { background-color: #f4f6f8; }
 
 
 <?php if ($_SESSION['usuario']['id_perfil'] == 1): ?>
-<div class="mb-3">
-    <label for="filtroUsuario" class="form-label">Filtrar por Usuario:</label>
-    <select id="filtroUsuario" class="form-select" style="width: 200px; display: inline-block; vertical-align: middle;">
-        <option value="">Todos</option>
-        <?php foreach ($data['usuarios'] as $usuario): ?>
-            <option value="<?php echo $usuario['id_usuario']; ?>" <?php echo (isset($data['id_usuario_seleccionado']) && $data['id_usuario_seleccionado'] == $usuario['id_usuario']) ? 'selected' : ''; ?>>
-                <?php echo $usuario['nombre_usuario'] . ' ' . $usuario['apellido_usuario']; ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
+<div class="filtros-container mb-4">
+    <div class="filtro-item">
+        <label for="filtroUsuario">Filtrar por Usuario:</label>
+        <select id="filtroUsuario" class="form-control">
+            <option value="">Todos</option>
+            <?php foreach ($data['usuarios'] as $usuario): ?>
+                <option value="<?php echo $usuario['id_usuario']; ?>" 
+                    <?php echo (isset($data['id_usuario_seleccionado']) && $data['id_usuario_seleccionado'] == $usuario['id_usuario']) ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($usuario['nombre_usuario']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
 </div>
+<?php else: ?>
+<input type="hidden" id="filtroUsuario" value="<?php echo $_SESSION['usuario']['id_usuario']; ?>">
 <?php endif; ?>
+
+
+
 
 <div class="dashboard-container">
     <!-- Contenedor calendario -->
