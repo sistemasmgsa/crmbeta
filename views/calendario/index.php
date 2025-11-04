@@ -10,13 +10,14 @@
 
 /* Contenedor calendario */
 #calendar-container {
-    width: 0px;
     flex: 3;
-    min-width: 600px;
+    min-width: 400px; /* más pequeño */
+    max-width: 700px; /* opcional */
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    padding: 15px;
+    padding: 10px; /* menos padding */
+    height: auto;
 }
 
 /* Contenedor agenda */
@@ -161,6 +162,13 @@ document.addEventListener('DOMContentLoaded', function() {
         initialView: 'dayGridMonth',
         height: 'auto',
         locale: 'es',
+        buttonText: {
+            today: 'Hoy',
+            dayGridMonth: 'Mes',
+            timeGridWeek: 'Semana',
+            timeGridDay: 'Día',
+            listWeek: 'Lista'
+        },
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
