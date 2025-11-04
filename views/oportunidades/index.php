@@ -17,7 +17,7 @@
 /* Tablero Kanban */
 .kanban-board {
     display: flex;
-    gap: 15px;
+    gap: 0px;
     min-height: 100px; /* evita colapsar si no hay tarjetas */
 }
 
