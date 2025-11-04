@@ -210,7 +210,15 @@ table th {
         height: 100%;
         min-height: 100vh;
     }
-    .sidebar.show { transform: translateX(260px); }
+
+
+    .sidebar.show {
+    left: 0;
+    transform: none;
+}
+
+
+
     .content { width: 100%; padding: 8px; margin-left: 0; }
     .sidebar.show ~ .content { margin-left: 250px; }
     .menu ul li a { padding: 8px 10px; font-size: 12px; }
@@ -231,7 +239,14 @@ table th {
         width: 250px;
         height: 100%;
     }
-    .sidebar.show { transform: translateX(260px); }
+
+
+   .sidebar.show {
+    left: 0;
+    transform: none;
+}
+
+
     .content { width: 100%; padding: 10px; margin-left: 0; }
     .sidebar.show ~ .content { margin-left: 250px; }
     .menu ul li a { padding: 10px 12px; font-size: 13px; }
@@ -261,4 +276,31 @@ table th {
     body { font-size: 16px; }
     .sidebar { width: 250px; min-height: 100vh; }
     .content { width: calc(100% - 250px); padding: 20px; }
+}
+
+/* --- Menú de usuario --- */
+.user-menu > a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.user-menu i {
+    margin-right: 10px;
+}
+
+.user-menu small {
+    margin-left: 25px;
+    color: #ccc;
+}
+
+/* Estilo submenu usuario */
+.user-menu .submenu li a {
+    padding-left: 40px;
+    background-color: #444;
+}
+
+.user-menu .submenu li a:hover {
+    background-color: #555;
 }

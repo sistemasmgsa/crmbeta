@@ -38,8 +38,6 @@
                         <ul class="submenu">
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=tiposdocumentoidentidad&action=index">Tipos de Documento</a></li>
                             <li><a href="<?php echo SITE_URL; ?>index.php?controller=ubigeos&action=index">Ubigeos</a></li>
-                            <!-- <li><a href="<?php echo SITE_URL; ?>index.php?controller=usuarios&action=index">Usuarios</a></li>
-                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=perfiles&action=index">Perfiles</a></li> -->
                         </ul>
                     </li>
 
@@ -55,7 +53,7 @@
                     <li class="has-submenu">
                         <a href="#"><i class="fas fa-chart-bar"></i> Reportes</a>
                         <ul class="submenu">
-                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=reportes&action=dinamicos">Reportes Dinamicos</a></li>
+                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=reportes&action=dinamicos">Reportes Dinámicos</a></li>
                         </ul>
                     </li>
 
@@ -69,7 +67,30 @@
                     </li>
                     <?php endif; ?>
 
-                    <li><a href="<?php echo SITE_URL; ?>index.php?controller=login&action=logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                    <hr>
+
+                    <!-- Menú de usuario logeado -->
+                    <li class="has-submenu user-menu">
+
+                    
+                        <a href="#"> 
+                            <i class="fas fa-user-circle"></i>
+                            <?php echo htmlspecialchars($_SESSION['usuario']['nombre_perfil']); ?>
+                             
+                         <p style="margin-left: 30px;font-size: 14px; color: #9e9e9eff">
+                            <?php echo htmlspecialchars($_SESSION['usuario']['nombre_usuario']); ?>
+                        </p>
+                           
+
+                        </a>
+
+
+                        <ul class="submenu">
+                            <li><a href="<?php echo SITE_URL; ?>index.php?controller=login&action=logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+
+                    
                 </ul>
             </nav>
         </aside>

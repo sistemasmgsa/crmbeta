@@ -93,7 +93,7 @@
 </style>
 
 <div class="container-fluid">
-    <h2>Bienvenido al CRM, <?php echo $_SESSION['usuario']['nombre_usuario']; ?></h2>
+    <h2>Bienvenido al CRM</h2>
 
     <!-- 🔹 Filtros -->
     <div class="filtros-container">
