@@ -43,12 +43,12 @@
 <div class="container-fluid">
     <h1 class="h3 mb-4 text-gray-800"><?php echo $data['titulo']; ?></h1>
 
+    <!-- Report Type and Templates -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Configuración del Reporte</h6>
         </div>
         <div class="card-body">
-            <!-- Report Type and Templates -->
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="report_type">Tipo de Reporte</label>
@@ -79,8 +79,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Column Selection -->
+    <!-- Column Selection -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Selección de Columnas</h6>
+        </div>
+        <div class="card-body">
             <div class="dual-list-box">
                 <div class="list-box">
                     <h5>Columnas Disponibles</h5>
@@ -95,20 +102,21 @@
                     <ul id="selected_columns"></ul>
                 </div>
             </div>
+        </div>
+    </div>
 
+    <!-- Report Generation and Results -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Generar y Ver Reporte</h6>
+        </div>
+        <div class="card-body">
             <div class="mt-4">
                 <button class="btn btn-info" id="generate_report_btn">Generar Reporte</button>
                 <button class="btn btn-warning" id="export_excel_btn" style="display:none;">Exportar a Excel</button>
             </div>
-        </div>
-    </div>
 
-    <div class="card shadow mb-4" id="report_result_card" style="display:none;">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Resultados del Reporte</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
+            <div class="table-responsive mt-4" id="report_result_container" style="display:none;">
                 <table class="table table-bordered table-striped" id="report_table" width="100%" cellspacing="0">
                     <thead></thead>
                     <tbody></tbody>
@@ -130,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const exportExcelBtn = document.getElementById('export_excel_btn');
     const saveTemplateBtn = document.getElementById('save_template_btn');
     const loadTemplateBtn = document.getElementById('load_template_btn');
+    const reportResultContainer = document.getElementById('report_result_container');
 
     function updateColumnsAndTemplates() {
         const reportType = reportTypeSelect.value;
@@ -232,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     tableBody.appendChild(trBody);
                 });
 
-                document.getElementById('report_result_card').style.display = 'block';
+                reportResultContainer.style.display = 'block';
                 exportExcelBtn.style.display = 'inline-block';
             }
         });
