@@ -5,24 +5,24 @@ class ReportesModel {
     private $column_map = [
         'oportunidades' => [
             'ID Oportunidad' => 'o.id_oportunidad',
-            'Nombre Oportunidad' => 'o.nombre_oportunidad',
+            'Oportunidad' => 'o.nombre_oportunidad',
             'Cliente' => 'c.nombre_cliente',
             'Valor Estimado' => 'o.valor_estimado',
             'Etapa' => 'o.etapa',
-            'Fecha Cierre' => 'o.fecha_cierre',
-            'Propietario' => 'u.nombre_usuario',
-            'Fecha Creación' => 'o.fecha_creacion',
+            'Fecha Cierre' => "DATE_FORMAT(o.fecha_cierre, '%d/%m/%Y %h:%i %p')",
+            'Usuario' => 'u.nombre_usuario',
+            'Fecha Creación' => "DATE_FORMAT(o.fecha_creacion, '%d/%m/%Y %h:%i %p')",
         ],
         'actividades' => [
             'ID Actividad' => 'a.id_actividad',
             'Asunto' => 'a.asunto',
             'Tipo' => 'a.tipo_actividad',
-            'Fecha' => 'a.fecha_actividad',
+            'Fecha Actividad' => 'a.fecha_actividad',
             'Usuario' => 'u.nombre_usuario',
             'Cliente' => 'c.nombre_cliente',
             'Oportunidad' => 'o.nombre_oportunidad',
             'Descripción' => 'a.descripcion',
-            'Fecha Creación' => 'a.fecha_creacion',
+            'Fecha Creación' => "DATE_FORMAT(a.fecha_creacion, '%d/%m/%Y %h:%i %p')",
         ],
         'clientes' => [
             'ID Cliente' => 'c.id_cliente',
@@ -36,7 +36,7 @@ class ReportesModel {
             'Provincia' => 'ub.provincia',
             'Distrito' => 'ub.distrito',
             'Estado' => 'c.estado',
-            'Fecha Creación' => 'c.fecha_creacion',
+            'Fecha Creación' => "DATE_FORMAT(c.fecha_creacion, '%d/%m/%Y %h:%i %p')",
         ]
     ];
 

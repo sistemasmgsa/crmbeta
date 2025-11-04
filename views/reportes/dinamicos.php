@@ -1,52 +1,270 @@
 <style>
+:root {
+    --primary: #7d0000ff;
+    --secondary: #a3a3a3ff;
+    --success: #28a745;
+    --warning: #ffc107;
+    --info: #17a2b8;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --radius: 6px;
+    --shadow: 0 2px 6px rgba(0,0,0,0.1);
+    --transition: 0.2s ease;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background-color: #f4f6f9;
+    color: var(--dark);
+    margin: 0;
+    padding: 0px;
+}
+
+.container-fluid {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1.h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 25px;
+}
+
+/* Tarjetas */
+.card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 25px;
+    border: 1px solid #e0e0e0;
+}
+
+.card-header {
+    background: var(--primary);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.card-header h6 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Etiquetas y campos */
+label {
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 6px;
+    display: block;
+}
+
+select, input[type="text"] {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    border: 1px solid #ccc;
+    outline: none;
+    transition: border-color var(--transition);
+    background-color: white;
+}
+
+select:focus, input[type="text"]:focus {
+    border-color: var(--primary);
+}
+
+/* Botones */
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: var(--radius);
+    padding: 8px 14px;
+    font-weight: 500;
+    transition: all var(--transition);
+}
+
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-success { background: var(--success); color: #fff; }
+.btn-warning { background: var(--warning); color: #fff; }
+.btn-info { background: var(--info); color: #fff; }
+.btn-secondary { background: var(--secondary); color: #fff; }
+
+button:hover {
+    filter: brightness(1.1);
+}
+
+/* Grupos de entrada */
+.input-group {
+    display: flex;
+    gap: 6px;
+}
+
+.input-group input {
+    flex: 1;
+}
+
+/* Sistema de columnas */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.col-md-4 {
+    flex: 1;
+    min-width: 250px;
+}
+
+/* Dual List Box */
+.dual-list-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.dual-list-box .list-box {
+    flex: 1;
+    min-width: 250px;
+    border: 1px solid #ddd;
+    border-radius: var(--radius);
+    background: white;
+    padding: 10px;
+    height: 300px;
+    overflow-y: auto;
+    box-shadow: var(--shadow);
+}
+
+.dual-list-box .list-box h5 {
+    margin: 0 0 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--dark);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.dual-list-box .list-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dual-list-box .list-box ul li {
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.dual-list-box .list-box ul li:hover {
+    background: #f4f4f4;
+}
+
+.dual-list-box .list-box ul li.selected {
+    background: var(--primary);
+    color: white;
+}
+
+.dual-list-box .actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Botones circulares */
+.dual-list-box .actions button {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background: var(--secondary);
+    color: #fff;
+    border: none;
+    box-shadow: var(--shadow);
+    transition: all var(--transition);
+}
+
+.dual-list-box .actions button:hover {
+    background: var(--primary);
+    transform: scale(1.08);
+}
+
+
+/* Tabla */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 0.95rem;
+}
+
+.table th, .table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.table th {
+    background: var(--light);
+    text-align: left;
+    font-weight: 600;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
     .dual-list-box {
-        display: flex;
-        justify-content: space-between;
-    }
-    .dual-list-box .list-box {
-        width: 45%;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
-        height: 300px;
-        overflow-y: auto;
-    }
-    .dual-list-box .list-box h5 {
-        margin-top: 0;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 5px;
-    }
-    .dual-list-box .list-box ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
-    .dual-list-box .list-box ul li {
-        padding: 8px 12px;
-        cursor: pointer;
-        border-radius: 3px;
-    }
-    .dual-list-box .list-box ul li:hover, .dual-list-box .list-box ul li.selected {
-        background-color: #f0f0f0;
-    }
-    .dual-list-box .actions {
-        display: flex;
         flex-direction: column;
-        justify-content: center;
-        padding: 0 15px;
     }
-    .dual-list-box .actions button {
-        margin-bottom: 10px;
-    }
+}
+
+
+
+/* Tabla responsive para muchas columnas */
+#report_result_container {
+    overflow-x: auto; /* Scroll horizontal si no caben todas las columnas */
+    -webkit-overflow-scrolling: touch; /* Suaviza el scroll en móviles */
+}
+
+#report_table {
+    table-layout: auto; /* Se ajusta según contenido */
+    width: 100%;
+    min-width: 800px; /* Evita que se colapse con muchas columnas */
+}
+
+#report_table th, #report_table td {
+    white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+    text-align: left;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    font-size: 0.85rem;
+}
+
+/* Opcional: hover para filas */
+#report_table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+
 </style>
 
 <div class="container-fluid">
-    <h1 class="h3 mb-4 text-gray-800"><?php echo $data['titulo']; ?></h1>
+    <h1 class="h2 mb-4 text-gray-800"><?php echo $data['titulo']; ?></h1>
 
     <!-- Report Type and Templates -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Configuración del Reporte</h6>
+            <h6 class="m-0 font-weight-bold text-primary" style="font-size: 16px;">Configuración del Reporte</h6>
         </div>
         <div class="card-body">
             <div class="row mb-3">
@@ -64,51 +282,53 @@
                         <select id="template_select" class="form-control">
                             <option value="">Seleccione una plantilla</option>
                         </select>
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" id="load_template_btn">Cargar</button>
-                        </div>
+                        <button class="btn btn-primary" id="load_template_btn">Cargar</button>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label for="template_name">Guardar Plantilla</label>
                     <div class="input-group">
                         <input type="text" id="template_name" class="form-control" placeholder="Nombre de la plantilla">
-                        <div class="input-group-append">
-                            <button class="btn btn-success" id="save_template_btn">Guardar</button>
-                        </div>
+                        <button class="btn btn-success" id="save_template_btn">Guardar</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Column Selection -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Selección de Columnas</h6>
-        </div>
-        <div class="card-body">
-            <div class="dual-list-box">
-                <div class="list-box">
-                    <h5>Columnas Disponibles</h5>
-                    <ul id="available_columns"></ul>
-                </div>
-                <div class="actions">
-                    <button class="btn btn-secondary" id="add_column_btn">&gt;</button>
-                    <button class="btn btn-secondary" id="remove_column_btn">&lt;</button>
-                </div>
-                <div class="list-box">
-                    <h5>Columnas Seleccionadas</h5>
-                    <ul id="selected_columns"></ul>
-                </div>
+<!-- Column Selection -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary" style="font-size: 16px;">Selección de Columnas</h6>
+    </div>
+    <div class="card-body">
+        <div class="dual-list-box">
+            <div class="list-box">
+                <h5>Columnas Disponibles</h5>
+                <ul id="available_columns"></ul>
+            </div>
+
+            <div class="actions">
+                <!-- Botones existentes + nuevos -->
+                <button class="btn btn-secondary" id="add_all_btn">&raquo;</button>
+                <button class="btn btn-secondary" id="add_column_btn">&gt;</button>
+                <button class="btn btn-secondary" id="remove_column_btn">&lt;</button>
+                <button class="btn btn-secondary" id="remove_all_btn">&laquo;</button>
+            </div>
+
+            <div class="list-box">
+                <h5>Columnas Seleccionadas</h5>
+                <ul id="selected_columns"></ul>
             </div>
         </div>
     </div>
+</div>
+
 
     <!-- Report Generation and Results -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Generar y Ver Reporte</h6>
+            <h6 class="m-0 font-weight-bold text-primary" style="font-size: 16px;">Generar y Ver Reporte</h6>
         </div>
         <div class="card-body">
             <div class="mt-4">
@@ -117,13 +337,15 @@
             </div>
 
             <div class="table-responsive mt-4" id="report_result_container" style="display:none;">
-                <table class="table table-bordered table-striped" id="report_table" width="100%" cellspacing="0">
+                <table class="table" id="report_table" width="100%" cellspacing="0">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
             </div>
         </div>
     </div>
+
+
 </div>
 
 <script>
@@ -306,6 +528,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
+        });
+    });
+
+
+    const addAllBtn = document.getElementById('add_all_btn');
+    const removeAllBtn = document.getElementById('remove_all_btn');
+
+    // 👉 Mover todas las columnas disponibles a seleccionadas
+    addAllBtn.addEventListener('click', function() {
+        const allAvailable = Array.from(availableColumnsUl.children);
+        allAvailable.forEach(li => {
+            selectedColumnsUl.appendChild(li);
+            li.classList.remove('selected');
+        });
+    });
+
+    // 👉 Mover todas las columnas seleccionadas a disponibles
+    removeAllBtn.addEventListener('click', function() {
+        const allSelected = Array.from(selectedColumnsUl.children);
+        allSelected.forEach(li => {
+            availableColumnsUl.appendChild(li);
+            li.classList.remove('selected');
         });
     });
 
