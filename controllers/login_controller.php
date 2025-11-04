@@ -12,7 +12,7 @@ class LoginController extends Controller {
         $this->view('login/index');
     }
 
-     public function login() {
+    public function login() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $recaptchaResponse = $_POST['g-recaptcha-response'] ?? '';
             $secretKey = '6Lf2h_srAAAAAGkTLCt3MExbYmdff01p5RlTSjQR';
@@ -28,20 +28,23 @@ class LoginController extends Controller {
 
             $usuario = new Usuario($this->db);
             $usuario->correo_usuario = $_POST['correo'];
-            $stmt = $usuario->login();
 
-            if ($stmt->rowCount() > 0) {
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            // login() ahora devuelve un array, no un PDOStatement
+            $row = $usuario->login();
+
+            if ($row) {
                 $clave_hash = $row['clave_usuario'];
 
                 if (password_verify($_POST['clave'], $clave_hash)) {
-                    $stmt = $usuario->generarCodigoVerificacion($row['id_usuario']);
-                    $codigo = $stmt->fetch(PDO::FETCH_ASSOC)['codigo'];
+                    // generarCodigoVerificacion() devuelve el código directamente
+                    $codigo = $usuario->generarCodigoVerificacion($row['id_usuario']);
 
+                    // Enviar correo con el código
                     $asunto = 'Código de Verificación';
                     $cuerpo = "Su código de verificación es: <b>$codigo</b>";
                     enviar_correo($row['correo_usuario'], $asunto, $cuerpo);
 
+                    // Guardar en sesión
                     $_SESSION['id_usuario_verificar'] = $row['id_usuario'];
                     header('Location: ' . SITE_URL . 'index.php?controller=login&action=verify_code');
                     exit();
@@ -60,11 +63,10 @@ class LoginController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (isset($_SESSION['id_usuario_verificar'])) {
                 $usuario = new Usuario($this->db);
-                $stmt = $usuario->verificarCodigo($_SESSION['id_usuario_verificar'], $_POST['codigo']);
+                $resultado = $usuario->verificarCodigo($_SESSION['id_usuario_verificar'], $_POST['codigo']);
 
-                if ($stmt->rowCount() > 0) {
-                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                    $_SESSION['usuario'] = $row;
+                if ($resultado) {
+                    $_SESSION['usuario'] = $resultado;
                     $usuario->invalidarCodigo($_SESSION['id_usuario_verificar']);
                     unset($_SESSION['id_usuario_verificar']);
                     header('Location: ' . SITE_URL . 'index.php?controller=dashboard&action=index');

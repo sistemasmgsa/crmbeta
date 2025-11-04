@@ -28,6 +28,10 @@ class Usuario {
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id_usuario", $this->id_usuario);
         $stmt->execute();
+
+        while ($stmt->nextRowset()) { /* vacio */ }
+        $stmt->closeCursor();
+
         return $stmt;
     }
 
@@ -39,10 +43,13 @@ class Usuario {
         $stmt->bindParam(":correo_usuario", $this->correo_usuario);
         $stmt->bindParam(":clave_usuario", $this->clave_usuario);
         $stmt->bindParam(":id_perfil", $this->id_perfil);
-        if ($stmt->execute()) {
-            return true;
-        }
-        return false;
+
+        $result = $stmt->execute();
+
+        while ($stmt->nextRowset()) { /* vacio */ }
+        $stmt->closeCursor();
+
+        return $result;
     }
 
     function actualizar() {
@@ -54,20 +61,26 @@ class Usuario {
         $stmt->bindParam(":correo_usuario", $this->correo_usuario);
         $stmt->bindParam(":clave_usuario", $this->clave_usuario);
         $stmt->bindParam(":id_perfil", $this->id_perfil);
-        if ($stmt->execute()) {
-            return true;
-        }
-        return false;
+
+        $result = $stmt->execute();
+
+        while ($stmt->nextRowset()) { /* vacio */ }
+        $stmt->closeCursor();
+
+        return $result;
     }
 
     function eliminar() {
         $query = "CALL sp_usuarios_eliminar(:id_usuario)";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id_usuario", $this->id_usuario);
-        if ($stmt->execute()) {
-            return true;
-        }
-        return false;
+
+        $result = $stmt->execute();
+
+        while ($stmt->nextRowset()) { /* vacio */ }
+        $stmt->closeCursor();
+
+        return $result;
     }
 
     function login() {
@@ -75,7 +88,14 @@ class Usuario {
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":correo_usuario", $this->correo_usuario);
         $stmt->execute();
-        return $stmt;
+
+        // Leer el resultado
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        while ($stmt->nextRowset()) { /* vacio */ }
+        $stmt->closeCursor();
+
+        return $usuario;
     }
 
     function generarCodigoVerificacion($id_usuario) {
@@ -83,7 +103,14 @@ class Usuario {
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id_usuario", $id_usuario);
         $stmt->execute();
-        return $stmt;
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $codigo = $row ? $row['codigo'] : null;
+
+        while ($stmt->nextRowset()) { /* vacio */ }
+        $stmt->closeCursor();
+
+        return $codigo;
     }
 
     function verificarCodigo($id_usuario, $codigo) {
@@ -92,7 +119,13 @@ class Usuario {
         $stmt->bindParam(":id_usuario", $id_usuario);
         $stmt->bindParam(":codigo", $codigo);
         $stmt->execute();
-        return $stmt;
+
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        while ($stmt->nextRowset()) { /* vacio */ }
+        $stmt->closeCursor();
+
+        return $resultado;
     }
 
     function invalidarCodigo($id_usuario) {
@@ -100,6 +133,10 @@ class Usuario {
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id_usuario", $id_usuario);
         $stmt->execute();
-        return $stmt;
+
+        while ($stmt->nextRowset()) { /* vacio */ }
+        $stmt->closeCursor();
+
+        return true;
     }
 }
