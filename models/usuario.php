@@ -77,4 +77,29 @@ class Usuario {
         $stmt->execute();
         return $stmt;
     }
+
+    function generarCodigoVerificacion($id_usuario) {
+        $query = "CALL sp_usuarios_generar_codigo(:id_usuario)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id_usuario", $id_usuario);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    function verificarCodigo($id_usuario, $codigo) {
+        $query = "CALL sp_usuarios_verificar_codigo(:id_usuario, :codigo)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id_usuario", $id_usuario);
+        $stmt->bindParam(":codigo", $codigo);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    function invalidarCodigo($id_usuario) {
+        $query = "CALL sp_usuarios_invalidar_codigo(:id_usuario)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id_usuario", $id_usuario);
+        $stmt->execute();
+        return $stmt;
+    }
 }

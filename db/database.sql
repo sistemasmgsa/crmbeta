@@ -949,6 +949,8 @@ CREATE TABLE usuarios (
   clave_usuario varchar(255) NOT NULL,
   id_perfil int NOT NULL,
   estado tinyint(1) NOT NULL DEFAULT 1,
+  codigo_verificacion varchar(255) DEFAULT NULL,
+  codigo_expiracion datetime DEFAULT NULL,
   PRIMARY KEY (id_usuario)
 )
 ENGINE = INNODB,
@@ -1226,7 +1228,7 @@ INSERT INTO clientes VALUES
 
 
 
-INSERT INTO usuarios VALUES
+INSERT INTO usuarios (id_usuario, nombre_usuario, apellido_usuario, correo_usuario, clave_usuario, id_perfil, estado) VALUES
 (1, 'Admin', 'User', 'admin@crm.com', '$2y$10$HoyyaTnauVkSCKsK8NOyDOkCsVPedppXAc7vVGs7F9LO2e1EgWIPC', 1, 1),
 (2, 'Santiago', 'Prueba', 'santiago@crm.com', '$2y$10$XizLkd9gHRDLm6tDaGJZFeHkMoRIC9rlnH2RnjJqzWKLZB1djdtWG', 3, 1),
 (4, 'sistemas', 'sistemas', 'sistemas@crm.com', '$2y$10$C9o2j5cOi1jNuHmgtCfvTex4AVpaeop4giGxYjrPKSRtgU601peJi', 1, 1);
@@ -1378,3 +1380,39 @@ CREATE TABLE `reportes_plantillas` (
   `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id_plantilla`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DELIMITER $$
+
+CREATE PROCEDURE `sp_usuarios_generar_codigo`(IN `in_id_usuario` INT)
+BEGIN
+    DECLARE codigo VARCHAR(6);
+    SET codigo = LPAD(FLOOR(RAND() * 1000000), 6, '0');
+
+    UPDATE usuarios
+    SET
+        codigo_verificacion = codigo,
+        codigo_expiracion = DATE_ADD(NOW(), INTERVAL 15 MINUTE)
+    WHERE id_usuario = in_id_usuario;
+
+    SELECT codigo;
+END$$
+
+CREATE PROCEDURE `sp_usuarios_verificar_codigo`(IN `in_id_usuario` INT, IN `in_codigo` VARCHAR(6))
+BEGIN
+    SELECT *
+    FROM usuarios
+    WHERE id_usuario = in_id_usuario
+      AND codigo_verificacion = in_codigo
+      AND codigo_expiracion > NOW();
+END$$
+
+CREATE PROCEDURE `sp_usuarios_invalidar_codigo`(IN `in_id_usuario` INT)
+BEGIN
+    UPDATE usuarios
+    SET
+        codigo_verificacion = NULL,
+        codigo_expiracion = NULL
+    WHERE id_usuario = in_id_usuario;
+END$$
+
+DELIMITER ;

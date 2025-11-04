@@ -1,10 +1,10 @@
 <?php
 require_once 'controller.php';
+require_once __DIR__ . '/../util/email.php';
 
 class LoginController extends Controller {
 
     public function index() {
-        // Si ya hay una sesión activa, redirigir al dashboard
         if (isset($_SESSION['usuario'])) {
             header('Location: ' . SITE_URL . 'index.php?controller=dashboard&action=index');
             exit();
@@ -14,10 +14,8 @@ class LoginController extends Controller {
 
      public function login() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-            // 🔹 1. Verificar reCAPTCHA antes de todo
             $recaptchaResponse = $_POST['g-recaptcha-response'] ?? '';
-            $secretKey = '6Lf2h_srAAAAAGkTLCt3MExbYmdff01p5RlTSjQR'; // <-- pon tu clave secreta aquí
+            $secretKey = '6Lf2h_srAAAAAGkTLCt3MExbYmdff01p5RlTSjQR';
 
             $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secretKey}&response={$recaptchaResponse}");
             $responseData = json_decode($verify);
@@ -29,7 +27,6 @@ class LoginController extends Controller {
             }
 
             $usuario = new Usuario($this->db);
-
             $usuario->correo_usuario = $_POST['correo'];
             $stmt = $usuario->login();
 
@@ -38,8 +35,15 @@ class LoginController extends Controller {
                 $clave_hash = $row['clave_usuario'];
 
                 if (password_verify($_POST['clave'], $clave_hash)) {
-                    $_SESSION['usuario'] = $row;
-                    header('Location: ' . SITE_URL . 'index.php?controller=dashboard&action=index');
+                    $stmt = $usuario->generarCodigoVerificacion($row['id_usuario']);
+                    $codigo = $stmt->fetch(PDO::FETCH_ASSOC)['codigo'];
+
+                    $asunto = 'Código de Verificación';
+                    $cuerpo = "Su código de verificación es: <b>$codigo</b>";
+                    enviar_correo($row['correo_usuario'], $asunto, $cuerpo);
+
+                    $_SESSION['id_usuario_verificar'] = $row['id_usuario'];
+                    header('Location: ' . SITE_URL . 'index.php?controller=login&action=verify_code');
                     exit();
                 } else {
                     $data['error'] = "La contraseña es incorrecta.";
@@ -49,6 +53,33 @@ class LoginController extends Controller {
                 $data['error'] = "El correo electrónico no existe.";
                 $this->view('login/index', $data);
             }
+        }
+    }
+
+    public function verify_code() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (isset($_SESSION['id_usuario_verificar'])) {
+                $usuario = new Usuario($this->db);
+                $stmt = $usuario->verificarCodigo($_SESSION['id_usuario_verificar'], $_POST['codigo']);
+
+                if ($stmt->rowCount() > 0) {
+                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $_SESSION['usuario'] = $row;
+                    $usuario->invalidarCodigo($_SESSION['id_usuario_verificar']);
+                    unset($_SESSION['id_usuario_verificar']);
+                    header('Location: ' . SITE_URL . 'index.php?controller=dashboard&action=index');
+                    exit();
+                } else {
+                    $data['error'] = "El código de verificación es incorrecto o ha expirado.";
+                    $this->view('login/verify_code', $data);
+                }
+            }
+        } else {
+            if (!isset($_SESSION['id_usuario_verificar'])) {
+                header('Location: ' . SITE_URL . 'index.php?controller=login&action=index');
+                exit();
+            }
+            $this->view('login/verify_code');
         }
     }
 
