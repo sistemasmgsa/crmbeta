@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificación de Dos Pasos - CRM Beta</title>
+    <title>Verificación de Dos Pasos - Advisor CRM</title>
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>assets/css/style.css">
     <style>
         body {
@@ -86,7 +86,7 @@
 <body>
     <div class="verify-container">
         <div class="verify-form">
-            <h1>CRM Beta V1.0</h1>
+            <h1>Advisor CRM</h1>
             <h2>Verificación de Dos Pasos</h2>
             <p>Se ha enviado un código de verificación a su correo electrónico.<br>Por favor, ingrese el código a continuación.</p>
 

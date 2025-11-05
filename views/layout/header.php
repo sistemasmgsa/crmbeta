@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($data['titulo']) ? $data['titulo'] . ' - CRM Beta' : 'CRM Beta'; ?></title>
+    <title><?php echo isset($data['titulo']) ? $data['titulo'] . ' - Advisor CRM' : 'Advisor CRM'; ?></title>
     
     <!-- FullCalendar -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/main.min.css" rel="stylesheet">
@@ -20,15 +20,22 @@
         <div class="hamburger-circle">
             <div class="hamburger" id="hamburger"></div>
         </div>
-        <h2>CRM Beta</h2>
+        <h2>Advisor CRM</h2>
     </header>
 
     <div class="container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>CRM Beta</h2>
-            </div>
+
+        
+        <div class="sidebar-header" style="text-align: center; padding: 15px 0;">
+            <img src="<?php echo SITE_URL; ?>assets/img/logo.png" 
+                alt="Logo CRM" 
+                style="max-width: 160px; height: auto;">
+        </div>
+
+
+
             <nav class="menu">
                 <ul>
                     <li><a href="<?php echo SITE_URL; ?>index.php?controller=dashboard&action=index"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - CRM Beta</title>
+    <title>Advisor CRM</title>
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>assets/css/style.css">
     <style>
         .login-container {
@@ -37,7 +37,7 @@
     <div class="login-container">
         <div class="login-form">
              <h1 style="text-align: center; color: #8B0000; margin-bottom: 20px; font-family: Arial, sans-serif;">
-                CRM Beta V1.0
+                Advisor CRM
             </h1>
             <h2>Iniciar Sesión</h2>
 

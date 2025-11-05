@@ -113,7 +113,7 @@ class LoginController extends Controller {
                 <body>
                     <div class="container">
                         <div class="logo">
-                            <img src="' . $logo_url . '" alt="Logo CRM Beta">
+                            <img src="' . $logo_url . '" alt="Logo Advisor CRM">
                         </div>
 
                         <div style="
@@ -136,7 +136,7 @@ class LoginController extends Controller {
                         </div>
 
                         <div class="footer">
-                            Copyright ' . date("Y") . ' - CRM Beta. Todos los derechos reservados.
+                            Copyright ' . date("Y") . ' - Advisor CRM. Todos los derechos reservados.
                         </div>
                     </div>
                 </body>

@@ -21,7 +21,7 @@ function enviar_correo($destinatario, $asunto, $cuerpo) {
         $mail->Port = SMTP_PORT;
 
         //Destinatarios
-        $mail->setFrom(SMTP_USER, 'CRM Beta');
+        $mail->setFrom(SMTP_USER, 'Advisor CRM');
         $mail->addAddress($destinatario);
 
         //Contenido
