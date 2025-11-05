@@ -39,10 +39,114 @@ class LoginController extends Controller {
                     // generarCodigoVerificacion() devuelve el código directamente
                     $codigo = $usuario->generarCodigoVerificacion($row['id_usuario']);
 
-                    // Enviar correo con el código
-                    $asunto = 'Código de Verificación';
-                    $cuerpo = "Su código de verificación es: <b>$codigo</b>";
-                    enviar_correo($row['correo_usuario'], $asunto, $cuerpo);
+
+
+                // Enviar correo con diseño HTML moderno
+                $asunto = 'Codigo de verificacion para inicio de sesion CRM';
+
+                $logo_url = SITE_URL . 'assets/img/logo.png'; // Cambia luego por tu logo real
+
+                $cuerpo = '
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Codigo de Verificacion</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f4f4f4;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .container {
+                        max-width: 600px;
+                        margin: 40px auto;
+                        background-color: #fff;
+                        border-radius: 8px;
+                        overflow: hidden;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                    }
+                    .header {
+                        background-color: #8B0000; /* Dark Red */
+                        color: white;
+                        text-align: center;
+                        padding: 20px;
+                        font-size: 20px;
+                        font-weight: bold;
+                    }
+                    .logo {
+                        text-align: center;
+                        margin-top: 20px;
+                    }
+                    .logo img {
+                        width: 150px;
+                        height: auto;
+                    }
+                    .body {
+                        padding: 30px;
+                        color: #333;
+                        line-height: 1.6;
+                    }
+                    .code-box {
+                        text-align: center;
+                        background-color: #f3f3f3;
+                        padding: 15px;
+                        border-radius: 6px;
+                        font-size: 26px;
+                        font-weight: bold;
+                        letter-spacing: 3px;
+                        margin: 25px 0;
+                        color: #000;
+                    }
+                    .footer {
+                        text-align: center;
+                        font-size: 12px;
+                        color: #777;
+                        border-top: 1px solid #eaeaea;
+                        padding: 15px;
+                        background-color: #fafafa;
+                    }
+                </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="logo">
+                            <img src="' . $logo_url . '" alt="Logo CRM Beta">
+                        </div>
+
+                        <div style="
+                            background-color: #8B0000;
+                            color: white;
+                            text-align: center;
+                            padding: 20px;
+                            font-size: 20px;
+                            font-weight: bold;
+                        ">
+                            Verificacion de inicio de sesion
+                        </div>
+
+                        <div class="body">
+                            <p>Hola <b>' . htmlspecialchars($row['nombre_usuario'] ?? 'Usuario') . '</b>,</p>
+                            <p>Se ha solicitado un inicio de sesion en tu cuenta. Utiliza el siguiente codigo para completar el proceso:</p>
+                            <div class="code-box">' . $codigo . '</div>
+                            <p>Este codigo expirara en <b>10 minutos</b>.</p>
+                            <p>Si no has solicitado este codigo, por favor cambia tu clave inmediatamente y contacta al equipo de soporte.</p>
+                        </div>
+
+                        <div class="footer">
+                            Copyright ' . date("Y") . ' - CRM Beta. Todos los derechos reservados.
+                        </div>
+                    </div>
+                </body>
+                </html>
+                ';
+
+                enviar_correo($row['correo_usuario'], $asunto, $cuerpo);
+
+
+
 
                     // Guardar en sesión
                     $_SESSION['id_usuario_verificar'] = $row['id_usuario'];
