@@ -28,10 +28,6 @@ class Usuario {
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id_usuario", $this->id_usuario);
         $stmt->execute();
-
-        while ($stmt->nextRowset()) { /* vacio */ }
-        $stmt->closeCursor();
-
         return $stmt;
     }
 

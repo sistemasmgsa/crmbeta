@@ -44,6 +44,8 @@ class UsuariosController extends Controller {
         $this->view('usuarios/crear', $data);
     }
 
+
+
     public function editar() {
         $database = new Database();
         $db = $database->getConnection();
@@ -77,8 +79,13 @@ class UsuariosController extends Controller {
 
         $usuario->id_usuario = $_GET['id'];
         $stmt = $usuario->obtener();
+
+
         $data['usuario'] = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
         $stmt->closeCursor();
+        
 
         $perfil = new Perfil($db);
         $stmt_perfiles = $perfil->listar();
@@ -86,6 +93,10 @@ class UsuariosController extends Controller {
 
         $this->view('usuarios/editar', $data);
     }
+
+
+
+
 
     public function eliminar() {
         $database = new Database();

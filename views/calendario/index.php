@@ -226,31 +226,43 @@ document.addEventListener('DOMContentLoaded', function() {
             return (text || '').toString().toLowerCase().trim();
         }
 
-        function filtrarAgenda() {
+       function filtrarAgenda() {
             const texto = norm(inputBuscar.value);
             if (!texto) {
-                // si está vacío, mostramos todo
                 actualizarAgenda(events);
                 return;
             }
 
             const filtrados = events.filter(e => {
-                // campos disponibles
                 const title = norm(e.title);
-                const type = norm(e.extendedProps && e.extendedProps.type);
-                const cliente = norm(e.extendedProps && e.extendedProps.cliente);
-                const usuario = norm(e.extendedProps && e.extendedProps.nombre_usuario);
-                const desc = norm(e.extendedProps && e.extendedProps.description);
+                const type = norm(e.extendedProps?.type);
+                const cliente = norm(e.extendedProps?.cliente);
+                const usuario = norm(e.extendedProps?.nombre_usuario);
+                const desc = norm(e.extendedProps?.description);
 
-                // fechas: versión larga con weekday y versión corta numérica
                 const fechaObj = new Date(e.start);
-                const fechaConDia = norm(fechaObj.toLocaleDateString('es-ES', {
-                    weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
-                })); // ej: "martes, 04 de noviembre de 2025"
-                const fechaCorta = norm(fechaObj.toLocaleDateString('es-ES')); // ej: "04/11/2025"
-                const hora = norm(fechaObj.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })); // ej: "10:00"
 
-                // Buscamos coincidencia parcial en cualquiera de los campos
+                // 🗓️ Generar múltiples representaciones de la fecha
+                const dia = String(fechaObj.getDate()).padStart(2, '0');
+                const mes = String(fechaObj.getMonth() + 1).padStart(2, '0');
+                const anio = fechaObj.getFullYear();
+
+                const fechaCorta = `${dia}/${mes}/${anio}`;   // 04/11/2025
+                const fechaSolo = `${dia}/${mes}`;             // 04/11
+                const fechaISO = `${anio}-${mes}-${dia}`;      // 2025-11-04
+
+                const fechaConDia = norm(
+                    fechaObj.toLocaleDateString('es-ES', {
+                        weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
+                    })
+                ); // martes, 04 de noviembre de 2025
+
+                // ⏰ Varias versiones de la hora
+                const hora24 = fechaObj.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false }); // 14:17
+                const hora12 = fechaObj.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: true });  // 02:17 p. m.
+                const horaSolo = hora24.split(':')[0]; // 14
+
+                // ✅ Compara contra todas las variantes
                 return (
                     title.includes(texto) ||
                     type.includes(texto) ||
@@ -259,12 +271,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     desc.includes(texto) ||
                     fechaConDia.includes(texto) ||
                     fechaCorta.includes(texto) ||
-                    hora.includes(texto)
+                    fechaSolo.includes(texto) ||
+                    fechaISO.includes(texto) ||
+                    hora24.includes(texto) ||
+                    hora12.includes(texto) ||
+                    horaSolo.includes(texto)
                 );
             });
 
             actualizarAgenda(filtrados);
         }
+
+
 
         // listeners
         btnFiltrar.addEventListener('click', filtrarAgenda);
@@ -324,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }).then((result) => {
                 if (result.dismiss === Swal.DismissReason.cancel) {
                     const idCliente = info.event.extendedProps.id_cliente; 
-                    localStorage.setItem("tabActivoEditarCliente", "registro");
+                    localStorage.setItem("tabActivoEditarCliente", "cliente");
                     window.location.href = '<?php echo SITE_URL; ?>index.php?controller=clientes&action=editar&id=' + idCliente;
                 }
             });
@@ -347,7 +365,13 @@ function actualizarAgenda(eventos) {
 
     todosEventos.forEach((e, index) => {
         const fecha = new Date(e.start);
-        const fechaTexto = fecha.toLocaleDateString('es-ES', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
+
+        const nombreDia = fecha.toLocaleDateString('es-ES', { weekday: 'long' }); // martes
+        const dia = String(fecha.getDate()).padStart(2, '0');
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const anio = fecha.getFullYear();
+        const fechaTexto = `${nombreDia}, ${dia}/${mes}/${anio}`;
+
         const hora = fecha.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', hour12:true });
 
         const div = document.createElement('div');
@@ -385,7 +409,7 @@ function actualizarAgenda(eventos) {
             }).then((result) => {
                 if (result.dismiss === Swal.DismissReason.cancel) {
                     const idCliente = e.extendedProps.id_cliente;
-                    localStorage.setItem("tabActivoEditarCliente", "registro");
+                    localStorage.setItem("tabActivoEditarCliente", "cliente");
                     window.location.href = '<?php echo SITE_URL; ?>index.php?controller=clientes&action=editar&id=' + idCliente;
                 }
             });

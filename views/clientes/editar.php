@@ -108,8 +108,8 @@
     <div class="tab-nav">
         <button class="tab-link active" onclick="openTab(event, 'cliente')">Cliente</button>
 
-        <button class="tab-link" onclick="openTab(event, 'actividades')">Actividades</button>
-        <button class="tab-link" onclick="openTab(event, 'registro')">Registro</button>
+        <button class="tab-link" onclick="openTab(event, 'actividades')">Nueva Actividad</button>
+        <button class="tab-link" onclick="openTab(event, 'registro')">Historial</button>
 
 
         <button class="tab-link" onclick="openTab(event, 'contacto')">Contacto</button>
@@ -232,13 +232,14 @@
 
             <button type="submit" class="btn btn-primary">Actualizar</button>
             <a href="<?php echo SITE_URL; ?>index.php?controller=clientes&action=index" class="btn btn-secondary">Cancelar</a>
+
+            <a href="<?php echo SITE_URL; ?>index.php?controller=calendario&action=index" 
+            class="btn btn-secondary" style="background-color: #007bff; margin-left: 890px;">Ver Calendario</a>
         </form>
     </div>
 
     <!-- Contenido de la Pestaña Actividades -->
     <div id="actividades" class="tab-content">
-
-        <h2>Registrar Nueva Actividad</h2>
 
         <form id="form-nueva-actividad">
             <input type="hidden" name="id_cliente" value="<?php echo $data['cliente']['id_cliente']; ?>">
@@ -279,7 +280,7 @@
 
 
             <button type="submit" class="btn btn-primary">Registrar Actividad</button>
-             <a href="<?php echo SITE_URL; ?>index.php?controller=calendario&action=index" class="btn btn-secondary">Ver Calendario</a>
+             
         </form>
      
 
@@ -289,7 +290,6 @@
 
     <div id="registro" class="tab-content">
 
-        <h2>Registro de Actividades</h2>
         <div id="historial-actividades">
             <!-- Las actividades se cargarán aquí con AJAX -->
         </div>
@@ -304,7 +304,7 @@
 
     <!-- Contenido de la Pestaña Contacto -->
     <div id="contacto" class="tab-content">
-        <h2>Contactos</h2>
+    
         <button id="btn-nuevo-contacto" class="btn btn-primary">Nuevo Contacto</button>
         <table id="tabla-contactos">
             <thead>
@@ -472,9 +472,11 @@ function cargarActividades() {
                     actividadDiv.style.padding = '10px';
                     actividadDiv.style.marginBottom = '10px';
                     actividadDiv.innerHTML = `
-                        <strong>${actividad.tipo_actividad}: ${actividad.asunto}</strong>
-                        <p>${actividad.descripcion}</p>
-                        <small>Fecha: ${new Date(actividad.fecha_actividad).toLocaleString()} | Registrado por: ${actividad.nombre_usuario}</small>
+                        <strong>Tipo: </strong> ${actividad.tipo_actividad}<br>
+                        <strong>Asunto: </strong>${actividad.asunto} <br>
+                        <strong>Descripción: </strong>${actividad.descripcion}<br>
+                        <strong>Fecha: </strong>${new Date(actividad.fecha_actividad).toLocaleString()} 
+                        <strong>|</strong>  <strong>Registrado por: </strong>  ${actividad.nombre_usuario}
                     `;
                     historialActividades.appendChild(actividadDiv);
                 });
