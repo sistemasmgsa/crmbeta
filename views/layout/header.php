@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($data['titulo']) ? $data['titulo'] . ' - Advisor CRM' : 'Advisor CRM'; ?></title>
     
+
+    <link rel="icon" type="image/png" href="<?php echo SITE_URL; ?>assets/img/icono.png">
+
     <!-- FullCalendar -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/main.min.css" rel="stylesheet">
     
@@ -20,7 +23,15 @@
         <div class="hamburger-circle">
             <div class="hamburger" id="hamburger"></div>
         </div>
-        <h2>Advisor CRM</h2>
+
+        <!-- <h2>Advisor CRM</h2> -->
+         
+        <div class="sidebar-header" style="text-align: center; padding: 15px 0;">
+            <img src="<?php echo SITE_URL; ?>assets/img/logodash.png" 
+                alt="Logo CRM" 
+                style="max-width: 150px; height: auto;">
+        </div>
+
     </header>
 
     <div class="container">
@@ -29,9 +40,9 @@
 
         
         <div class="sidebar-header" style="text-align: center; padding: 15px 0;">
-            <img src="<?php echo SITE_URL; ?>assets/img/logo.png" 
+            <img src="<?php echo SITE_URL; ?>assets/img/logodash.png" 
                 alt="Logo CRM" 
-                style="max-width: 160px; height: auto;">
+                style="max-width: 150px; height: auto;">
         </div>
 
 

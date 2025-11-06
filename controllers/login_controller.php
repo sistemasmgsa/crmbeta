@@ -44,7 +44,7 @@ class LoginController extends Controller {
                 // Enviar correo con diseño HTML moderno
                 $asunto = 'Codigo de verificacion para inicio de sesion CRM';
 
-                $logo_url = SITE_URL . 'assets/img/logo.png'; // Cambia luego por tu logo real
+                $logo_url = SITE_URL . 'assets/img/logoenviocorreo.png'; // Cambia luego por tu logo real
 
                 $cuerpo = '
                 <!DOCTYPE html>
@@ -81,7 +81,7 @@ class LoginController extends Controller {
                         margin-top: 20px;
                     }
                     .logo img {
-                        width: 150px;
+                        width: 50px;
                         height: auto;
                     }
                     .body {

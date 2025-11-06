@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advisor CRM</title>
+
+    <link rel="icon" type="image/png" href="<?php echo SITE_URL; ?>assets/img/icono.png">
+
+
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>assets/css/style.css">
     <style>
         .login-container {
@@ -36,9 +40,16 @@
 <body>
     <div class="login-container">
         <div class="login-form">
-             <h1 style="text-align: center; color: #8B0000; margin-bottom: 20px; font-family: Arial, sans-serif;">
-                Advisor CRM
-            </h1>
+
+
+            <div class="logo_crm" style="text-align: center; margin-bottom: -15px;">
+                <img src="<?php echo SITE_URL; ?>assets/img/logocorreo.png" 
+                    alt="Logo CRM" 
+                    style="max-width: 300px; height: auto;">
+            </div>
+
+
+
             <h2>Iniciar Sesión</h2>
 
             <?php if (isset($data['error'])) : ?>

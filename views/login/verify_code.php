@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificación de Dos Pasos - Advisor CRM</title>
+    <title>Verificación de Dos Pasos</title>
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>assets/css/style.css">
     <style>
         body {
@@ -86,7 +86,16 @@
 <body>
     <div class="verify-container">
         <div class="verify-form">
-            <h1>Advisor CRM</h1>
+
+
+            <div class="logo_crm" style="text-align: center; margin-bottom: -15px;">
+                <img src="<?php echo SITE_URL; ?>assets/img/logocorreo.png" 
+                    alt="Logo CRM" 
+                    style="max-width: 300px; height: auto;">
+            </div>
+
+
+
             <h2>Verificación de Dos Pasos</h2>
             <p>Se ha enviado un código de verificación a su correo electrónico.<br>Por favor, ingrese el código a continuación.</p>
 
@@ -95,7 +104,7 @@
             <?php endif; ?>
 
             <form id="verifyForm" action="<?php echo SITE_URL; ?>index.php?controller=login&action=verify_code" method="post">
-                <label for="codigo">Código de Verificación</label>
+                <label for="codigo" style="font-weight: bold;">Código de Verificación</label>
                 <div class="code-inputs">
                     <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required>
                     <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required>
